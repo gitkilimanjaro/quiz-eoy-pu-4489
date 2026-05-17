@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&#127758; Grade 7 Geography Quiz v2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f4f0;padding:20px}
+.wrap{max-width:660px;margin:0 auto}
+h1{font-size:1.4rem;margin-bottom:4px}
+.sub{color:#666;font-size:.82rem;margin-bottom:16px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.topbar span{font-size:.8rem;color:#777}
+.scores{display:flex;gap:8px}
+.sc{font-size:.8rem;padding:3px 12px;border-radius:20px;border:1.5px solid}
+.sc.ok{border-color:green;color:green}
+.sc.ng{border-color:red;color:red}
+.prog-bg{height:5px;background:#ddd;border-radius:3px;margin-bottom:16px}
+.prog-fill{height:100%;background:#333;border-radius:3px;transition:width .4s}
+#fixednext{position:fixed;bottom:0;left:0;right:0;background:#111;color:#fff;border:none;
+  padding:18px;font-size:1.1rem;font-weight:bold;font-family:Arial,sans-serif;
+  cursor:pointer;display:none;z-index:999;text-align:center}
+#fixednext:hover{background:#333}
+body.answered{padding-bottom:70px}
+.card{background:#fff;border-radius:14px;padding:20px;border:1px solid #e0e0e0;margin-bottom:12px}
+.qmeta{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.qnum{font-size:.72rem;color:#aaa}
+.qpill{font-size:.68rem;padding:2px 8px;border-radius:10px;font-weight:bold}
+.phys{background:#e8f0fe;color:#1a56db;border:1px solid #c3d7fc}
+.pop{background:#e6f9ee;color:#1a7f37;border:1px solid #b5e8c8}
+.map{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.riv{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
+.eros{background:#fce7f3;color:#9d174d;border:1px solid #f9a8d4}
+.qtext{font-size:.98rem;font-weight:bold;line-height:1.6;margin-bottom:14px;color:#111}
+.opts{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.opt{display:flex;align-items:center;gap:10px;background:#fafafa;border:1.5px solid #e0e0e0;
+  border-radius:10px;padding:11px 14px;cursor:pointer;font-size:.9rem;
+  font-family:Arial,sans-serif;color:#111;text-align:left;width:100%}
+.opt:hover{background:#f0f0f0;border-color:#999}
+.oletter{width:27px;height:27px;border-radius:50%;border:1.5px solid #ccc;
+  display:flex;align-items:center;justify-content:center;font-size:.72rem;
+  font-weight:bold;flex-shrink:0;color:#888;background:#fff}
+.opt.correct{border-color:#16a34a !important;background:#f0fdf4 !important}
+.opt.correct .oletter{background:#16a34a !important;color:#fff !important;border-color:#16a34a !important}
+.opt.wrong{border-color:#dc2626 !important;background:#fef2f2 !important}
+.opt.wrong .oletter{background:#dc2626 !important;color:#fff !important;border-color:#dc2626 !important}
+.opt.reveal{border-color:#16a34a !important}
+.opt.reveal .oletter{border-color:#16a34a !important;color:#16a34a !important}
+.rlabel{font-size:.88rem;font-weight:bold;margin-bottom:10px;padding:8px 12px;border-radius:8px}
+.rlabel.ok{color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0}
+.rlabel.ng{color:#dc2626;background:#fef2f2;border:1px solid #fecaca}
+.hbtn{background:#fff;border:1px solid #ddd;border-radius:8px;padding:6px 14px;
+  font-size:.78rem;color:#555;cursor:pointer;font-family:Arial,sans-serif;margin-bottom:8px}
+.hbox{font-size:.83rem;line-height:1.6;color:#1e40af;padding:10px 12px;
+  border-left:3px solid #3b82f6;background:#eff6ff;border-radius:0 8px 8px 0;margin-bottom:8px}
+.ebox{padding:12px;background:#f9f9f9;border-radius:10px;border:1px solid #e5e5e5}
+.elabel{font-size:.68rem;font-weight:bold;color:#aaa;text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:5px}
+.etext{font-size:.83rem;line-height:1.7;color:#444;margin-bottom:8px}
+.insight{font-size:.83rem;line-height:1.6;padding:8px 10px;
+  border-left:3px solid #f59e0b;background:#fffbeb;border-radius:0 8px 8px 0;color:#78350f}
+#rscreen{display:none}
+.rscore{font-size:3rem;font-weight:bold;margin:8px 0}
+.rmsg{color:#555;font-size:.9rem;line-height:1.6;margin-bottom:14px}
+.dots{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.dot{width:10px;height:10px;border-radius:50%;background:#ddd}
+.dot.c{background:green}.dot.w{background:red}
+.rgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.rcard{background:#f9f9f9;border:1px solid #e0e0e0;border-radius:10px;padding:12px 6px;text-align:center}
+.rnum{font-size:1.5rem;font-weight:bold;display:block;margin-bottom:2px}
+.rnum.ok{color:green}.rnum.ng{color:red}.rnum.bl{color:#1a56db}
+.rlbl2{font-size:.68rem;color:#aaa}
+.brestart{display:block;width:100%;background:#111;color:#fff;border:none;border-radius:8px;
+  padding:14px;font-size:1rem;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;margin-bottom:6px}
+.brestart:hover{background:#333}
+.pool-info{font-size:.72rem;color:#999;text-align:center}
+@media(max-width:420px){.rgrid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>&#127758; Grade 7 Geography Quiz <span style="font-size:.75rem;color:#aaa;font-weight:normal">v2</span></h1>
+  <p class="sub">End of Year Revision &middot; Human &amp; Physical Geography &middot; 20 questions per round from a pool of 60</p>
+
+  <div id="qarea">
+    <div class="topbar">
+      <span id="qcounter">Question 1 of 20</span>
+      <div class="scores">
+        <span class="sc ok">&#10003; <span id="scr">0</span></span>
+        <span class="sc ng">&#10007; <span id="scw">0</span></span>
+      </div>
+    </div>
+    <div class="prog-bg"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+    <div id="maincard"></div>
+  </div>
+
+  <div id="rscreen">
+    <div class="card">
+      <h2 style="margin-bottom:6px">Round complete!</h2>
+      <div class="rscore" id="rscore"></div>
+      <div class="dots" id="dots"></div>
+      <div class="rmsg" id="rmsg"></div>
+      <div class="rgrid">
+        <div class="rcard"><span class="rnum ok" id="rbc">0</span><div class="rlbl2">Correct</div></div>
+        <div class="rcard"><span class="rnum ng" id="rbw">0</span><div class="rlbl2">Wrong</div></div>
+        <div class="rcard"><span class="rnum bl" id="rbh">0</span><div class="rlbl2">Hints used</div></div>
+        <div class="rcard"><span class="rnum" id="rbp">0%</span><div class="rlbl2">Score</div></div>
+      </div>
+      <button class="brestart" onclick="restart()">&#8635; New round</button>
+      <div class="pool-info" id="pool-info"></div>
+    </div>
+  </div>
+</div>
+<button id="fixednext" onclick="nextQ()">Next question &#8594;</button>
+
+<script>
+var POOL = [];
+function q(difficulty, type, text, opts, ans, hint, expl, insight) {
+  POOL.push({d:difficulty, type:type, text:text, opts:opts, ans:ans,
+             hint:hint, expl:expl, insight:insight});
+}
+
+// ── HUMAN & PHYSICAL GEOGRAPHY (6 questions) ────────────
+
+q(1,"Human vs Physical","Which of the following is an example of a PHYSICAL geography feature?",
+  ["City","Road","Mountain","Housing","Infrastructure"],2,
+  "Think about what is natural versus what is built by people.",
+  "Physical geography covers anything that is natural and not man-made. Mountains, rivers, and oceans are all natural features. Cities, roads, and infrastructure are all built by humans.",
+  "Key test: if it exists without people, it is physical geography.");
+
+q(1,"Human vs Physical","Which of the following is an example of a HUMAN geography feature?",
+  ["River","Ocean","Mountain","City","Forest"],3,
+  "Think about what humans have built or created.",
+  "Human geography features are man-made. A city is built by people. Rivers, oceans, mountains, and forests are all natural, so they belong to physical geography.",
+  "If people built it, it is human geography.");
+
+q(1,"Human vs Physical","Geography is split into how many main themes?",
+  ["One","Two","Three","Four","Five"],1,
+  "The revision notes state this clearly at the very beginning.",
+  "Geography is split into two themes: physical geography and human geography. Physical covers natural features; human covers man-made features.",
+  "Two themes, two words: Physical and Human.");
+
+q(1,"Human vs Physical","Physical geography concerns anything that is described as what?",
+  ["Man-made and artificial","Natural and not man-made","Built by governments","Found only in cities","Related to people"],1,
+  "The definition is stated directly in the revision notes.",
+  "Physical geography concerns anything that is natural and not man-made. This includes mountains, rivers, oceans, forests, and other features of the natural world.",
+  "Natural = physical; man-made = human. That is the key dividing line.");
+
+q(2,"Human vs Physical","A road is built through a forest. Which statement is correct?",
+  ["The forest is human geography; the road is physical geography","Both the forest and the road are physical geography","The road is human geography; the forest is physical geography","Both the forest and the road are human geography","Neither the road nor the forest belongs to geography"],2,
+  "Ask yourself: which of the two was created by people, and which exists naturally?",
+  "The road is a man-made structure, so it belongs to human geography. The forest is a natural feature, so it belongs to physical geography. The two can exist side by side, each belonging to a different branch.",
+  "One object can be human, another physical - they do not have to match.");
+
+q(2,"Human vs Physical","A forest fire destroys trees on a hillside. Which branch of geography would study the resulting change to the landscape?",
+  ["Human geography","Physical geography","Economic geography","Political geography","Social geography"],1,
+  "The forest and the hillside are natural features. Which branch studies the natural environment?",
+  "Physical geography studies the natural environment, including landforms, vegetation, and how they change. A forest fire altering a hillside is a change to a natural landscape, so it falls under physical geography.",
+  "Any change to a natural feature - forest, river, mountain - is studied by physical geography.");
+
+// ── CONTINENTS (5 questions) ────────────────────────────
+
+q(1,"Continents","How many continents are there on Earth?",
+  ["Five","Six","Seven","Eight","Nine"],2,
+  "Count the continents listed in your revision material.",
+  "There are seven continents: North America, South America, Europe, Africa, Asia, Australia, and Antarctica. That is exactly seven.",
+  "A useful memory trick: count them using the first letters - NA SA E A A A A.");
+
+q(1,"Continents","Which of the following is NOT one of the seven continents?",
+  ["Africa","Antarctica","Europe","Pacific","Australia"],3,
+  "One of these options is an ocean, not a continent.",
+  "The Pacific is one of the world's oceans, not a continent. The seven continents are North America, South America, Europe, Africa, Asia, Australia, and Antarctica.",
+  "Oceans and continents are different things - do not confuse them.");
+
+q(2,"Continents","Which continent is also recognised as a country?",
+  ["Africa","Europe","Antarctica","Australia","Asia"],3,
+  "Think about which continent is entirely occupied by a single nation.",
+  "Australia is unique because it is both a continent and a country. No other continent is also its own individual country. Antarctica has no country, and Africa, Europe, and Asia contain many countries.",
+  "Australia is the only place that is both a continent and a single country.");
+
+q(1,"Continents","Which is the LARGEST continent by land area?",
+  ["Africa","North America","Europe","Asia","South America"],3,
+  "Think about which continent stretches from the Middle East all the way to Japan and down to Southeast Asia.",
+  "Asia is the largest continent by land area, covering around 44 million square kilometres. Africa is the second largest. Europe is actually one of the smallest continents.",
+  "Asia = biggest continent. A common mistake is to think Africa is the largest - it is second.");
+
+q(2,"Continents","Which continent has NO countries and is governed by an international treaty?",
+  ["Australia","Africa","Antarctica","Asia","Europe"],2,
+  "Think about which continent is so remote and hostile that no country has claimed it as sovereign territory.",
+  "Antarctica has no sovereign countries. It is governed by the Antarctic Treaty signed in 1959, which dedicates the continent to peaceful scientific research and bans military activity.",
+  "Antarctica = no countries, just international cooperation. It is the only continent like this.");
+
+// ── POPULATION PYRAMID (5 questions) ───────────────────
+
+q(1,"Population","What does a population pyramid show?",
+  ["The wealth of a country","The ages and genders of a population","The physical size of cities","Birth rates only","Migration patterns only"],1,
+  "The revision notes define this directly.",
+  "A population pyramid shows the ages and genders of a population. The left side shows age groups, and the two bars show the number of males and females in each age group.",
+  "Population pyramid = ages plus genders together in one diagram.");
+
+q(1,"Population","In a population pyramid, what do the numbers on the LEFT-HAND side represent?",
+  ["Population totals in millions","Gender ratio","Ages","Income levels","Birth rates"],2,
+  "Look at the left axis of a population pyramid.",
+  "The numbers on the left-hand side of a population pyramid represent the ages. Males are shown in blue on the left bar, and females in pink or red on the right bar.",
+  "Left side = age scale. The bars show how many people are in each age group.");
+
+q(1,"Population","In a population pyramid, which colour represents MALES?",
+  ["Pink","Red","Green","Blue","Yellow"],3,
+  "The revision notes state the colour used for each gender.",
+  "Males are represented in blue in a population pyramid. Females are represented in pink or red. This is stated directly in the revision material.",
+  "Blue for boys, pink or red for girls - a simple colour code to remember.");
+
+q(2,"Population","A population pyramid that is WIDE at the bottom and NARROW at the top suggests what about that population?",
+  ["An ageing population with few young people","A high birth rate and many young people","Equal numbers of males and females","A very small total population","Low death rates across all ages"],1,
+  "Think about what a wide base means - lots of people in the youngest age groups.",
+  "A wide base on a population pyramid means there are many young people, which indicates a high birth rate. A narrow top means fewer people survive to old age, suggesting higher death rates or shorter life expectancy.",
+  "Wide base = high birth rate = many young people. Common in developing countries.");
+
+q(2,"Population","A population pyramid that is NARROW at the bottom and WIDER in the middle suggests what?",
+  ["A high birth rate","A very young population","A falling birth rate and an ageing population","A high death rate for all ages","Rapid population growth"],2,
+  "Think about what a narrow base means - fewer people in the youngest age groups.",
+  "A narrow base means fewer young people are being born, indicating a falling birth rate. A wider middle and upper section means more people are living longer, indicating an ageing population. This is typical of developed countries.",
+  "Narrow base = falling birth rate. Wider middle and top = ageing population. Common in developed countries.");
+
+// ── POPULATION GROWTH & PUSH/PULL (7 questions) ────────
+
+q(1,"Population Growth","Populations rise for which kinds of reasons?",
+  ["Physical and geographical","Social and economic","Political and military","Religious and cultural","Scientific and technological"],1,
+  "The revision notes state this directly when discussing population growth.",
+  "Populations rise for both social and economic reasons. Social reasons include improved healthcare and education; economic reasons include better job opportunities and higher standards of living.",
+  "Social plus economic = the two drivers of population growth.");
+
+q(1,"Push and Pull","Push factors are things that make people want to do what?",
+  ["Stay in a place","Visit a place as a tourist","Leave a place","Invest money in a place","Work harder in a place"],2,
+  "Push factors push people away. Think about what direction they push.",
+  "Push factors are things that make people want to LEAVE a place. Examples include conflict, poverty, lack of jobs, drought, and natural disasters. They push people out.",
+  "Push = pushed OUT of a place. The word push tells you the direction.");
+
+q(1,"Push and Pull","Pull factors are things that make people want to do what?",
+  ["Leave a place","Move TO a place","Avoid a place","Change a place","Study a place"],1,
+  "Pull factors pull people in. Think about what direction they pull.",
+  "Pull factors are things that make people want to MOVE TO a place. Examples include good job opportunities, better healthcare, good schools, and political stability.",
+  "Pull = pulled INTO a place. The word pull tells you the direction.");
+
+q(2,"Push and Pull","Which of the following is most likely a PUSH factor?",
+  ["Good job opportunities","Good schools","Conflict and war","Clean water supply","Warm and pleasant climate"],2,
+  "Ask yourself: does this make people want to leave, or want to arrive?",
+  "Conflict and war is a push factor because it makes people want to LEAVE a place for safety. The other options - good jobs, good schools, clean water, and warm climate - are all things that attract people, making them pull factors.",
+  "Danger and hardship = push. Opportunity and safety = pull.");
+
+q(2,"Push and Pull","Which of the following is most likely a PULL factor?",
+  ["Drought and water shortage","Extreme poverty","Armed conflict","Good healthcare system","Major natural disaster"],3,
+  "Ask yourself: does this make people want to arrive, or want to leave?",
+  "A good healthcare system is a pull factor because it attracts people to move TO that place. Drought, poverty, conflict, and natural disasters all make people want to LEAVE, so they are push factors.",
+  "Things that improve quality of life attract people - those are pull factors.");
+
+q(2,"Push and Pull","A family moves from a rural village to a city because the city has better hospitals and universities. What type of factor is driving this move?",
+  ["Push factor only","Pull factor only","Both push and pull factors","Neither push nor pull","A physical geography factor"],1,
+  "The family is moving because of positive attractions. Are they being pushed away or pulled towards something?",
+  "Better hospitals and universities are attractions at the destination - these are pull factors. The question gives no reason for leaving the village (no push is mentioned), so this move is driven by pull factors only.",
+  "If the reason is about what attracts you TO a place, it is a pull factor.");
+
+q(3,"Push and Pull","A farmer leaves his land because drought has made farming impossible, and moves to a city that has factory jobs available. How would you classify the drought and the factory jobs?",
+  ["Both are pull factors","Both are push factors","Drought is a pull factor; factory jobs are a push factor","Drought is a push factor; factory jobs are a pull factor","Neither are push or pull factors"],3,
+  "Identify each factor separately: does the drought make him want to leave or arrive? Do the factory jobs make him want to leave or arrive?",
+  "The drought makes farming impossible, forcing the farmer to LEAVE - that is a push factor. The factory jobs attract him TO the city - that is a pull factor. This is a classic example of both types working together.",
+  "Real migration usually involves BOTH push and pull at the same time. Identify each one separately.");
+
+q(2,"Population Growth","According to the population by region graph in the revision material, which region had by far the largest population by the year 2000?",
+  ["Europe","Africa","Latin America","Asia","Northern America"],3,
+  "Think about which region of the world has the most countries and the highest density of people.",
+  "Asia had by far the largest population by 2000, with the line on the graph reaching around 3.5 to 4 million units - far above every other region. This reflects countries like China and India, which each have populations over a billion.",
+  "Asia = most populated region. China and India alone account for over 2.8 billion people.");
+
+// ── MAP SKILLS (7 questions) ────────────────────────────
+
+q(1,"Map Skills","What are the four CARDINAL (main) compass directions?",
+  ["N, S, E, W","NE, SE, SW, NW","N, NE, E, SE","Up, Down, Left, Right","N, S, NE, SW"],0,
+  "Think about the four main points of a compass - the ones that point straight.",
+  "The four cardinal directions are North, South, East, and West (N, S, E, W). The diagonal directions such as NE, SE, SW, and NW are called intercardinal directions. Together they make eight compass directions.",
+  "Cardinal = the four main directions. Intercardinal = the four diagonals between them.");
+
+q(2,"Map Skills","A map has a scale of 1:25000. What does this mean?",
+  ["1 cm on the map equals 25 m in real life","1 cm on the map equals 250 m in real life","1 cm on the map equals 2.5 km in real life","1 cm on the map equals 25 km in real life","1 cm on the map equals 1 km in real life"],1,
+  "Work out the real distance: 1 cm times 25000, then convert from cm to metres.",
+  "A scale of 1:25000 means 1 unit on the map equals 25000 of the same units in real life. So 1 cm on the map = 25000 cm in real life. Divide by 100 to convert to metres: 25000 cm = 250 m.",
+  "1 cm x 25000 = 25000 cm. Divide by 100 = 250 m. Always convert cm to m by dividing by 100.");
+
+q(1,"Map Skills","On the map legend in the revision material, what does CL stand for?",
+  ["Central Library","Clinic","Community Lodge","Car Lane","Cattle Land"],1,
+  "Think about what important community buildings are typically found on a local map.",
+  "CL stands for Clinic. The map legend lists CL = Clinic. Knowing map abbreviations is an important map-reading skill.",
+  "Map legends always explain abbreviations - always check the key before reading a map.");
+
+q(1,"Map Skills","On the map legend in the revision material, what does MKT stand for?",
+  ["Market","Mountain","Main Track","Motorway","Monument"],0,
+  "Say the abbreviation out loud - which word does MKT most sound like?",
+  "MKT stands for Market. A market is a public trading area and is an important human geography feature commonly shown on maps with this abbreviation.",
+  "MKT = MarKeT. The letters M, K, T come from the word market.");
+
+q(1,"Map Skills","On the map legend in the revision material, what does TH stand for?",
+  ["Town Highway","Toll House","Town Hall","Tree Height","Train Hub"],2,
+  "Think about important civic buildings in a town. What do the letters T and H stand for?",
+  "TH stands for Town Hall. The Town Hall is a central civic building in many communities and is commonly marked on maps with the abbreviation TH.",
+  "TH = Town Hall. It is the main administrative building of a local area.");
+
+q(1,"Map Skills","When reading a four-figure grid reference, which direction do you read FIRST?",
+  ["Up the side (northing first)","Diagonally across","Along the bottom (easting first)","It does not matter which order","Downwards first"],2,
+  "Remember the saying: along the corridor, then up the stairs.",
+  "You always read the easting (horizontal number along the bottom) FIRST, then the northing (vertical number up the side). The memory trick is: along the corridor, up the stairs.",
+  "Easting first, northing second. Along the corridor, up the stairs - always.");
+
+q(2,"Map Skills","On a map with scale 1:25000, two points are 4 cm apart. What is the real-world distance?",
+  ["400 m","600 m","1000 m","4 km","25 km"],2,
+  "Multiply the map distance by the scale, then convert the answer from cm to metres.",
+  "4 cm x 25000 = 100000 cm. To convert cm to metres, divide by 100: 100000 divided by 100 = 1000 m. So the real-world distance is 1000 m, which is also 1 km.",
+  "Map cm x scale = real cm. Divide by 100 for metres. Divide by 100000 for km.");
+
+q(1,"Map Skills","On a map legend, what does a DASHED line represent in the revision material?",
+  ["A main road","A river","A footpath","A railway line","A national boundary"],2,
+  "Look at the legend in the revision material - what is the symbol that looks like a broken line?",
+  "A dashed line on the map legend represents a Foot Path. Main roads are shown as solid thick lines, while footpaths are shown as dashed lines to indicate they are smaller, unpaved routes.",
+  "Dashed line = footpath. Solid thick line = road. Always check the legend.");
+
+q(2,"Map Skills","What do CONTOUR LINES on a map show?",
+  ["Where roads are located","Points of equal height above sea level","The boundary between countries","The flow direction of rivers","Population density"],1,
+  "Think about what the numbers on those curved lines represent.",
+  "Contour lines connect all points that are at the same height (elevation) above sea level. The number on the line tells you the height. Lines that are close together mean a steep slope; widely spaced lines mean a gentle slope.",
+  "Contour lines = equal height. Close together = steep. Far apart = gentle slope.");
+
+q(2,"Map Skills","On a map, contour lines that are very CLOSE TOGETHER indicate what kind of terrain?",
+  ["Flat, low-lying land","A gentle slope","A very steep slope","An underwater area","A flat-topped hill"],2,
+  "Think about how much height change is packed into a small horizontal distance.",
+  "Closely packed contour lines mean the land rises steeply over a short horizontal distance. Widely spaced contour lines mean the land rises gently. The closer together, the steeper the slope.",
+  "Squeeze many height levels into a small space = steep slope. Spread them out = gentle slope.");
+
+q(2,"Map Skills","What is the difference between a four-figure and a six-figure grid reference?",
+  ["Four-figure identifies a whole grid square; six-figure pinpoints an exact spot within it","Four-figure is more precise than six-figure","Six-figure is only used for rivers","Four-figure uses letters; six-figure uses numbers","They refer to the same location"],0,
+  "Think about how much detail each type of grid reference gives you.",
+  "A four-figure grid reference (e.g. 8522) identifies a whole grid square on the map. A six-figure grid reference (e.g. 858224) is more precise and pinpoints an exact location within that square by dividing each side into tenths.",
+  "More figures = more precision. Six-figure gives a point; four-figure gives a square.");
+
+// ── RIVERS - DRAINAGE BASIN & TERMS (8 questions) ──────
+
+q(1,"Rivers","What is a drainage basin?",
+  ["A man-made water reservoir","An area around a river where all rainfall ends up in that river","The deepest section of a river channel","A type of steep waterfall","The area where two rivers meet"],1,
+  "Think about what drains into a river and from what area.",
+  "A drainage basin is an area surrounding a river where any rainfall will end up in the river. All rain falling inside the basin eventually flows into that river system.",
+  "Everything inside the basin drains into the same river. The boundary is called the watershed.");
+
+q(1,"Rivers","What is the term for the PERIMETER of a drainage basin?",
+  ["Confluence","Source","Mouth","Watershed","Tributary"],3,
+  "Think about what forms the outer boundary or edge of a drainage basin.",
+  "The watershed is the perimeter (outer boundary) of a drainage basin. Rain falling on one side of a watershed flows into one river basin; rain on the other side flows into a different basin.",
+  "Watershed = the dividing line between two drainage basins. Like a ridge separating two valleys.");
+
+q(1,"Rivers","What is the term for where TWO RIVERS JOIN together?",
+  ["Source","Mouth","Watershed","Tributary","Confluence"],4,
+  "Think about the Latin word con- meaning together.",
+  "A confluence is where two rivers join together. At a confluence, a smaller tributary meets the main river channel and they combine into one larger flow.",
+  "Con- means together. A confluence is where flows come together.");
+
+q(1,"Rivers","What is the term for where a RIVER STARTS?",
+  ["Mouth","Confluence","Tributary","Source","Watershed"],3,
+  "Think about the origin point of a river, usually high up on a hillside.",
+  "The source is where a river starts. It is usually found high up in mountains or hills where water collects and begins flowing downhill as a river.",
+  "Source = starting point. Like the source of a story - where it all begins.");
+
+q(1,"Rivers","What is the term for where a RIVER MEETS THE SEA?",
+  ["Source","Tributary","Mouth","Watershed","Confluence"],2,
+  "Think about the part of your body that opens outward - the same word applies here.",
+  "The mouth is where a river meets the sea or a large body of water. Just as a mouth is an opening, the river mouth is where it opens out into the sea.",
+  "Mouth = opening. A river mouth is where the river opens into the sea.");
+
+q(1,"Rivers","What is a TRIBUTARY?",
+  ["The starting point of a river","The place where two rivers join","A smaller river that connects to a main river","The perimeter of a drainage basin","Where a river meets the sea"],2,
+  "Think about smaller rivers feeding into a larger one.",
+  "A tributary is a smaller river that is connected to and flows into a main river. Tributaries feed the main river channel with additional water, making it larger as it flows downstream.",
+  "Tributaries are like branches feeding into the main trunk of a tree - the main river is the trunk.");
+
+q(1,"Rivers","What is the term for the MAIN RIVER in a drainage basin?",
+  ["Tributary","Watershed","Main River Channel","Confluence","Source"],2,
+  "Think about the largest, central river that all the smaller rivers flow into.",
+  "The Main River Channel is the primary, largest river in a drainage basin. Tributaries are smaller rivers that flow into it. The main river channel carries the combined water of all its tributaries as it flows toward the sea.",
+  "Main River Channel = the central spine of the drainage basin. Tributaries feed into it.");
+
+q(2,"Rivers","In the LOWER COURSE of a river, what best describes the shape of the channel?",
+  ["Steep and narrow due to vertical erosion","Moderate depth with some lateral erosion","Widest and shallowest as the river approaches the sea","A deep V-shape cut into rock","Fast-flowing with many waterfalls"],2,
+  "Think about where a river is in its journey - it is nearly at the sea. What happens to its energy and shape?",
+  "In its lower course, the river is at its widest and shallowest because it is approaching the sea. The gradient is very gentle, the river moves slowly, and lateral erosion has widened the channel significantly.",
+  "Upper = steep and narrow. Middle = wider. Lower = widest and shallowest.");
+
+q(2,"Rivers","What is DEPOSITION in a river context?",
+  ["When a river erodes its banks sideways","When a river drops and lays down the sediment it was carrying","When a river suddenly changes direction","When rainfall enters a drainage basin","When two rivers merge at a confluence"],1,
+  "Think about what happens when a river loses energy and can no longer carry its load.",
+  "Deposition is when a river slows down and drops the sediment it was transporting. This is the opposite of erosion. Deposition typically happens on the inside of meander bends and in the lower course of a river.",
+  "Deposition = dropping sediment. Happens when the river loses energy and slows down.");
+
+q(3,"Rivers","In which COURSE of a river would you most likely find a waterfall?",
+  ["Lower course only","Middle course only","Upper course","At the mouth of the river","Only at a confluence"],2,
+  "Think about where rivers are steepest and where they flow over different types of rock.",
+  "Waterfalls are found in the upper course of a river where the gradient is steep and the river flows over layers of hard and soft rock. The revision notes confirm waterfalls are found in the upper section of the river channel.",
+  "Upper course = steep gradient + hard/soft rock layers = waterfalls. Lower course is too flat.");
+
+// ── WATERFALL FORMATION (4 questions) ──────────────────
+
+q(2,"Waterfall","In waterfall formation, what is the FIRST step that begins the process?",
+  ["The overhang collapses","A plunge pool develops","Undercutting of the soft rock below","The waterfall retreats upstream","A gorge-like valley forms"],2,
+  "Look at the waterfall diagram - step 1 is labelled at the base of the waterfall.",
+  "Step 1 is undercutting. Water flowing over the hard rock erodes the softer rock underneath, wearing it away. This eventually creates an overhang of hard rock sticking out above. The sequence is: undercut, overhang collapses, plunge pool, retreat upstream, gorge forms.",
+  "The sequence: 1-Undercut, 2-Overhang collapses, 3-Plunge pool, 4-Retreat, 5-Gorge.");
+
+q(1,"Waterfall","In a waterfall, which type of rock is found on TOP?",
+  ["Soft rock","Sandstone","Limestone","Hard rock","Clay"],3,
+  "Look at the waterfall diagram - the labels show which rock is where.",
+  "Hard rock is found on top in a waterfall structure. The water flows over the hard rock and then erodes the softer rock underneath it. This difference in rock hardness is what creates the waterfall.",
+  "Hard on top, soft below. The soft rock erodes away, creating the undercutting that drives waterfall retreat.");
+
+q(1,"Waterfall","What feature forms at the BASE of a waterfall where the falling water hits the rock below?",
+  ["Gorge","Plunge pool","Watershed","Confluence","Oxbow lake"],1,
+  "Look at the waterfall diagram - step 3 labels this feature.",
+  "A plunge pool forms at the base of a waterfall. The force of the falling water hitting the rock below creates a deep, circular pool. This is step 3 in the waterfall formation process.",
+  "Plunge pool = the pool where the water plunges down. The erosion here deepens the pool over time.");
+
+q(2,"Waterfall","As a waterfall retreats upstream over time, what type of steep valley does it carve out?",
+  ["A U-shaped valley","A flood plain","A river delta","A gorge","A meander"],3,
+  "The revision notes describe the valley left behind as the waterfall retreats.",
+  "As the waterfall retreats upstream, it carves out a steep-sided valley called a gorge. The revision notes state: the waterfall retreats into the landscape, carving out a steep-side valley called a gorge.",
+  "Gorge = a steep-sided, narrow valley carved by a retreating waterfall over thousands of years.");
+
+// ── EROSION (6 questions) ───────────────────────────────
+
+q(2,"Erosion","Which type of river erosion involves the force of flowing water entering CRACKS in rock and breaking it apart?",
+  ["Abrasion","Attrition","Solution","Saltation","Hydraulic action"],4,
+  "Think about the power of water pressure forcing its way into gaps in the rock.",
+  "Hydraulic action is when the force of the flowing water enters cracks in the rock, traps air, and creates pressure that weakens and eventually breaks apart the rock. It is purely mechanical - no sediment needed.",
+  "Hydraulic = to do with water pressure. Hydraulic action = water pressure breaking rock.");
+
+q(2,"Erosion","Which type of river erosion involves rocks and sediment SCRAPING against the riverbed like sandpaper?",
+  ["Hydraulic action","Solution","Attrition","Abrasion","Traction"],3,
+  "Think about a rough material being dragged across a surface to wear it down.",
+  "Abrasion is when rocks, pebbles, and sediment carried by the river scrape against the riverbed and banks, acting like sandpaper to wear them away. The sediment does the scraping.",
+  "Abrasion = like sandpaper. The word abrasion comes from abrading, meaning to scrape.");
+
+q(2,"Erosion","Which type of river erosion involves minerals being CHEMICALLY DISSOLVED by slightly acidic river water?",
+  ["Abrasion","Hydraulic action","Attrition","Suspension","Solution"],4,
+  "Think about a chemical process rather than a physical scraping process.",
+  "Solution is when minerals in the rock are chemically dissolved by the slightly acidic river water and then carried away in the flow. The rock is not broken physically - it dissolves chemically. The revision notes highlight this as an important one to remember.",
+  "Solution = dissolving. It is a chemical process, not a physical one. Limestone is particularly vulnerable.");
+
+q(2,"Erosion","Which type of erosion involves pieces of sediment COLLIDING with each other, breaking down into smaller rounded fragments?",
+  ["Hydraulic action","Abrasion","Attrition","Solution","Saltation"],2,
+  "Think about two rocks bumping into each other repeatedly over time.",
+  "Attrition is when sediment carried by the river collides with each other, the riverbed, and the banks, causing them to break down into smaller, smoother, and more rounded fragments. This is why river pebbles become rounded.",
+  "Attrition = the particles wear each other down. River pebbles are round because of attrition.");
+
+q(2,"Erosion","Which TWO types of erosion both involve a PHYSICAL rather than chemical process?",
+  ["Solution and attrition","Hydraulic action and abrasion","Suspension and traction","Saltation and solution","Attrition and suspension"],1,
+  "Think about which erosion types involve physical force - either water pressure or grinding - rather than a chemical reaction.",
+  "Hydraulic action uses the physical force of water pressure breaking rock apart. Abrasion uses the physical grinding of sediment against the riverbed and banks. Both are physical processes. Solution is chemical (dissolving), not physical.",
+  "Physical erosion = hydraulic action (pressure) and abrasion (grinding). Chemical = solution.");
+
+q(3,"Erosion","A river is slowing down in its lower course. Which method of sediment transport would STOP FIRST as the river loses energy?",
+  ["Suspension","Solution","Saltation","Traction","Abrasion"],3,
+  "Think about which transport method moves the heaviest material and therefore requires the most energy.",
+  "Traction moves the largest, heaviest rocks by rolling them along the river bed. These require the most energy to move and will therefore be deposited first when the river slows down. Suspension keeps the finest, lightest particles moving the longest.",
+  "Most energy needed = deposited first. Traction (heavy rocks) stops first; suspension (fine particles) stops last.");
+
+// ── SEDIMENT TRANSPORT (4 questions) ───────────────────
+
+q(2,"Erosion","How does TRACTION transport sediment in a river?",
+  ["Tiny particles lifted and carried in the water","Small rocks bounced along the river bed","Large rocks rolled along the river bed","Particles dissolved by acids in the water","Rocks skimming along the surface"],2,
+  "Think about the heaviest material a river can move - how would it move?",
+  "Traction is when large rocks are rolled along the river bed. These are the heaviest materials and the river cannot lift them, so they are simply rolled by the force of the current along the bottom.",
+  "Traction = dragging and rolling. The heaviest load is moved by traction.");
+
+q(2,"Erosion","How does SALTATION transport sediment in a river?",
+  ["Tiny particles lifted and carried in the water","Small rocks bounced along the river bed","Large rocks rolled along the river bed","Particles dissolved by acids","Rocks floating on the surface"],1,
+  "Think about a medium-sized rock that can be picked up briefly but then dropped again.",
+  "Saltation is when small rocks are bounced along the river bed. The current is strong enough to briefly lift them, but not strong enough to keep them in suspension, so they bounce in a series of hops along the bottom.",
+  "Saltation comes from the Latin saltare meaning to jump. Sediment jumps along the bed.");
+
+q(2,"Erosion","How does SUSPENSION transport sediment in a river?",
+  ["Large rocks rolled along the river bed","Small rocks bounced along the bed","Tiny particles lifted and carried within the water","Particles dissolved by acids","Rocks skimming the surface"],2,
+  "Think about very fine, light particles that the river can fully carry within its flow.",
+  "Suspension is when tiny particles are lifted and carried within the water itself. The particles are so light that the river current keeps them floating in the flow. This is what makes some rivers look brown or cloudy.",
+  "Suspension = suspended in the water. The finest particles travel this way. Makes rivers look muddy.");
+
+// ── RIVER PROFILE (2 questions) ─────────────────────────
+
+q(2,"Rivers","In the UPPER COURSE of a river, the channel is steep and narrow. What type of erosion causes this?",
+  ["Lateral erosion","Solution","Attrition","Vertical erosion","Hydraulic action"],3,
+  "The river is cutting downwards through rock in the upper course. What direction is the erosion?",
+  "In the upper course, the river erodes downwards through the rock in a process called vertical erosion. This creates a steep, narrow, V-shaped channel. The river has a lot of energy and cuts down rather than sideways.",
+  "Upper course = vertical erosion = steep and narrow V-shape.");
+
+q(2,"Rivers","In the MIDDLE COURSE of a river, the channel becomes wider. What type of erosion causes this?",
+  ["Vertical erosion","Hydraulic action","Attrition","Lateral erosion","Solution"],3,
+  "The river is eroding outwards to the sides in the middle course. What direction is the erosion?",
+  "In the middle course, the river erodes outwards (sideways) in a process called lateral erosion. This makes the channel shallower and wider. The gradient is less steep, so the river spreads out rather than cutting down.",
+  "Middle course = lateral erosion = wider and shallower channel. Lateral means to the side.");
+
+document.getElementById("pool-info").textContent =
+  POOL.length + " questions in pool - 20 randomly selected each round";
+
+var QS_PER_ROUND = 20;
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+var deck, cur, rights, wrongs, hintCount, hist;
+
+function init() {
+  deck = shuffle(POOL).slice(0, Math.min(QS_PER_ROUND, POOL.length));
+  cur = 0; rights = 0; wrongs = 0; hintCount = 0; hist = [];
+  document.getElementById("scr").textContent = "0";
+  document.getElementById("scw").textContent = "0";
+  document.getElementById("qarea").style.display = "block";
+  document.getElementById("rscreen").style.display = "none";
+  document.getElementById("fixednext").style.display = "none";
+  document.body.className = "";
+  render();
+}
+
+function render() {
+  var q = deck[cur];
+  var pct = Math.round(cur / deck.length * 100);
+  document.getElementById("pfill").style.width = pct + "%";
+  document.getElementById("qcounter").textContent = "Question " + (cur + 1) + " of " + deck.length;
+  document.getElementById("fixednext").style.display = "none";
+  document.body.className = "";
+  var L = ["A","B","C","D","E"];
+  var html = '<div class="card">';
+  html += '<div class="qmeta"><span class="qnum">Q' + (cur + 1) + "</span>";
+  html += '<span class="qpill ' + q.d + '">' + q.type + "</span></div>";
+  html += '<div class="qtext">' + q.text + "</div>";
+  html += '<div class="opts" id="opts">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="opt" id="opt' + i + '" onclick="pick(' + i + ')"><span class="oletter">' + L[i] + "</span> " + q.opts[i] + "</button>";
+  }
+  html += "</div>";
+  html += '<button class="hbtn" id="hbtn" onclick="toggleHint()">&#128161; Show first-step hint</button>';
+  html += '<div class="hbox" id="hbox" style="display:none">' + q.hint + "</div>";
+  html += '<div id="ebox" style="display:none">';
+  html += '<div class="rlabel" id="rlabel"></div>';
+  html += '<div class="ebox"><div class="elabel">Explanation</div>';
+  html += '<div class="etext">' + q.expl + "</div>";
+  html += '<div class="insight">' + q.insight + "</div></div>";
+  html += "</div></div>";
+  document.getElementById("maincard").innerHTML = html;
+}
+
+function pick(chosen) {
+  var q = deck[cur];
+  var L = ["A","B","C","D","E"];
+  for (var k = 0; k < q.opts.length; k++) {
+    var b = document.getElementById("opt" + k);
+    if (b) { b.onclick = null; b.style.cursor = "default"; }
+  }
+  var lbl = document.getElementById("rlabel");
+  if (chosen === q.ans) {
+    document.getElementById("opt" + chosen).classList.add("correct");
+    rights++;
+    document.getElementById("scr").textContent = rights;
+    hist.push("c");
+    lbl.textContent = "Correct!";
+    lbl.className = "rlabel ok";
+  } else {
+    document.getElementById("opt" + chosen).classList.add("wrong");
+    document.getElementById("opt" + q.ans).classList.add("reveal");
+    wrongs++;
+    document.getElementById("scw").textContent = wrongs;
+    hist.push("w");
+    lbl.textContent = "Wrong - the answer was (" + L[q.ans] + ")";
+    lbl.className = "rlabel ng";
+  }
+  document.getElementById("ebox").style.display = "block";
+  document.getElementById("hbtn").style.display = "none";
+  document.getElementById("hbox").style.display = "none";
+  document.getElementById("fixednext").style.display = "block";
+  document.body.className = "answered";
+}
+
+function toggleHint() {
+  var hbox = document.getElementById("hbox");
+  var hbtn = document.getElementById("hbtn");
+  if (hbox.style.display === "none") {
+    hbox.style.display = "block";
+    hbtn.textContent = "Hide hint";
+    hintCount++;
+  } else {
+    hbox.style.display = "none";
+    hbtn.textContent = "Show first-step hint";
+  }
+}
+
+function nextQ() {
+  cur++;
+  document.getElementById("fixednext").style.display = "none";
+  document.body.className = "";
+  if (cur >= deck.length) { showResult(); return; }
+  render();
+  window.scrollTo(0, 0);
+}
+
+function showResult() {
+  document.getElementById("qarea").style.display = "none";
+  document.getElementById("rscreen").style.display = "block";
+  var pct = Math.round(rights / deck.length * 100);
+  document.getElementById("rscore").textContent = rights + " / " + deck.length;
+  document.getElementById("rbc").textContent = rights;
+  document.getElementById("rbw").textContent = wrongs;
+  document.getElementById("rbh").textContent = hintCount;
+  document.getElementById("rbp").textContent = pct + "%";
+  var dd = document.getElementById("dots");
+  dd.innerHTML = "";
+  for (var i = 0; i < hist.length; i++) {
+    var d = document.createElement("div");
+    d.className = "dot " + hist[i];
+    dd.appendChild(d);
+  }
+  var msg;
+  if (pct >= 90) msg = "Outstanding! You really know your Grade 7 Geography!";
+  else if (pct >= 75) msg = "Well done! Review the questions you missed and you will nail it.";
+  else if (pct >= 55) msg = "Good effort! Read the explanations carefully and try again.";
+  else msg = "Keep going! Study the revision notes and give it another round.";
+  document.getElementById("rmsg").textContent = msg;
+  window.scrollTo(0, 0);
+}
+
+function restart() { init(); }
+init();
+</script>
+</body>
+</html>
