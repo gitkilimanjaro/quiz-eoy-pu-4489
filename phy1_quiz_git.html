@@ -185,14 +185,14 @@ body.answered{padding-bottom:70px}
       <div class="dash-metric">
         <span class="dash-icon">&#127919;</span>
         <div>
-          <div class="dash-val" id="dash-active">—</div>
+          <div class="dash-val" id="dash-active">150</div>
           <div class="dash-lbl">Active Questions</div>
         </div>
       </div>
       <div class="dash-metric">
         <span class="dash-icon">&#127942;</span>
         <div>
-          <div class="dash-val mastered" id="dash-mastered">—</div>
+          <div class="dash-val mastered" id="dash-mastered">0</div>
           <div class="dash-lbl">Mastered &amp; Retired</div>
         </div>
       </div>
@@ -538,16 +538,19 @@ function showHome(){
   document.getElementById('dash-bar').style.width      = m.pct+'%';
   document.getElementById('dash-pct').textContent      = m.pct+'% complete';
 
+  var hasProgress = Object.keys(ledger).length > 0;
   var btn=document.getElementById('btn-continue');
   var allDone=document.getElementById('all-done');
 
   if(m.active===0){
     btn.disabled=true;
-    btn.textContent='&#127881; All Questions Mastered!';
+    btn.innerHTML='&#127881; All Questions Mastered!';
     allDone.style.display='block';
   } else {
     btn.disabled=false;
-    btn.innerHTML='&#9654; Continue Progress ('+pool.length+' active)';
+    btn.innerHTML = hasProgress
+      ? '&#9654; Continue Progress &nbsp;(' + pool.length + ' remaining)'
+      : '&#9654; Start Learning';
     allDone.style.display='none';
   }
 
@@ -639,7 +642,7 @@ function render(){
   html+='</div>';
   html+='<div class="qtext">'+esc(qobj.q)+'</div>';
   for(var i=0;i<shuffled.length;i++){
-    html+='<button class="opt" id="opt'+i+'" onclick="answer('+i+','+newAns+','+qobj.id+',''+qobj.t.replace(/'/g,"\'")+'')">'+L[i]+'. '+esc(shuffled[i])+'</button>';
+    html+='<button class="opt" id="opt'+i+'" onclick="answer('+i+','+newAns+')">'+L[i]+'. '+esc(shuffled[i])+'</button>';
   }
   html+='<div class="rlabel" id="rlbl"></div>';
   html+='<div class="hint-box" id="hbox">&#128161; '+esc(qobj.h)+'</div>';
@@ -652,7 +655,10 @@ function render(){
 // ═══════════════════════════════════════════════════════
 //  ANSWER
 // ═══════════════════════════════════════════════════════
-function answer(chosen, correct, qid, topic){
+function answer(chosen, correct){
+  var qobj=deck[cur];
+  var qid=qobj.id;
+  var topic=qobj.t;
   var opts=document.querySelectorAll('.opt');
   for(var i=0;i<opts.length;i++) opts[i].disabled=true;
 
