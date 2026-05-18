@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 7 Physical Science Quiz v3</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f0f4f8;padding:20px}
+.wrap{max-width:680px;margin:0 auto}
+h1{font-size:1.45rem;margin-bottom:3px;color:#1a237e}
+.sub{color:#555;font-size:.82rem;margin-bottom:16px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.topbar span{font-size:.8rem;color:#777}
+.scores{display:flex;gap:8px}
+.sc{font-size:.8rem;padding:3px 12px;border-radius:20px;border:1.5px solid}
+.sc.ok{border-color:#1a7f37;color:#1a7f37}
+.sc.ng{border-color:#c0392b;color:#c0392b}
+.prog-bg{height:5px;background:#ddd;border-radius:3px;margin-bottom:16px}
+.prog-fill{height:100%;background:#1a237e;border-radius:3px;transition:width .4s}
+#fixednext{position:fixed;bottom:0;left:0;right:0;background:#1a237e;color:#fff;border:none;
+  padding:18px;font-size:1.1rem;font-weight:bold;font-family:Arial,sans-serif;
+  cursor:pointer;display:none;z-index:999;text-align:center}
+#fixednext:hover{background:#283593}
+body.answered{padding-bottom:70px}
+.card{background:#fff;border-radius:14px;padding:20px;border:1px solid #e0e0e0;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.qmeta{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.qnum{font-size:.72rem;color:#aaa}
+.qpill{font-size:.68rem;padding:2px 9px;border-radius:10px;font-weight:bold}
+.Particle{background:#fce4ec;color:#880e4f;border:1px solid #f48fb1}
+.Elements{background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7}
+.Earth{background:#fff3e0;color:#e65100;border:1px solid #ffcc80}
+.Speed{background:#e3f2fd;color:#0d47a1;border:1px solid #90caf9}
+.Magnets{background:#f3e5f5;color:#4a148c;border:1px solid #ce93d8}
+.Space{background:#e0f7fa;color:#006064;border:1px solid #80deea}
+color:#1a7f37;border:1px solid #b5e8c8}
+.medium{background:#e8f0fe;color:#1a56db;border:1px solid #c3d7fc}
+.hard{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.qtext{font-size:1rem;font-weight:bold;margin-bottom:14px;line-height:1.5;color:#222}
+.opt{display:block;width:100%;text-align:left;padding:11px 14px;margin:5px 0;
+  border-radius:8px;border:1.5px solid #ddd;background:#fafafa;
+  font-size:.93rem;cursor:pointer;font-family:Arial,sans-serif;transition:background .15s}
+.opt:hover:not(:disabled){background:#e8eaf6;border-color:#9fa8da}
+.opt.correct{background:#e8f5e9;border-color:#43a047;color:#1b5e20;font-weight:bold}
+.opt.wrong{background:#ffebee;border-color:#e53935;color:#b71c1c}
+.opt.reveal{background:#e8f5e9;border-color:#43a047;color:#1b5e20;font-weight:bold}
+.opt:disabled{cursor:default}
+.rlabel{display:none;font-weight:bold;margin:10px 0 6px;font-size:.9rem}
+.rlabel.ok{color:#1a7f37}
+.rlabel.ng{color:#c0392b}
+#ebox{display:none;margin-top:12px}
+.expl-box{background:#f8f9ff;border-left:4px solid #5c6bc0;padding:12px 14px;border-radius:6px;font-size:.88rem;line-height:1.55;color:#333;margin-bottom:8px}
+.insight-box{background:#fffde7;border-left:4px solid #f9a825;padding:10px 14px;border-radius:6px;font-size:.85rem;line-height:1.5;color:#5d4037}
+.insight-lbl{font-weight:bold;color:#f57f17;margin-bottom:3px;font-size:.8rem}
+#hbtn{display:block;background:none;border:1px solid #9fa8da;color:#3949ab;padding:7px 14px;
+  border-radius:6px;font-size:.83rem;cursor:pointer;margin-bottom:8px;font-family:Arial,sans-serif}
+#hbox{display:none;background:#e8eaf6;border-radius:6px;padding:10px 14px;font-size:.86rem;color:#283593;margin-bottom:8px}
+#rscreen{display:none}
+.rscore{font-size:2.8rem;font-weight:bold;text-align:center;margin:16px 0 8px;color:#1a237e}
+.dots{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:10px 0}
+.dot{width:14px;height:14px;border-radius:50%}
+.dot.ok{background:#43a047}
+.dot.w{background:#e53935}
+.rmsg{text-align:center;font-size:.95rem;color:#555;margin:8px 0 16px}
+.rgrid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+.rcard{background:#f4f4f0;border-radius:10px;padding:12px 6px;text-align:center}
+.rnum{font-size:1.6rem;font-weight:bold;display:block}
+.rnum.ok{color:#1a7f37}
+.rnum.ng{color:#c0392b}
+.rnum.bl{color:#1a56db}
+.rlbl2{font-size:.72rem;color:#888;margin-top:3px}
+.brestart{display:block;width:100%;padding:14px;background:#1a237e;color:#fff;border:none;
+  border-radius:10px;font-size:1rem;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif}
+.brestart:hover{background:#283593}
+.pool-info{text-align:center;font-size:.75rem;color:#aaa;margin-top:10px}
+.topic-bar{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.tbadge{font-size:.72rem;padding:3px 8px;border-radius:10px;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>&#9883; Grade 7 Physical Science</h1>
+  <p class="sub">Science Ahead &middot; Cambridge Curriculum &middot; 25 questions per round from 175</p>
+  <div class="topic-bar">
+    <span class="tbadge Particle">Particle Model</span>
+    <span class="tbadge Elements">Elements &amp; Compounds</span>
+    <span class="tbadge Earth">The Earth</span>
+    <span class="tbadge Speed">Speed &amp; Motion</span>
+    <span class="tbadge Magnets">Magnets</span>
+    <span class="tbadge Space">Space</span>
+  </div>
+  <div class="topbar">
+    <span id="qcounter">Question 1 of 30</span>
+    <div class="scores">
+      <span class="sc ok">&#10003; <span id="scr">0</span></span>
+      <span class="sc ng">&#10007; <span id="scw">0</span></span>
+    </div>
+  </div>
+  <div class="prog-bg"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+  <div id="maincard"></div>
+</div>
+
+<div class="wrap" id="rscreen">
+  <div class="card">
+    <h2 style="margin-bottom:6px;color:#1a237e">Round complete!</h2>
+    <div class="rscore" id="rscore"></div>
+    <div class="dots" id="dots"></div>
+    <div class="rmsg" id="rmsg"></div>
+    <div class="rgrid">
+      <div class="rcard"><span class="rnum ok" id="rbc">0</span><div class="rlbl2">Correct</div></div>
+      <div class="rcard"><span class="rnum ng" id="rbw">0</span><div class="rlbl2">Wrong</div></div>
+      <div class="rcard"><span class="rnum bl" id="rbh">0</span><div class="rlbl2">Hints</div></div>
+      <div class="rcard"><span class="rnum" id="rbp">0%</span><div class="rlbl2">Score</div></div>
+    </div>
+    <button class="brestart" onclick="restart()">&#8635; New round</button>
+    <div class="pool-info" id="pool-info"></div>
+  </div>
+</div>
+
+<button id="fixednext" onclick="nextQ()">Next question &#8594;</button>
+
+<script>
+var POOL = [];
+function q(difficulty, type, text, opts, ans, hint, expl, insight) {
+  POOL.push({d:difficulty, type:type, text:text, opts:opts, ans:ans, hint:hint, expl:expl, insight:insight});
+}
+
+// ═══════════════════════════════════════════════
+// TOPIC 1: PARTICLE MODEL (30 questions)
+// ═══════════════════════════════════════════════
+
+q(1,"Particle","Which state of matter has particles arranged in a fixed, ordered pattern with all particles touching?",
+  ["Gas","Liquid","Solid","Plasma","Vapour"],2,
+  "Think about which state has the strongest forces of attraction between particles.",
+  "In a solid, particles are held in fixed positions in an ordered, regular pattern. All particles touch each other and the forces of attraction are very strong. This is why solids keep a definite shape.",
+  "KEY: Solid = ordered rows, all touching, fixed positions, very strong forces.");
+
+q(1,"Particle","Which state of matter can be compressed (squashed) easily?",
+  ["Solid","Liquid","Both solid and liquid","Gas","None of them"],3,
+  "Think about which state has particles that are far apart from each other.",
+  "Gas particles are far apart from each other, so there is a lot of empty space between them. This means gas can be compressed by pushing the particles closer together. Solids and liquids cannot be compressed because their particles are already touching.",
+  "KEY: Only gases can be compressed because gas particles are far apart.");
+
+q(1,"Particle","What is the correct term for the random movement of pollen grains in water, caused by water particles hitting them?",
+  ["Diffusion","Evaporation","Brownian motion","Condensation","Osmosis"],2,
+  "This phenomenon was first observed by Scottish scientist Robert Brown in 1773.",
+  "Brownian motion is the random movement of small particles such as pollen grains in a liquid or gas. The pollen grains are bombarded from all sides by the much smaller, fast-moving water particles, causing them to move randomly.",
+  "KEY: Brownian motion = evidence that particles are in constant random motion.");
+
+q(1,"Particle","What is diffusion?",
+  ["The movement of particles from cold to hot","The net movement of particles from high concentration to low concentration","The process of a liquid turning to gas","The compression of gas particles","The arrangement of particles in a solid"],1,
+  "Diffusion involves particles spreading out from where there are many of them to where there are fewer.",
+  "Diffusion is the net movement of particles from a region of higher concentration to a region of lower concentration. It happens because particles are always in constant random motion. Gases and liquids can diffuse, but solids cannot.",
+  "KEY: Diffusion = high concentration to low concentration, due to random particle movement.");
+
+q(1,"Particle","In which state of matter do particles vibrate about fixed positions but cannot move freely?",
+  ["Gas","Liquid","Solid","All states","None of them"],2,
+  "Which state has the strongest forces holding particles in place?",
+  "In a solid, particles are held in fixed positions by very strong forces of attraction. They can only vibrate (shake) back and forth about their fixed positions. They do not move around freely like liquid or gas particles.",
+  "KEY: Solid particles vibrate but stay in fixed positions.");
+
+q(1,"Particle","Which state of matter has no definite shape but does have a definite volume?",
+  ["Solid","Gas","Liquid","Plasma","Vapour"],2,
+  "A definite volume means it takes up the same amount of space regardless of container. No definite shape means it takes the shape of its container.",
+  "A liquid has a definite volume because its particles are still close together and touching. However, liquid particles can move freely over each other, so the liquid takes the shape of whatever container it is in. It has no definite shape.",
+  "KEY: Liquid = definite volume, no definite shape.");
+
+q(2,"Particle","Why does gas exert pressure on the walls of its container?",
+  ["Because gas particles are attracted to the walls","Because gas particles collide with the walls","Because gas particles are heavier than air","Because gas is compressed inside","Because the container is heated"],1,
+  "Gas pressure is caused by particles hitting something. What do they hit?",
+  "Gas particles are in constant, fast, random motion. They collide with the walls of their container repeatedly. Each collision exerts a tiny force on the wall. The total effect of billions of collisions per second creates the gas pressure we measure.",
+  "KEY: Gas pressure = particles colliding with container walls.");
+
+q(2,"Particle","What happens to gas pressure when the temperature of a sealed container is increased?",
+  ["Pressure decreases","Pressure stays the same","Pressure increases","Pressure becomes zero","It depends on the gas"],2,
+  "Higher temperature means particles move faster. How does that affect collisions with the walls?",
+  "When temperature increases, the gas particles gain energy and move faster. They collide with the walls more frequently and with greater force. This increases the gas pressure inside the container.",
+  "KEY: Higher temperature means faster particles, more collisions, higher pressure.");
+
+q(2,"Particle","A balloon is pumped with more air. Why does it expand?",
+  ["The particles get bigger","There are more particles colliding with the walls, creating more pressure","The temperature increases","The particles slow down","The rubber gets softer"],1,
+  "More air means more particles in the same space. Think about what more particles do to the walls.",
+  "When more air is pumped in, there are more gas particles inside. More particles means more collisions with the inner walls per second. This increased pressure pushes the walls outward, causing the balloon to expand.",
+  "KEY: More particles = more collisions = more pressure = balloon expands.");
+
+q(2,"Particle","When a liquid is heated and turns into a gas, what happens to the energy of the particles?",
+  ["They lose energy and slow down","They gain energy and move faster","Their energy stays the same","They stop moving","They become smaller"],1,
+  "Adding heat gives energy to particles. What does more energy do to movement?",
+  "When a liquid is heated, the particles gain energy and move faster. The attractive forces between them become too weak to hold them together. The particles break free from each other, and the liquid becomes a gas. This process is called boiling or evaporation.",
+  "KEY: Heating means particles gain energy, move faster, and eventually escape as gas.");
+
+q(2,"Particle","During freezing, what happens to the particles of a liquid?",
+  ["They gain energy and move faster","They lose energy, slow down, and become held in fixed positions","They break free from each other","They become randomly arranged","They start to collide more often"],1,
+  "Freezing is the opposite of melting. Think about what happens to energy when something gets colder.",
+  "During freezing, the liquid is cooled. The particles lose energy and move more slowly. The attractive forces between them become strong enough to hold them in fixed positions. The liquid becomes a solid.",
+  "KEY: Freezing = particles lose energy, slow down, locked into fixed positions.");
+
+q(2,"Particle","In which state do the particles have the LEAST energy?",
+  ["Gas","Liquid","Solid","They all have the same energy","It depends on temperature"],2,
+  "Think about which state requires the most cooling to reach. Which state has the slowest-moving particles?",
+  "Solid particles have the least energy. They can only vibrate about fixed positions. Liquid particles have more energy and can move around each other. Gas particles have the most energy and move freely at high speed.",
+  "KEY: Energy order from least to most: Solid, Liquid, Gas.");
+
+q(2,"Particle","Why can you smell perfume from across a room even without any wind?",
+  ["The smell travels along the floor","Perfume particles diffuse through the air from high to low concentration","The nose is very sensitive to temperature","Air currents push the smell","Perfume particles are attracted to people"],1,
+  "This is an example of a process where particles spread out on their own. What is the name of this process?",
+  "Perfume particles diffuse through the air. They move from the area of high concentration near the bottle to areas of lower concentration across the room. This happens because gas particles are in constant random motion and spread out naturally.",
+  "KEY: Smell spreading = diffusion of gas particles from high to low concentration.");
+
+q(2,"Particle","Why does diffusion happen faster in gases than in liquids?",
+  ["Gas particles are bigger","Gas particles move faster and have more space between them","Liquid particles are colder","Gas particles are heavier","Liquid particles cannot move at all"],1,
+  "Compare how fast particles move in gas versus liquid. Also think about how much space is between the particles.",
+  "In a gas, particles move very fast and are far apart, so they can travel long distances without bumping into many other particles. In a liquid, particles are closer together and must push past each other, slowing down the spreading. So diffusion is much faster in gases.",
+  "KEY: Gas diffuses faster because particles move faster and have more open space.");
+
+q(3,"Particle","A student compresses gas in a sealed syringe by pushing the plunger in. The volume decreases. What happens to the pressure, and why?",
+  ["Pressure decreases because particles have more room","Pressure increases because particles collide with walls more often in a smaller space","Pressure stays the same because temperature did not change","Pressure increases because temperature increases","Pressure decreases because particles slow down"],1,
+  "When the volume gets smaller, the same number of particles are squeezed into less space. Think about how often they hit the walls.",
+  "When volume decreases, the same number of gas particles are in a smaller space. They hit the walls of the syringe more frequently because they do not need to travel as far between collisions. This increases the gas pressure. Temperature does not change in this case.",
+  "KEY: Smaller volume + same particles = more frequent wall collisions = higher pressure.");
+
+q(3,"Particle","What is the correct explanation for why a solid cannot be compressed?",
+  ["Solid particles are too heavy","Solid particles are already touching, so there is no space to push them closer","Solid particles move too fast","Solid particles have no forces between them","Solids are always at low temperature"],1,
+  "Think about the arrangement of particles in a solid. Is there empty space between them?",
+  "In a solid, all particles are already touching each other and packed tightly together. There is no empty space between them. This means there is nowhere for the particles to go when a compressing force is applied, so the solid cannot be compressed.",
+  "KEY: Solid cannot be compressed because particles are already touching with no space between them.");
+
+q(3,"Particle","The particle theory states that particles do NOT change during a change of state. What does NOT change when water freezes into ice?",
+  ["The arrangement of particles","The movement of the particles","The type and size of the particles","The forces between the particles","The energy of the particles"],2,
+  "A change of state changes how particles are arranged and how they move. But does it change what the particles actually are?",
+  "When water freezes, the water molecules (particles) themselves do not change. They are still water molecules of exactly the same size and type. What changes is their arrangement (random to ordered), their movement (mobile to fixed vibration), and the forces between them (weaker to stronger).",
+  "KEY: Changes of state change arrangement and movement, but NOT the type or size of particles.");
+
+q(1,"Particle","Which two states of matter can flow?",
+  ["Solid and liquid","Liquid and gas","Solid and gas","Only liquid","Only gas"],1,
+  "The ability to flow is called fluidity. Which states do not have a fixed shape?",
+  "Liquids and gases can both flow because their particles are not held in fixed positions. Liquid particles can move freely over each other, and gas particles can move in all directions. Solids cannot flow because their particles are locked in fixed positions.",
+  "KEY: Liquids and gases can flow. Solids cannot.");
+
+q(2,"Particle","What happens to the attractive forces between particles when a solid melts into a liquid?",
+  ["The forces get stronger","The forces disappear completely","The forces get weaker","The forces stay the same","The particles lose their forces"],2,
+  "When a solid gains energy and melts, particles move more freely. What must happen to the forces holding them in place?",
+  "When a solid is heated and melts, the particles gain energy. The attractive forces between the particles become weaker, allowing the particles to move more freely over each other. The forces do not disappear completely - they are still present in the liquid, just weaker than in the solid.",
+  "KEY: Melting = forces weaken (but do not disappear), allowing particles to flow.");
+
+q(3,"Particle","Condensation is the process of a gas turning into a liquid. Which statement best explains what happens to the particles?",
+  ["Particles gain energy and break free from each other","Particles lose energy, slow down, and attractive forces become strong enough to hold them together","Particles are compressed into a smaller space","Particles change type from gas particles to liquid particles","Particles stop moving completely"],1,
+  "Condensation is the reverse of boiling. Think about what happens to energy when gas cools down.",
+  "During condensation, the gas is cooled. The particles lose energy and slow down. As they slow, the attractive forces between them become strong enough to pull the particles together into the liquid state. The particles do not change type, and they do not stop moving entirely.",
+  "KEY: Condensation = gas cools, particles lose energy, forces pull them together into liquid.");
+
+// ═══════════════════════════════════════════════
+// TOPIC 1 continued: more particles (to reach ~30)
+// ═══════════════════════════════════════════════
+
+q(1,"Particle","Robert Brown observed pollen grains moving randomly in water under a microscope. What conclusion did this support?",
+  ["Pollen grains are alive and swim on their own","Water particles are constantly moving and hit the pollen grains","The water was being stirred by air currents","Temperature was changing rapidly","Pollen grains repel water"],1,
+  "What was hitting the pollen grains to make them move? Think about what is in the water besides the pollen.",
+  "The random movement of pollen grains is caused by the constant bombardment from the tiny, fast-moving water particles. This provides evidence that liquid particles are in constant random motion, which supports the particle theory of matter.",
+  "KEY: Brownian motion is evidence that particles are in constant random motion.");
+
+q(2,"Particle","Which of the following is NOT a property of gases?",
+  ["Can be compressed","Has no definite shape","Has no definite volume","Cannot flow","Particles move rapidly and randomly"],3,
+  "Review the properties of gases. Gases can flow. Which option says they cannot?",
+  "Gases can flow - this is one of their key properties. Gas particles move rapidly and randomly in all directions, meaning a gas spreads to fill its container. The incorrect statement is that gases cannot flow. All the other options correctly describe gas properties.",
+  "KEY: Gases CAN flow. They have no fixed shape and no fixed volume.");
+
+q(2,"Particle","What happens to the volume of gas when it is cooled in a sealed container at constant volume?",
+  ["Volume increases","Volume decreases","Volume stays the same because the container does not change","The gas turns to liquid immediately","Pressure stays the same"],2,
+  "The container is sealed and rigid. Can the volume actually change? Then think about what does change.",
+  "When gas is cooled in a rigid sealed container, the volume cannot change because the walls of the container are fixed. However, the pressure decreases because the particles move more slowly and collide with the walls less frequently and with less force.",
+  "KEY: Rigid sealed container = volume stays the same, but pressure decreases when cooled.");
+
+q(1,"Particle","Which change of state describes a liquid turning into a gas at its boiling point?",
+  ["Freezing","Condensation","Melting","Boiling","Sublimation"],3,
+  "At the boiling point, energy is high enough to break all the forces holding the liquid particles together.",
+  "Boiling is the change of state from liquid to gas. It occurs at a specific temperature called the boiling point. During boiling, particles in the liquid gain enough energy to overcome the attractive forces and escape into the gas state throughout the entire liquid.",
+  "KEY: Liquid to gas = boiling (at boiling point) or evaporation (at surface).");
+
+q(1,"Particle","What is the name of the change of state when a solid turns directly into a liquid?",
+  ["Boiling","Freezing","Evaporation","Melting","Condensation"],3,
+  "This happens when you heat a solid enough. Ice turning to water is a common example.",
+  "Melting is the change of state from solid to liquid. It occurs when a solid is heated and the particles gain enough energy to overcome the strong attractive forces holding them in fixed positions. The melting point is the specific temperature at which this occurs.",
+  "KEY: Solid to liquid = melting. The reverse (liquid to solid) = freezing.");
+
+q(3,"Particle","Two students discuss whether solids can diffuse. Student A says no. Student B says yes if you wait millions of years. Which is the better scientific answer for a Grade 7 exam?",
+  ["Student B is completely right; all solids diffuse quickly","Student A is right; solids cannot diffuse at all under normal conditions","Both are entirely wrong","Student B is right in principle but for exam purposes, solids do not diffuse","Diffusion only happens in gases, not liquids or solids"],3,
+  "For your exam, think about whether particles in a solid can move freely enough to spread out.",
+  "For the Grade 7 Cambridge exam, the correct answer is that solids do not diffuse. Solid particles are held in fixed positions and cannot move freely, so diffusion does not occur. While atomic diffusion in solids is possible over geological timescales, this is beyond the scope of Grade 7 science.",
+  "KEY: For Grade 7 exam: gases and liquids diffuse, solids do NOT diffuse.");
+
+q(2,"Particle","A gas is heated in a container with a moveable piston (so pressure stays constant). What happens to the volume?",
+  ["Volume decreases","Volume stays the same","Volume increases","Volume becomes zero","The gas condenses"],2,
+  "If pressure is kept constant and temperature increases, particles move faster and need more space.",
+  "When gas is heated at constant pressure, the particles gain energy and move faster. They push the piston outward to maintain the same pressure. This means the volume of the gas increases. This is why hot air balloons expand when heated.",
+  "KEY: Heating gas at constant pressure increases its volume.");
+
+q(1,"Particle","Which scientist explained Brownian motion by showing that pollen grains are bombarded by water particles?",
+  ["Robert Brown","Isaac Newton","Democritus","Albert Einstein","Aristotle"],3,
+  "Robert Brown observed the motion. A different famous scientist later explained WHY it happens.",
+  "Albert Einstein explained in 1905 that pollen grains in water move randomly because they are being bombarded by the fast-moving water particles. Robert Brown had observed this motion in 1827 but could not explain the cause. Einstein provided the theoretical explanation.",
+  "KEY: Robert Brown observed it; Albert Einstein explained it.");
+
+q(2,"Particle","In a particle diagram of a liquid, which statement correctly describes the arrangement?",
+  ["Particles are in ordered rows, all touching","Particles are randomly arranged, all touching, and can move over each other","Particles are randomly arranged, far apart, and move very fast","Particles are in fixed positions and cannot move","Particles are in ordered rows but not touching"],1,
+  "Liquid is between solid (ordered, touching) and gas (random, far apart). What is the middle arrangement?",
+  "In a liquid, particles are randomly arranged (not in ordered rows like a solid), but they are all still touching each other (unlike a gas where they are far apart). They can move freely over each other, which is why liquids can flow and take the shape of their container.",
+  "KEY: Liquid particles = random arrangement, all touching, can move over each other.");
+
+// ═══════════════════════════════════════════════
+// TOPIC 2: ELEMENTS AND COMPOUNDS (25 questions)
+// ═══════════════════════════════════════════════
+
+q(1,"Elements","What is a chemical element?",
+  ["A substance made of two or more different types of atoms","A substance that can be broken down by heating","A substance that contains only one type of repeating atom","A substance that is always a solid at room temperature","A substance that dissolves easily in water"],2,
+  "An element is the simplest type of pure substance. Think about what type of atoms it contains.",
+  "A chemical element is a pure substance that contains only one type of repeating atom. It cannot be broken down into simpler substances by chemical methods. For example, iron contains only iron atoms, and oxygen contains only oxygen atoms.",
+  "KEY: Element = only one type of atom, cannot be broken down by chemical methods.");
+
+q(1,"Elements","What is the chemical symbol for sodium?",
+  ["So","Sa","Na","S","N"],2,
+  "Sodium comes from the Latin word natrium. The symbol uses the first two letters of the Latin name.",
+  "The chemical symbol for sodium is Na, which comes from the Latin word natrium. Many element symbols come from their Latin names. This is why the symbol does not always match the English name. Other examples include iron (Fe from ferrum) and gold (Au from aurum).",
+  "KEY: Na = Sodium (from Latin natrium). Always use the correct capital/lowercase letters.");
+
+q(1,"Elements","What is the chemical symbol for oxygen?",
+  ["Ox","Og","O","Oy","On"],2,
+  "For elements with only one letter in their symbol, the letter is always a capital letter.",
+  "The chemical symbol for oxygen is O. It is a single capital letter taken from the first letter of the English name. Elements whose names begin with a unique letter often have single-letter symbols.",
+  "KEY: O = Oxygen. Single-letter symbols are always written as capitals.");
+
+q(1,"Elements","What is the chemical symbol for carbon?",
+  ["Ca","Co","Cb","C","Cr"],3,
+  "Carbon is one of the most important non-metal elements. Its symbol is just one capital letter.",
+  "The chemical symbol for carbon is C. It is a single capital letter. Carbon is a non-metallic element that forms the basis of all living things and exists in forms such as graphite and diamond.",
+  "KEY: C = Carbon. Do not confuse with Ca (Calcium) or Co (Cobalt).");
+
+q(1,"Elements","What is the chemical symbol for hydrogen?",
+  ["Hy","Hg","He","H","Hd"],3,
+  "Hydrogen is the lightest and most abundant element in the universe. Its symbol is a single letter.",
+  "The chemical symbol for hydrogen is H. It is the first element in the Periodic Table, has the smallest atoms, and is the most abundant element in the universe. Do not confuse H (hydrogen) with He (helium).",
+  "KEY: H = Hydrogen. He = Helium. Always check you have the right symbol.");
+
+q(2,"Elements","What is a compound?",
+  ["A mixture of elements that can be separated easily","A substance made of two or more different elements chemically joined together","A pure element with special properties","A substance with only one type of atom","A type of metal alloy"],1,
+  "A compound is NOT just a mixture. The elements must be chemically joined, not just mixed.",
+  "A compound is a substance made of two or more different elements that are chemically joined (bonded) together. The properties of a compound are completely different from the elements that make it up. For example, water (H2O) is a compound of hydrogen and oxygen, both of which are gases, yet water is a liquid.",
+  "KEY: Compound = two or more different elements chemically bonded together.");
+
+q(1,"Elements","Is water an element or a compound? Why?",
+  ["Element, because it is found naturally","Compound, because it is made of hydrogen and oxygen chemically joined","Element, because it has one chemical formula","Mixture, because it contains different substances","Element, because it cannot be broken down easily"],1,
+  "Can water be broken down into simpler substances? If yes, what does that make it?",
+  "Water is a compound. It is made of hydrogen atoms and oxygen atoms chemically joined together. Water can be broken down into hydrogen gas and oxygen gas by passing electricity through it (electrolysis). Because it contains more than one type of element and can be broken down, it is a compound, not an element.",
+  "KEY: Water = compound (H2O) made of hydrogen and oxygen chemically bonded.");
+
+q(2,"Elements","How are elements arranged in the Periodic Table?",
+  ["By colour","By state at room temperature","In order of increasing atomic mass, in groups and periods","Alphabetically by their English name","By how reactive they are"],2,
+  "The Periodic Table has rows (periods) and columns (groups). Think about what determines the order.",
+  "Elements in the Periodic Table are arranged in order of increasing atomic mass (from lightest to heaviest). They are organised into vertical columns called groups and horizontal rows called periods. Elements in the same group share similar chemical properties.",
+  "KEY: Periodic Table = arranged by atomic mass, in groups (columns) and periods (rows).");
+
+q(1,"Elements","What are the two types of elements in the Periodic Table?",
+  ["Atoms and molecules","Elements and compounds","Metals and non-metals","Solids and liquids","Acids and bases"],2,
+  "Look at the Periodic Table. Most elements are on the left and centre. A smaller number are on the right.",
+  "Elements in the Periodic Table are classified as metals or non-metals. Metals are on the left and centre of the Periodic Table. Non-metals are on the right. A small number of elements between metals and non-metals are called metalloids, which have properties of both.",
+  "KEY: Periodic Table elements = metals (left/centre) and non-metals (right).");
+
+q(2,"Elements","Which of the following is a property of metals?",
+  ["They are poor conductors of electricity","They are always gases at room temperature","They are good conductors of heat and electricity","They are brittle and break easily when bent","They do not have a shiny surface"],2,
+  "Think about what metals like copper and iron are used for in wires and cooking pots.",
+  "Metals are generally good conductors of heat and electricity. This is why copper is used in electrical wires and metals are used in cooking pots. Metals are also typically shiny, malleable (can be bent without breaking), and have high melting points.",
+  "KEY: Metals = good conductors of heat and electricity, shiny, malleable.");
+
+q(2,"Elements","Which of the following is a property of non-metals?",
+  ["They are good conductors of electricity","They are always shiny","They are poor conductors of heat and electricity","They are all liquids at room temperature","They are all magnetic"],2,
+  "Think about the properties that are opposite to those of metals.",
+  "Non-metals are generally poor conductors of heat and electricity. Most non-metals are gases or solids at room temperature, and they are usually dull (not shiny). Non-metals are also brittle when solid, meaning they break easily rather than bending.",
+  "KEY: Non-metals = poor conductors, dull surface, often brittle.");
+
+q(1,"Elements","What is a molecule?",
+  ["A single atom of any element","Two or more atoms joined together","A type of compound only","A very large atom","A charged particle"],1,
+  "A molecule is the smallest unit of many substances. It is made of atoms joined together.",
+  "A molecule is made of two or more atoms that are joined (bonded) together. The atoms in a molecule can be of the same type (like O2, an oxygen molecule with two oxygen atoms) or different types (like H2O, water, which has two hydrogen and one oxygen atom).",
+  "KEY: Molecule = two or more atoms joined together.");
+
+q(2,"Elements","An oxygen molecule is written as O2. What does this tell us?",
+  ["Oxygen has two types of atoms","One oxygen molecule contains two oxygen atoms joined together","Oxygen needs two compounds to form","Oxygen is the second element in the Periodic Table","The molecular mass of oxygen is 2"],1,
+  "The subscript number (2) tells you how many atoms of oxygen are in one molecule.",
+  "O2 means one molecule of oxygen contains two oxygen atoms joined together. This is called a diatomic molecule. The subscript number after the symbol tells you the number of atoms of that element in one molecule. This is a molecule of an element, not a compound, because both atoms are the same type.",
+  "KEY: O2 = one molecule containing two oxygen atoms. Diatomic = two atoms.");
+
+q(2,"Elements","What is the chemical formula for water, and what does it tell us?",
+  ["O2H, meaning two oxygen atoms and one hydrogen atom","H2O, meaning two hydrogen atoms and one oxygen atom","HO, meaning one hydrogen and one oxygen","H2O2, meaning two hydrogen and two oxygen","OH2, meaning one oxygen and two hydrogen"],1,
+  "The subscript number comes after the element symbol it refers to. H2 means two hydrogen atoms.",
+  "H2O tells us that one molecule of water contains two hydrogen atoms (H2) and one oxygen atom (O). Water is a compound because it contains two different types of atoms chemically joined together. Its properties are completely different from hydrogen gas and oxygen gas.",
+  "KEY: H2O = 2 hydrogen atoms + 1 oxygen atom, chemically bonded = compound.");
+
+q(3,"Elements","Which of the following is an element and which is a compound: nitrogen gas (N2) and carbon dioxide (CO2)?",
+  ["N2 is a compound, CO2 is an element","Both N2 and CO2 are elements","N2 is an element, CO2 is a compound","Both N2 and CO2 are compounds","N2 is a mixture, CO2 is an element"],2,
+  "An element has only ONE type of atom. A compound has TWO or more types of atoms bonded together.",
+  "N2 (nitrogen gas) is an element because it contains only one type of atom (nitrogen). It is a diatomic molecule of the same element. CO2 (carbon dioxide) is a compound because it contains two different types of atoms (carbon and oxygen) chemically joined together.",
+  "KEY: Element = one type of atom only. Compound = two or more different types of atoms.");
+
+q(2,"Elements","Dmitri Mendeleev organised the Periodic Table and predicted the existence of undiscovered elements. How was he able to predict them?",
+  ["He invented all the elements himself","He noticed gaps in the pattern of properties in his table","He counted all atoms in nature","He used a computer to calculate all elements","He copied the work of other scientists"],1,
+  "Mendeleev arranged elements by properties and mass. Some spaces in his table had no known element. What do gaps in a pattern suggest?",
+  "Mendeleev arranged elements in order of atomic mass and noticed that elements in the same column (group) shared similar properties. When he found gaps in the pattern where no known element fitted, he predicted that undiscovered elements must exist, and described their expected properties. His predictions were later confirmed.",
+  "KEY: Mendeleev predicted elements by finding gaps in the pattern of the Periodic Table.");
+
+q(1,"Elements","What is the chemical symbol for iron?",
+  ["Ir","I","Fe","Fo","In"],2,
+  "Iron comes from the Latin word ferrum. Use the first two letters of the Latin name.",
+  "The chemical symbol for iron is Fe, from the Latin word ferrum. Iron is a metal and one of the most widely used elements in the world, found in steel and many structures. Its symbol does not match its English name because it comes from Latin.",
+  "KEY: Fe = Iron (from Latin ferrum). Many metal symbols come from Latin names.");
+
+q(1,"Elements","What is the chemical symbol for gold?",
+  ["Go","Gd","Gl","Au","G"],3,
+  "Gold comes from the Latin word aurum.",
+  "The chemical symbol for gold is Au, from the Latin word aurum. Gold is a valuable metal known for its yellow colour and resistance to corrosion. Like iron (Fe) and sodium (Na), its symbol comes from its Latin name.",
+  "KEY: Au = Gold (from Latin aurum).");
+
+q(3,"Elements","Which of the following substances is a mixture rather than a compound or element?",
+  ["Water (H2O)","Oxygen gas (O2)","Salt dissolved in water","Carbon dioxide (CO2)","Iron (Fe)"],2,
+  "A mixture has components that are NOT chemically joined and can be separated by physical methods.",
+  "Salt dissolved in water is a mixture because the salt and water are not chemically joined. They can be separated by physical means such as evaporation. In a mixture, each substance keeps its own properties. In a compound, the substances are chemically bonded and cannot be separated easily.",
+  "KEY: Mixture = components not chemically joined, can be separated physically.");
+
+q(2,"Elements","In the Periodic Table, elements in the same GROUP share similar properties. What is a group?",
+  ["A horizontal row across the Periodic Table","A vertical column down the Periodic Table","A group of metals only","A group of non-metals only","A random selection of elements"],1,
+  "The Periodic Table has rows and columns. Groups are one of these. Which direction do they run?",
+  "A group is a vertical column in the Periodic Table. Elements in the same group have similar chemical properties because they have the same number of electrons in their outer shell (outer electron layer). For example, all elements in Group 1 react vigorously with water.",
+  "KEY: Group = vertical column. Elements in the same group share similar properties.");
+
+// ═══════════════════════════════════════════════
+// TOPIC 3: THE EARTH AND ITS STRUCTURES (25 questions)
+// ═══════════════════════════════════════════════
+
+q(1,"Earth","What are the four main layers of the Earth from the centre outward?",
+  ["Crust, mantle, outer core, inner core","Inner core, outer core, mantle, crust","Soil, rock, magma, iron","Core, shell, rock, soil","Granite, limestone, marble, basalt"],1,
+  "Start from the centre and work outward. The centre is the hottest and most dense layer.",
+  "From the centre outward, the Earth has four layers: the inner core (solid iron and nickel), the outer core (liquid iron and nickel), the mantle (semi-molten rock called magma), and the crust (the thin outer layer of solid rock on which we live).",
+  "KEY: Centre to surface = inner core, outer core, mantle, crust.");
+
+q(1,"Earth","What is the outermost solid layer of the Earth called?",
+  ["Mantle","Core","Magma","Crust","Sediment"],3,
+  "This is the layer we live on. It is the thinnest layer of the Earth.",
+  "The crust is the outermost layer of the Earth. It is a thin layer of solid rock that forms the ocean floors and the continents. The crust is the layer we live on and the one we can study directly through mining and drilling.",
+  "KEY: The outermost layer = crust. It is solid rock and the thinnest layer.");
+
+q(1,"Earth","How old is the Earth estimated to be?",
+  ["4.5 thousand years","45 million years","4.5 billion years","45 billion years","450 million years"],2,
+  "The age is measured in billions of years. Scientists use the ages of the oldest rocks, moon rocks, and meteorites.",
+  "The Earth is estimated to be approximately 4.5 billion years old. This estimate is based on the ages of the oldest rocks found on Earth, the ages of moon rocks brought back by astronauts, and the ages of meteorites from space, all of which formed at around the same time.",
+  "KEY: Earth is approximately 4.5 billion years old.");
+
+q(1,"Earth","Which type of rock is formed when molten rock (magma or lava) cools and solidifies?",
+  ["Sedimentary rock","Metamorphic rock","Igneous rock","Chalk","Limestone"],2,
+  "The name of this rock type comes from the Latin word ignis, meaning fire.",
+  "Igneous rocks are formed when molten rock cools and solidifies. Magma that cools slowly underground forms coarse-grained igneous rocks like granite. Lava that cools quickly at the surface forms fine-grained rocks like basalt. The word igneous comes from the Latin for fire.",
+  "KEY: Igneous rock = formed from cooled molten rock (magma or lava).");
+
+q(1,"Earth","Which type of rock is formed when layers of sediment are compressed and cemented together over a long time?",
+  ["Igneous rock","Metamorphic rock","Sedimentary rock","Granite","Basalt"],2,
+  "Sediment is material like sand, mud, and shells that settles at the bottom of water. What happens when it is squeezed over millions of years?",
+  "Sedimentary rocks are formed when layers of sediment (such as sand, mud, shells, or tiny fragments of other rocks) are deposited, compressed, and cemented together over millions of years. Examples include sandstone, limestone, and mudstone. Fossils are often found in sedimentary rocks.",
+  "KEY: Sedimentary rock = layers of sediment compressed and cemented over time.");
+
+q(1,"Earth","Which type of rock is formed when existing rocks are changed by great heat and pressure deep underground?",
+  ["Igneous rock","Sedimentary rock","Metamorphic rock","Basalt","Pumice"],2,
+  "The word metamorphic comes from Greek, meaning change of form.",
+  "Metamorphic rocks are formed when existing rocks (igneous, sedimentary, or other metamorphic rocks) are subjected to very high temperature and pressure deep underground. These conditions change the characteristics of the rock without melting it completely. Examples include marble (from limestone) and slate (from mudstone).",
+  "KEY: Metamorphic rock = changed by heat and pressure underground.");
+
+q(2,"Earth","Why are fossils most commonly found in sedimentary rocks and NOT in igneous or metamorphic rocks?",
+  ["Sedimentary rocks are softer","Fossils form in layers of sediment which are then compressed into sedimentary rock","Igneous rocks are too dark to see fossils","Metamorphic rocks do not exist underground","Fossils need water to form and sedimentary rocks contain water"],1,
+  "Think about how sedimentary rocks form. They start as layers of sediment containing organic material. What happens to the organisms buried in the sediment?",
+  "Fossils form when the remains of organisms are buried in sediment. Over millions of years, the sediment is compressed into sedimentary rock, and the organic material is replaced by minerals, preserving the shape of the organism. In igneous rocks, the intense heat from magma would destroy any fossils. In metamorphic rocks, the high heat and pressure would also destroy them.",
+  "KEY: Fossils form in sedimentary rock because organisms are buried in sediment layers.");
+
+q(2,"Earth","What is weathering?",
+  ["The study of weather patterns","The process by which rocks are broken down into smaller fragments by physical or chemical means","The formation of new rocks from magma","The movement of tectonic plates","The process of fossils forming in rock"],1,
+  "Weathering happens to rocks at or near the surface. It breaks them apart. Think about what natural agents could do this.",
+  "Weathering is the process by which rocks are broken down or dissolved into smaller pieces and fragments over time. It is caused by physical processes (such as freeze-thaw action and temperature changes) and chemical processes (such as acid rain dissolving limestone). Weathering does not involve moving the rock fragments - that is erosion.",
+  "KEY: Weathering = breaking down of rocks by physical or chemical processes.");
+
+q(2,"Earth","Explain how freeze-thaw weathering breaks apart rocks.",
+  ["Hot water dissolves the rock","Water enters cracks, freezes and expands, breaking the rock apart","Acid rain reacts with the rock surface","Wind blows rock particles against the rock","Tree roots dissolve the minerals in rock"],1,
+  "Water expands when it freezes. Think about what happens if water in a crack freezes and gets bigger.",
+  "In freeze-thaw weathering, water enters cracks in rocks. When temperatures drop below 0 degrees C, the water freezes and expands. This expansion exerts enormous force on the surrounding rock. When the ice melts, the crack is slightly wider. Repeated cycles of freezing and thawing eventually break the rock apart.",
+  "KEY: Freeze-thaw = water freezes in cracks, expands, breaks rock apart.");
+
+q(2,"Earth","What is the inner core of the Earth made of, and what is its state?",
+  ["Liquid iron and nickel","Solid iron and nickel","Semi-molten magma","Solid granite","Molten basalt"],1,
+  "The inner core is at the very centre of the Earth. Despite being the hottest layer, it is solid. Why might that be?",
+  "The inner core is made of solid iron and nickel. Even though it is extremely hot (around 5000 degrees C), the enormous pressure at the centre of the Earth keeps it solid. The outer core is also iron and nickel but it is liquid because the pressure is slightly lower.",
+  "KEY: Inner core = solid iron and nickel (kept solid by enormous pressure).");
+
+q(1,"Earth","What is the mantle of the Earth made of?",
+  ["Liquid water","Solid granite","Semi-molten rock called magma","Solid iron and nickel","Gas and dust"],2,
+  "The mantle is the thickest layer, between the core and the crust. It is not quite solid and not quite liquid.",
+  "The mantle is made of semi-molten rock called magma. It behaves like a very thick, slow-moving fluid over millions of years. The mantle is the thickest layer of the Earth. Magma from the mantle can rise through cracks in the crust during volcanic activity.",
+  "KEY: Mantle = semi-molten rock (magma). Thickest layer of the Earth.");
+
+q(2,"Earth","What evidence do scientists use to estimate the age of the Earth?",
+  ["The number of fossils found","The ages of the oldest rocks, moon rocks, and meteorites","The thickness of the crust","The temperature of the inner core","The number of earthquakes per year"],1,
+  "Scientists cannot directly observe when the Earth formed. What types of very old material from that time still exist today?",
+  "Scientists estimate the Earth is 4.5 billion years old based on three types of evidence: the ages of the oldest rocks found on Earth, the ages of moon rocks collected during space missions, and the ages of meteorites. All three formed at approximately the same time as the Earth, early in the solar system.",
+  "KEY: Age of Earth estimated using: oldest Earth rocks + moon rocks + meteorites.");
+
+q(3,"Earth","How does extreme temperature change cause physical weathering of rocks?",
+  ["Chemical reactions in the rock dissolve it","Rocks expand when heated and contract when cooled; repeated cycles create stress that breaks the rock","Water freezes in the cracks","Acid rain dissolves the surface","Tree roots grow into the rock"],1,
+  "Think about what happens to the size of an object when heated and when cooled. What happens if this keeps repeating?",
+  "When rocks are heated by the sun during the day, they expand. At night, when temperatures drop, they contract. The outer surface of a rock heats and cools faster than the interior. This repeated expansion and contraction creates stress in the rock and eventually causes the outer layers to crack and break off. This type of weathering is common in deserts.",
+  "KEY: Temperature changes cause expand-contract cycles, creating stress that breaks rock.");
+
+q(2,"Earth","What is a fossil, and what does it tell us?",
+  ["A type of sedimentary rock","The preserved remains or impression of an ancient organism found in rock, giving evidence of past life","A type of igneous rock","A mineral crystal found in metamorphic rock","A layer of soil found on the surface"],1,
+  "Fossils are found in rocks. Think about what kinds of things can be preserved in rock over millions of years.",
+  "A fossil is the preserved remains or impression of an organism that lived long ago, found in rocks (usually sedimentary). Fossils can be actual hard parts like bones and shells, or impressions left in rock. Fossil records give scientists evidence about what life existed in the past and how it has changed over time.",
+  "KEY: Fossil = preserved remains of ancient life in rock, evidence of past life forms.");
+
+q(3,"Earth","Limestone can be transformed into marble. What type of rock is limestone, and what type is marble?",
+  ["Limestone is igneous, marble is metamorphic","Limestone is sedimentary, marble is metamorphic","Limestone is metamorphic, marble is igneous","Limestone is sedimentary, marble is igneous","Both are igneous rocks"],1,
+  "Limestone is made from compressed marine sediment. Marble forms when limestone is subjected to heat and pressure. What category does each fit?",
+  "Limestone is a sedimentary rock formed from compressed layers of shells and marine material. When limestone is buried deep underground and subjected to very high temperature and pressure, it is transformed into marble, which is a metamorphic rock. This is an example of one rock type changing into another.",
+  "KEY: Limestone (sedimentary) + heat and pressure = Marble (metamorphic).");
+
+// ═══════════════════════════════════════════════
+// TOPIC 4: SPEED AND MOTION (20 questions)
+// ═══════════════════════════════════════════════
+
+q(1,"Speed","What is the formula for speed?",
+  ["Speed = time divided by distance","Speed = distance multiplied by time","Speed = distance divided by time","Speed = force divided by mass","Speed = mass divided by volume"],2,
+  "Speed tells you how far something travels in a given amount of time.",
+  "Speed is calculated by dividing the distance travelled by the time taken. The formula is: Speed = Distance divided by Time. The standard unit of speed is metres per second (m/s), though km/h is also commonly used.",
+  "KEY: Speed = Distance divided by Time. Units: m/s or km/h.");
+
+q(1,"Speed","A runner travels 100 metres in 10 seconds. What is the speed?",
+  ["1000 m/s","1 m/s","10 m/s","0.1 m/s","100 m/s"],2,
+  "Use Speed = Distance divided by Time. Substitute the values and calculate.",
+  "Speed = Distance divided by Time. Speed = 100 m divided by 10 s = 10 m/s. The runner is travelling at 10 metres per second.",
+  "KEY: 100 divided by 10 = 10 m/s. Always check units in your answer.");
+
+q(1,"Speed","On a distance-time graph, what does a horizontal (flat) line represent?",
+  ["The object is moving at constant speed","The object is accelerating","The object is stationary (not moving)","The object is moving very fast","The object is decelerating"],2,
+  "If distance is not changing over time, what must the object be doing?",
+  "A horizontal (flat) line on a distance-time graph means the distance from the starting point is not changing. This means the object is stationary - it is not moving. Time keeps passing, but the distance stays the same.",
+  "KEY: Flat horizontal line on distance-time graph = stationary (not moving).");
+
+q(1,"Speed","On a distance-time graph, what does the gradient (steepness) of the line represent?",
+  ["The mass of the object","The speed of the object","The force applied to the object","The acceleration of the object","The distance from the start"],1,
+  "The gradient is rise over run. On a distance-time graph, rise = distance and run = time. What is distance divided by time?",
+  "The gradient of a distance-time graph represents the speed of the object. A steeper gradient means a higher speed. A gentler gradient means a lower speed. A flat line (zero gradient) means the object is stationary. This is because gradient = change in distance divided by change in time = speed.",
+  "KEY: Gradient of distance-time graph = speed. Steeper = faster.");
+
+q(2,"Speed","Two cars travel the same road. Car A has a steeper gradient on a distance-time graph than Car B. What can you conclude?",
+  ["Car A is heavier than Car B","Car A is travelling faster than Car B","Car A is travelling slower than Car B","Car A started earlier than Car B","Car B is accelerating"],1,
+  "Compare the gradients. A steeper gradient on a distance-time graph means what about speed?",
+  "A steeper gradient on a distance-time graph means the distance increases more quickly per unit of time, which means a higher speed. Since Car A has a steeper gradient, Car A is travelling faster than Car B.",
+  "KEY: Steeper gradient = greater speed. Car A gradient steeper = Car A faster.");
+
+q(2,"Speed","A cyclist travels 3 km in 15 minutes. What is the average speed in km/h?",
+  ["0.2 km/h","45 km/h","12 km/h","3 km/h","20 km/h"],2,
+  "Convert 15 minutes to hours first (15 divided by 60). Then use Speed = Distance divided by Time.",
+  "First convert 15 minutes to hours: 15 divided by 60 = 0.25 hours. Then Speed = 3 km divided by 0.25 hours = 12 km/h. Always convert time to the correct units before calculating.",
+  "KEY: 15 min = 0.25 hours. Speed = 3 divided by 0.25 = 12 km/h.");
+
+q(2,"Speed","What is the difference between speed and average speed?",
+  ["They are exactly the same thing","Speed is the speed at one moment; average speed is total distance divided by total time","Average speed is always higher than speed","Speed is measured in km/h only","Average speed ignores time stopped"],1,
+  "Most objects do not travel at a constant speed. Think about a car journey with traffic lights.",
+  "Speed at any instant is how fast an object is moving at that exact moment. Average speed is calculated by dividing the total distance of a journey by the total time taken, including any stops. Average speed smooths out all the variations in speed during the journey.",
+  "KEY: Average speed = total distance divided by total time (including stops).");
+
+q(1,"Speed","A car travels 200 km in 4 hours. What is the average speed?",
+  ["800 km/h","50 km/h","0.02 km/h","40 km/h","200 km/h"],1,
+  "Use average speed = total distance divided by total time.",
+  "Average speed = total distance divided by total time = 200 km divided by 4 hours = 50 km/h. The car travels at an average of 50 kilometres per hour.",
+  "KEY: 200 divided by 4 = 50 km/h. Always include the correct units.");
+
+q(2,"Speed","On a distance-time graph, what does a curved line that gets steeper over time represent?",
+  ["The object is slowing down","The object is moving at constant speed","The object is getting faster (increasing speed)","The object is stationary","The object is moving backward"],2,
+  "If the gradient is increasing (getting steeper), what is happening to speed over time?",
+  "On a distance-time graph, a curved line that gets progressively steeper means the gradient is increasing. Since gradient = speed, an increasing gradient means the object is getting faster, i.e. the speed is increasing. This is called acceleration.",
+  "KEY: Curved line getting steeper = object is speeding up (increasing speed).");
+
+q(3,"Speed","A student records the following data: at t=0s, distance=0m; at t=5s, distance=25m; at t=10s, distance=50m. What type of motion is this, and what is the speed?",
+  ["Accelerating; 5 m/s","Constant speed; 5 m/s","Decelerating; 10 m/s","Stationary; 0 m/s","Constant speed; 10 m/s"],1,
+  "Check if the distance increases by the same amount for each equal time interval. Then calculate speed.",
+  "The distance increases by 25 m every 5 seconds, which is a constant rate. This means the speed is constant (not changing). Speed = 25 m divided by 5 s = 5 m/s. On a distance-time graph, this would appear as a straight line with a constant gradient.",
+  "KEY: Equal distance in equal time = constant speed. Speed = 25 divided by 5 = 5 m/s.");
+
+q(1,"Speed","What are the standard units of speed in the SI system?",
+  ["Kilometres per hour (km/h)","Metres per second (m/s)","Centimetres per minute (cm/min)","Miles per hour (mph)","Feet per second (ft/s)"],1,
+  "SI stands for International System of units. The base units of distance and time in SI are metres and seconds.",
+  "The standard SI unit of speed is metres per second (m/s). This is because the SI unit of distance is the metre (m) and the SI unit of time is the second (s). Speed = distance divided by time, so the unit is m/s.",
+  "KEY: SI unit of speed = metres per second (m/s).");
+
+q(2,"Speed","How would a timing gate system be used to measure the speed of a runner?",
+  ["Measure the temperature of the runner","Use two timing gates a known distance apart; the time between breaking the two beams gives the time taken, then speed = distance divided by time","Ask the runner to count their steps","Use a ruler to measure the runner at a single moment","Estimate from watching the runner"],1,
+  "A timing gate uses an infrared beam. Think about what you need to know to calculate speed.",
+  "Two timing gates are placed a known distance apart. When the runner crosses the first gate, they break the infrared beam and start the timer. When they cross the second gate, they break the second beam and stop the timer. Speed is then calculated using speed = distance between gates divided by time taken.",
+  "KEY: Timing gates: known distance apart, measure time taken, calculate speed = d/t.");
+
+// ═══════════════════════════════════════════════
+// TOPIC 5: MAGNETS (20 questions)
+// ═══════════════════════════════════════════════
+
+q(1,"Magnets","What is the law of magnetic poles?",
+  ["Like poles attract, unlike poles repel","Like poles repel, unlike poles attract","All poles attract each other","North poles attract north poles","South poles repel north poles"],1,
+  "Remember the rule: same is repelled, different is attracted.",
+  "The law of magnetic poles states that like poles repel each other (North-North or South-South) and unlike poles attract each other (North-South). This is similar to how electrically charged objects behave: opposite charges attract and like charges repel.",
+  "KEY: Like poles REPEL. Unlike poles ATTRACT. This is the law of magnetic poles.");
+
+q(1,"Magnets","A bar magnet is suspended freely. Which direction does its north pole point?",
+  ["South","West","East","North (toward geographic north)","It spins randomly"],3,
+  "A freely suspended magnet acts as a compass. Think about what a compass does.",
+  "A freely suspended bar magnet aligns itself with the Earth magnetic field. The north pole of the magnet points toward geographic north. This is the basic principle behind a compass. The Earth itself behaves like a giant magnet with its magnetic south pole near geographic north.",
+  "KEY: A freely suspended magnet aligns north-south. This is how a compass works.");
+
+q(1,"Magnets","What is a magnetic field?",
+  ["The area inside a magnet where magnetic material is stored","The area around a magnet where a magnetic force can be detected","The surface of a magnet","The region inside the north pole only","The invisible material that makes magnets work"],1,
+  "A field is a region where a force acts. Think about where you can feel a magnetic force when you bring two magnets close.",
+  "A magnetic field is the region around a magnet where a magnetic force can be detected. Any magnetic material placed within this region will experience a force. The magnetic field is strongest at the poles of the magnet and gets weaker further away.",
+  "KEY: Magnetic field = region around a magnet where a magnetic force acts.");
+
+q(1,"Magnets","Where is the magnetic field strongest on a bar magnet?",
+  ["In the middle of the magnet","Evenly spread all over","At the poles (ends) of the magnet","Just outside the north pole only","Only on the surface"],2,
+  "If you place iron filings near a bar magnet, where do you see them cluster most densely?",
+  "The magnetic field is strongest at the poles (the two ends) of a bar magnet. This is where magnetic field lines are most concentrated and closest together. Iron filings cluster most densely at the poles when placed near a bar magnet.",
+  "KEY: Magnetic field is strongest at the poles. Weakest further away from poles.");
+
+q(2,"Magnets","Iron filings are placed around a bar magnet. What pattern do they form, and what do they show?",
+  ["They form a straight line, showing the magnet is strong","They form curved lines from pole to pole, showing the shape of the magnetic field","They form a circle around the magnet, showing uniform force","They arrange randomly, showing no pattern","They pile up at the centre of the magnet"],1,
+  "Iron filings align with magnetic field lines. Think about how field lines look around a bar magnet.",
+  "Iron filings align themselves along magnetic field lines. Around a bar magnet, they form curved lines that arc from the north pole to the south pole. The filings cluster most densely near the poles (strong field) and are more spread out further away (weaker field). This makes the shape of the magnetic field visible.",
+  "KEY: Iron filings show magnetic field lines, curving from north pole to south pole.");
+
+q(2,"Magnets","Which of the following materials is attracted to a magnet?",
+  ["Copper","Aluminium","Wood","Iron","Glass"],3,
+  "Magnetic materials are usually metals, but not all metals are magnetic. Only a few specific metals respond to magnets.",
+  "Iron is attracted to a magnet because it is a magnetic material. Not all metals are magnetic. Copper, aluminium, gold, and silver are examples of non-magnetic metals. The main magnetic metals are iron, nickel, and cobalt.",
+  "KEY: Magnetic metals = iron, nickel, cobalt. Copper, aluminium, gold are NOT magnetic.");
+
+q(2,"Magnets","Two north poles of different bar magnets are brought close together. What happens?",
+  ["They attract each other","They repel each other","Nothing happens","One pole disappears","They become south poles"],1,
+  "Apply the law of magnetic poles to two identical poles.",
+  "Like poles repel. Two north poles repel each other. You can feel this as a pushing force when you try to bring the two north poles together. The force increases as the poles get closer to each other.",
+  "KEY: North + North = REPEL. South + South = REPEL. N + S = ATTRACT.");
+
+q(2,"Magnets","Can a magnet be broken in half to separate the north and south poles? What happens?",
+  ["Yes, you get one magnet with only a north pole and one with only a south pole","No, each half becomes a new complete magnet with its own north and south pole","Yes, one half has no poles","No, both halves lose all magnetism","Yes, but only if you break it quickly"],1,
+  "Think about what always happens when you try to isolate a single magnetic pole.",
+  "When a bar magnet is broken in half, each half becomes a complete magnet with its own north pole and south pole. You cannot isolate a single magnetic pole. This is different from electric charges, where positive and negative charges can exist separately. A magnetic pole always comes in a north-south pair.",
+  "KEY: Breaking a magnet creates two complete magnets. You cannot isolate a single pole.");
+
+q(3,"Magnets","A student places a compass at different points around a bar magnet and records the direction the needle points each time. What is the student mapping?",
+  ["The strength of the magnet only","The magnetic field lines around the magnet","The electrical field of the magnet","The temperature around the magnet","The mass distribution of the magnet"],1,
+  "A compass needle aligns with the magnetic field at that point. Recording many positions maps out what?",
+  "The student is mapping the magnetic field lines around the bar magnet. A compass needle always aligns with the magnetic field at its location, pointing from south to north along the field lines. By recording the needle direction at many points, the student builds up a map of the complete magnetic field pattern.",
+  "KEY: Compass at multiple points around a magnet maps the magnetic field lines.");
+
+q(1,"Magnets","What do we call a material that is attracted to a magnet?",
+  ["An insulator","A conductor","A magnetic material","A compound","An element"],2,
+  "This is the term used in science for materials that respond to magnetic forces.",
+  "A magnetic material is any material that is attracted to a magnet. Examples include iron, nickel, and cobalt. Non-magnetic materials such as copper, aluminium, wood, and plastic are not attracted to magnets.",
+  "KEY: Materials attracted to magnets are called magnetic materials. Examples: iron, nickel, cobalt.");
+
+q(2,"Magnets","Why is a compass useful for navigation?",
+  ["It measures temperature","Its needle always points toward the geographic north because of Earth magnetic field","It measures speed","It shows the time","It detects electric fields"],1,
+  "A compass has a small freely suspended magnet inside it. Think about what a freely suspended magnet always does.",
+  "A compass contains a small, freely suspended magnet (the needle). Because the Earth has its own magnetic field, the compass needle aligns with it, always pointing toward geographic north. This allows people to determine direction for navigation, even without landmarks.",
+  "KEY: Compass works because Earth has a magnetic field that aligns the compass needle.");
+
+q(3,"Magnets","A student notices that magnetic field lines are more crowded near the poles of a bar magnet than in the middle. What does this tell us about the magnetic force?",
+  ["The force is the same everywhere","The poles are heavier","The magnetic force is stronger where field lines are closer together (at the poles)","The middle of the magnet has no field","The field lines show temperature, not force"],2,
+  "The density (closeness) of field lines tells us about the strength of the field at that point.",
+  "In magnetic field diagrams, field lines that are close together indicate a strong magnetic field, while field lines that are spread apart indicate a weaker field. Since field lines are most crowded at the poles, the magnetic force is strongest there. This matches what we observe when using iron filings or compass needles.",
+  "KEY: Crowded field lines = strong force. Spread-out field lines = weak force.");
+
+// ═══════════════════════════════════════════════
+// MIXED / CROSS-TOPIC (10 questions)
+// ═══════════════════════════════════════════════
+
+q(2,"Elements","Carbon dioxide has the formula CO2. How many atoms are in one molecule of CO2?",
+  ["2 atoms (one C and one O)","3 atoms (one C and two O)","4 atoms (two C and two O)","1 atom","6 atoms"],1,
+  "CO2 means 1 carbon atom plus 2 oxygen atoms. Count all the atoms.",
+  "The formula CO2 means each molecule contains 1 carbon atom (no subscript means 1) and 2 oxygen atoms (subscript 2 after O). Total atoms per molecule = 1 + 2 = 3. Carbon dioxide is a compound because it contains two different types of atoms chemically joined.",
+  "KEY: CO2 has 3 atoms per molecule: 1 carbon + 2 oxygen.");
+
+q(3,"Particle","A student seals gas in a rigid container and then heats it. Explain what happens to the pressure using the particle theory.",
+  ["Pressure decreases because particles get bigger","Pressure increases because particles gain energy, move faster, and collide with the walls more frequently and with greater force","Pressure stays the same because the volume does not change","Pressure decreases because the container expands","Pressure increases because the particles become more concentrated"],1,
+  "Think about how heating affects particle movement, and then how that affects collisions with the walls.",
+  "When the gas is heated, the particles gain energy. This causes them to move faster. Faster-moving particles collide with the container walls more frequently and with greater force. Since the volume of the rigid container cannot change, the increased rate and force of collisions causes the gas pressure to increase.",
+  "KEY: Heating gas = faster particles = more and harder collisions with walls = higher pressure.");
+
+q(2,"Earth","Granite is an igneous rock formed when magma cools slowly deep underground. What feature would you expect granite to have?",
+  ["Fine, small crystals because it cooled quickly","No crystals at all","Large, visible crystals because it cooled slowly","Layers of sediment","A smooth glassy surface"],2,
+  "The rate of cooling affects crystal size. Slow cooling allows crystals time to grow larger.",
+  "When magma cools slowly deep underground, the mineral crystals have time to grow large before the rock solidifies. This gives granite its characteristic large, visible crystals (coarse-grained texture). Rocks that cool quickly at the surface, like basalt, form small crystals or a glassy texture.",
+  "KEY: Slow cooling = large crystals (granite). Fast cooling = small crystals (basalt).");
+
+q(3,"Speed","On a distance-time graph, line A starts at the origin and rises steeply to 60m in 6 seconds. Line B starts at the origin and rises gently to 30m in 6 seconds. Compare the speeds of A and B.",
+  ["A and B have the same speed","A is slower than B","A is faster than B: speed A = 10 m/s, speed B = 5 m/s","B is faster because it has a gentler slope","The speed cannot be determined from the graph"],2,
+  "Calculate the speed from each gradient: speed = distance divided by time for each line.",
+  "Speed A = 60 m divided by 6 s = 10 m/s. Speed B = 30 m divided by 6 s = 5 m/s. A steeper gradient on a distance-time graph means greater speed. Line A has a steeper gradient, so object A is moving twice as fast as object B.",
+  "KEY: Speed A = 10 m/s, Speed B = 5 m/s. Steeper gradient = faster speed.");
+
+q(2,"Magnets","A student finds that a piece of metal is not attracted to a magnet. Does this prove the metal is a non-metal? Explain.",
+  ["Yes, only non-metals are not attracted to magnets","No, many metals such as copper and aluminium are also not attracted to magnets","Yes, all metals are magnetic","No, it proves the magnet is broken","Yes, only iron is a metal"],1,
+  "Think carefully: is being attracted to a magnet the same as being a metal? Consider copper and aluminium.",
+  "No, it does not prove the metal is a non-metal. Many metals, including copper, aluminium, gold, and silver, are not attracted to magnets because they are not magnetic materials. Only iron, nickel, and cobalt (among common metals) are magnetic. So an object not being attracted to a magnet cannot tell you whether it is a metal or non-metal.",
+  "KEY: Not all metals are magnetic. Copper, aluminium etc. are metals but NOT magnetic.");
+
+q(2,"Earth","Which type of rock is most likely to contain fossils: igneous, metamorphic, or sedimentary? Explain why.",
+  ["Igneous, because it forms from lava","Metamorphic, because it forms under high pressure","Sedimentary, because organisms are buried in layers of sediment that harden into rock","All three types contain fossils equally","None of them contain fossils"],2,
+  "Think about how each type of rock forms and whether the conditions would preserve or destroy delicate organisms.",
+  "Sedimentary rocks are most likely to contain fossils. When organisms die, they may be buried in sediment such as sand or mud. Over millions of years, this sediment hardens into sedimentary rock, preserving the remains or imprints of the organisms as fossils. In contrast, the heat from igneous rock formation and the heat and pressure of metamorphic rock formation would destroy any organic remains.",
+  "KEY: Sedimentary rocks = most likely to have fossils because organisms buried in sediment layers.");
+
+q(3,"Elements","A substance X can be broken down by electricity into two simpler gases, A and B. Gas A causes a squeaky pop with a lit splint. Gas B relights a glowing splint. What is substance X?",
+  ["Carbon dioxide","Water","Oxygen","Nitrogen","Hydrogen"],1,
+  "Gas A (squeaky pop with a lit splint) = hydrogen. Gas B (relights a glowing splint) = oxygen. What compound is made of hydrogen and oxygen?",
+  "Gas A is hydrogen (hydrogen burns with a squeaky pop when tested with a lit splint). Gas B is oxygen (oxygen relights a glowing splint). A substance that can be broken down into hydrogen and oxygen is water (H2O). Water is a compound of hydrogen and oxygen and can be decomposed by electrolysis.",
+  "KEY: Squeaky pop = hydrogen. Relights glowing splint = oxygen. Compound of both = water (H2O).");
+
+q(2,"Particle","Which observation provides the best evidence that particles are in constant motion?",
+  ["Rocks are hard and dense","A drop of dye spreads throughout water without stirring","Water can be boiled","Solids have a fixed shape","Metals conduct electricity"],1,
+  "Think about which observation shows particles moving on their own without any external force like stirring.",
+  "A drop of dye spreading throughout water without stirring is the best evidence of constant particle motion. This is diffusion - the dye particles and water particles are both moving constantly and randomly, causing them to mix. No external energy or force is needed. This directly demonstrates that particles are always in motion.",
+  "KEY: Dye spreading without stirring = diffusion = direct evidence that particles move constantly.");
+
+q(1,"Speed","A train travels at 90 km/h for 2 hours. How far does it travel?",
+  ["45 km","180 km","92 km","9 km","200 km"],1,
+  "Rearrange the speed formula to find distance. Distance = Speed multiplied by Time.",
+  "Distance = Speed multiplied by Time = 90 km/h multiplied by 2 h = 180 km. Always rearrange the formula to find the unknown. The units km/h multiplied by h gives km, which is correct for distance.",
+  "KEY: Distance = Speed x Time = 90 x 2 = 180 km.");
+
+q(3,"Magnets","A student makes an electromagnet by wrapping wire around an iron nail and connecting it to a battery. She notices the electromagnet can pick up paper clips. When she disconnects the battery, the paper clips fall off. What does this tell us about electromagnets compared to permanent magnets?",
+  ["Electromagnets are weaker than permanent magnets","Electromagnets only attract aluminium","Electromagnets are magnetic only when current flows; permanent magnets are always magnetic","Both types of magnet behave identically","Electromagnets cannot be turned off"],2,
+  "The electromagnet stops working when disconnected from the battery. What does the battery provide that permanent magnets do not need?",
+  "An electromagnet requires an electric current to produce a magnetic field. When the battery is disconnected, the current stops and the magnetic field disappears, so the paper clips fall. A permanent magnet retains its magnetism without any electric current. This means electromagnets can be switched on and off, which makes them very useful in machines like cranes and MRI scanners.",
+  "KEY: Electromagnet needs current to be magnetic. Permanent magnet is always magnetic.");
+
+// ═══════════════════════════════════════════════
+// NEW QUESTIONS: PARTICLE MODEL (+4 = 35 total)
+// ═══════════════════════════════════════════════
+
+q(2,"Particle","What is evaporation, and how does it differ from boiling?",
+  ["Both are identical processes","Evaporation occurs only at the surface at any temperature; boiling occurs throughout the liquid at the boiling point","Boiling occurs at the surface only; evaporation occurs throughout","Evaporation requires heating; boiling does not","Boiling only happens in gases"],1,
+  "Think about where evaporation occurs and what temperature it needs compared to boiling.",
+  "Evaporation occurs at the surface of a liquid at any temperature, as high-energy particles at the surface escape into the gas phase. Boiling occurs throughout the entire liquid only at the specific boiling point temperature, producing bubbles of gas throughout. Both result in liquid becoming gas, but they happen under different conditions.",
+  "KEY: Evaporation = surface only, any temperature. Boiling = throughout liquid, at boiling point only.");
+
+q(2,"Particle","A student notices that wet clothes dry faster on a hot, windy day than on a cold, still day. Which two factors speed up evaporation?",
+  ["Higher pressure and lower temperature","Higher temperature and air movement (wind)","Lower temperature and higher humidity","Darkness and stillness","Higher density of the liquid"],1,
+  "Think about what happens to particles at the surface of the liquid when it is hotter and when air is moving.",
+  "Higher temperature gives surface particles more energy, so more of them can escape into the air. Wind removes the evaporated water vapour from above the surface, preventing it from condensing back. Both factors increase the rate of evaporation. Humidity is also a factor - drier air allows faster evaporation.",
+  "KEY: Evaporation rate increases with higher temperature, wind, lower humidity, and larger surface area.");
+
+q(3,"Particle","A sealed gas syringe contains air. When the plunger is pushed in to halve the volume, what happens to the pressure, and why, assuming temperature stays constant?",
+  ["Pressure halves because there is less space","Pressure doubles because the same number of particles are in half the space, so collisions with walls double","Pressure stays the same because no particles escaped","Pressure increases slightly but not doubles","Pressure decreases because particles slow down"],1,
+  "Same number of particles, half the volume. Think about how often they hit the walls now.",
+  "When volume is halved at constant temperature, the same number of particles are squeezed into half the space. Each particle now has to travel a shorter distance before hitting a wall, so the rate of collisions with the walls doubles. This doubles the pressure. This is an inverse relationship: as volume decreases, pressure increases proportionally.",
+  "KEY: Halving volume doubles pressure (at constant temperature) - same particles, half the space, double the wall collisions.");
+
+q(1,"Particle","Which of the following is an example of sublimation?",
+  ["Ice melting into water","Water evaporating into steam","Dry ice (solid carbon dioxide) turning directly into carbon dioxide gas without becoming liquid","Steam condensing on a cold window","Water freezing into ice"],2,
+  "Sublimation is a change of state that skips the liquid phase entirely. Which option goes directly from solid to gas?",
+  "Sublimation is when a solid changes directly into a gas without passing through the liquid state. Dry ice (solid carbon dioxide) is a classic example - at room temperature and normal pressure it goes directly from solid to gas. Another example is iodine crystals which sublime when gently heated.",
+  "KEY: Sublimation = solid to gas directly, skipping liquid. Example: dry ice, iodine crystals.");
+
+// ═══════════════════════════════════════════════
+// NEW QUESTIONS: ELEMENTS & COMPOUNDS (+13 = 35 total)
+// ═══════════════════════════════════════════════
+
+q(1,"Elements","What is the chemical symbol for nitrogen?",
+  ["Ni","Ng","No","N","Nt"],3,
+  "Nitrogen has a single-letter symbol taken from its English name. Remember: Ni is nickel.",
+  "The chemical symbol for nitrogen is N. It is a single capital letter. Do not confuse N (nitrogen) with Ni (nickel) or Na (sodium). Nitrogen makes up about 78% of the Earth's atmosphere.",
+  "KEY: N = Nitrogen. Not Ni (nickel) or Na (sodium).");
+
+q(1,"Elements","What is the chemical symbol for chlorine?",
+  ["Ch","Cl","C","Cr","Co"],1,
+  "Chlorine has a two-letter symbol. The first letter is always a capital, the second is always lowercase.",
+  "The chemical symbol for chlorine is Cl. It is a two-letter symbol with a capital C and lowercase l. Chlorine is a non-metal gas that is yellow-green in colour and is used to disinfect drinking water and swimming pools.",
+  "KEY: Cl = Chlorine. Two-letter symbols: capital first letter, lowercase second.");
+
+q(1,"Elements","What is the chemical symbol for calcium?",
+  ["C","Ca","Cm","Cb","Cu"],1,
+  "Calcium has a two-letter symbol. It starts with Ca. Do not confuse with carbon (C) or copper (Cu).",
+  "The chemical symbol for calcium is Ca. It is a two-letter symbol. Calcium is a metal and is important for strong bones and teeth. Its symbol comes from the Latin word calx. Do not confuse Ca (calcium) with C (carbon) or Cu (copper, from Latin cuprum).",
+  "KEY: Ca = Calcium. C = Carbon. Cu = Copper. Always check carefully.");
+
+q(1,"Elements","What is the chemical symbol for copper?",
+  ["Co","Cp","C","Cr","Cu"],4,
+  "Copper comes from the Latin word cuprum. Use the first two letters of the Latin name.",
+  "The chemical symbol for copper is Cu, from the Latin word cuprum. Copper is a shiny reddish metal that is an excellent conductor of electricity, widely used in electrical wiring. Its symbol does not match its English name because it comes from Latin.",
+  "KEY: Cu = Copper (from Latin cuprum). Do not confuse with Co (cobalt) or Ca (calcium).");
+
+q(2,"Elements","Which of the following is a diatomic molecule of a non-metal element?",
+  ["NaCl","H2O","CO2","N2","Fe"],3,
+  "A diatomic molecule has exactly two atoms. An element's molecule has only one type of atom. Which option has two atoms of the same element?",
+  "N2 is a diatomic molecule of nitrogen - it contains two nitrogen atoms bonded together. It is a molecule of an element (not a compound) because both atoms are the same type. NaCl and H2O are compounds. CO2 has three atoms and is a compound. Fe is a single metal atom.",
+  "KEY: Diatomic element molecules: H2, O2, N2, Cl2, F2, Br2, I2. Two identical atoms bonded.");
+
+q(2,"Elements","What is the difference between a mixture and a compound?",
+  ["They are the same thing","In a mixture, substances are not chemically joined and can be separated by physical methods; in a compound they are chemically bonded","A compound can always be separated by filtering","A mixture always contains metals","Compounds are always liquids"],1,
+  "Think about what holds the substances together in each case. Can they be separated easily?",
+  "In a mixture, two or more substances are physically combined but not chemically bonded. Each substance keeps its own properties and the mixture can be separated by physical methods such as filtering, evaporation, or magnetic separation. In a compound, elements are chemically bonded together and can only be separated by chemical reactions.",
+  "KEY: Mixture = physically combined, separable. Compound = chemically bonded, not easily separated.");
+
+q(2,"Elements","Salt (sodium chloride) has the formula NaCl. What does this tell us?",
+  ["Salt is an element containing Na atoms only","Salt is a compound containing one sodium atom and one chlorine atom chemically bonded","Salt contains two different molecules","Na and Cl are both non-metals","Salt has two sodium atoms and one chlorine atom"],1,
+  "Each letter/symbol represents one type of atom. No subscript number means one atom of that element.",
+  "NaCl means each formula unit of sodium chloride contains one sodium atom (Na) and one chlorine atom (Cl) chemically bonded together. Since it contains two different types of atoms bonded together, NaCl is a compound. Sodium is a metal and chlorine is a non-metal - when they combine, the compound has completely different properties from either element.",
+  "KEY: NaCl = 1 sodium + 1 chlorine, chemically bonded = ionic compound.");
+
+q(2,"Elements","What is a period in the Periodic Table?",
+  ["A vertical column of elements with similar properties","A horizontal row of elements across the Periodic Table","A group of metals only","The time it takes for an element to react","A measure of atomic size"],1,
+  "Groups and periods are the two ways of organising the Periodic Table. Groups run vertically, periods run the other way.",
+  "A period is a horizontal row across the Periodic Table. There are 7 periods in the modern Periodic Table. As you move across a period from left to right, the elements change from metals to non-metals. Elements in the same period do not share similar properties, unlike elements in the same group.",
+  "KEY: Period = horizontal row. Group = vertical column. Elements in same group share similar properties.");
+
+q(3,"Elements","An unknown substance Z cannot be broken down by any chemical method and contains only one type of atom. What is substance Z?",
+  ["A compound","A mixture","A molecule","An element","A solution"],3,
+  "Only one type of atom and cannot be broken down chemically. What category does that describe?",
+  "If a substance cannot be broken down by chemical methods and contains only one type of atom, it must be an element. Elements are the simplest pure substances. They cannot be decomposed into anything simpler by chemical reactions. The Periodic Table lists all known elements.",
+  "KEY: One type of atom + cannot be broken down chemically = element.");
+
+q(1,"Elements","What is the chemical symbol for magnesium?",
+  ["Ma","Mn","Mg","Me","Mi"],2,
+  "Magnesium is a light metal. Its two-letter symbol uses Mg.",
+  "The chemical symbol for magnesium is Mg. It is a two-letter symbol. Magnesium is a light silvery metal used in alloys and in fireworks (it burns with a bright white flame). Do not confuse Mg (magnesium) with Mn (manganese).",
+  "KEY: Mg = Magnesium. Mn = Manganese. Always check the exact symbol.");
+
+q(2,"Elements","Which statement correctly describes metalloids?",
+  ["They are elements that are always liquid at room temperature","They are elements with properties between metals and non-metals","They conduct electricity better than metals","They are compounds of metals and non-metals","They are only found in Group 1 of the Periodic Table"],1,
+  "Metalloids sit between metals and non-metals on the Periodic Table. Think about what properties they might share from both sides.",
+  "Metalloids are elements that have properties intermediate between metals and non-metals. For example, silicon is a metalloid - it has a shiny appearance like a metal but is brittle like a non-metal, and it is a semiconductor (conducts electricity under certain conditions). Examples of metalloids include silicon, germanium, and arsenic.",
+  "KEY: Metalloids = properties between metals and non-metals. Silicon is the most well-known example.");
+
+q(3,"Elements","A student burns magnesium ribbon in air and produces a white powder called magnesium oxide (MgO). Is magnesium oxide an element, compound, or mixture?",
+  ["Element, because magnesium is an element","Mixture, because air is a mixture","Compound, because it contains two different elements (magnesium and oxygen) chemically bonded","Element, because it is a pure white solid","Mixture, because it contains two substances"],2,
+  "Look at the formula MgO. How many different types of atoms does it contain? Are they chemically joined?",
+  "Magnesium oxide (MgO) is a compound. It contains two different types of atoms - magnesium (Mg) and oxygen (O) - that are chemically bonded together. The white powder has completely different properties from both magnesium metal and oxygen gas. Since two different elements are chemically combined, it is a compound.",
+  "KEY: MgO = Mg + O chemically bonded = compound. Its properties differ completely from Mg and O2.");
+
+q(2,"Elements","In the Periodic Table, elements in the same group have the same number of outer electrons. What does this explain about elements in the same group?",
+  ["They have the same atomic mass","They have similar chemical properties","They are all metals","They are all the same colour","They all exist as gases"],1,
+  "Chemical properties depend on outer electrons. If elements in the same group have the same number of outer electrons, what would you expect about their behaviour?",
+  "Elements in the same group have the same number of electrons in their outer shell. Since chemical reactions involve outer electrons, elements in the same group react in similar ways and form similar types of compounds. For example, all Group 1 metals (Li, Na, K) react vigorously with water and form oxides and chlorides.",
+  "KEY: Same group = same outer electrons = similar chemical properties and reactions.");
+
+// ═══════════════════════════════════════════════
+// NEW QUESTIONS: THE EARTH (+13 = 30 total)
+// ═══════════════════════════════════════════════
+
+q(1,"Earth","What is the difference between weathering and erosion?",
+  ["They are the same process","Weathering breaks rocks down in place; erosion is the transport of weathered material to another location","Erosion breaks rocks down; weathering transports them","Weathering only happens in deserts","Erosion only happens underground"],1,
+  "Weathering breaks rocks down. Erosion involves movement. Which one stays in place and which one moves material?",
+  "Weathering is the breaking down of rocks in place by physical or chemical processes. The rock stays where it is but is broken into smaller pieces. Erosion is the wearing down and transportation of weathered material from one place to another by agents such as water, wind, ice, and waves.",
+  "KEY: Weathering = breakdown in place. Erosion = transport of broken material elsewhere.");
+
+q(2,"Earth","How does chemical weathering by acid rain break down rocks?",
+  ["Acid rain freezes in cracks and expands","Acid rain dissolves certain minerals in rocks, especially limestone and marble","Acid rain heats the rocks until they crack","Acid rain washes away the soil on top of rocks","Acid rain makes rocks magnetic"],1,
+  "Chemical weathering involves a chemical reaction. What would an acid do to a rock like limestone?",
+  "Acid rain (rainwater made slightly acidic by dissolved carbon dioxide and pollutants) reacts chemically with rocks that contain calcium carbonate, such as limestone and marble. The acid dissolves the calcium carbonate, causing the rock to slowly break down. This is why limestone buildings and statues are slowly eroded by acid rain.",
+  "KEY: Acid rain dissolves calcium carbonate in limestone and marble = chemical weathering.");
+
+q(2,"Earth","What are the four layers of soil from the surface downward?",
+  ["Bedrock, subsoil, topsoil, humus","Topsoil, subsoil, weathered rock fragments, bedrock","Sand, clay, gravel, rock","Humus, clay, sand, granite","Mantle, crust, soil, topsoil"],1,
+  "Think of the soil profile as layers in order from surface down. The most nutrient-rich layer is at the top.",
+  "The four layers of soil from top to bottom are: topsoil (dark, rich in humus and nutrients, where most plant roots grow), subsoil (lighter coloured, less humus, more mineral material), weathered rock fragments (partially broken-down rock), and bedrock (solid unweathered rock at the bottom).",
+  "KEY: Soil layers top to bottom: topsoil, subsoil, weathered rock fragments, bedrock.");
+
+q(1,"Earth","What is humus, and why is it important for plants?",
+  ["A hard mineral found in rocks","The organic material in soil formed from decomposed plants and animals, which provides nutrients for plants","A type of sedimentary rock","The bedrock layer below the soil","A type of clay mineral"],1,
+  "Think about what happens to dead leaves, plant roots, and animal matter over time. What does it become and why is it useful?",
+  "Humus is the organic component of soil formed from the decomposition of dead plant material, animal remains, and animal waste by microorganisms. It makes soil dark and crumbly, improves water retention, and provides essential nutrients for plant growth. Topsoil contains the most humus and is the most fertile layer.",
+  "KEY: Humus = decomposed organic matter in soil. Makes soil fertile. Found most in topsoil.");
+
+q(2,"Earth","What are the three types of rock, and give one example of each?",
+  ["Hard, soft, medium - granite, chalk, clay","Igneous, sedimentary, metamorphic - granite, limestone, marble","Old, new, ancient - basalt, sandstone, slate","Crystal, layer, smooth - quartz, shale, obsidian","Primary, secondary, tertiary - granite, limestone, slate"],1,
+  "The three rock types are named by how they form. Think: fire, layers, changed.",
+  "The three types of rock are: igneous (formed from cooled magma or lava, e.g. granite, basalt), sedimentary (formed from compressed layers of sediment, e.g. limestone, sandstone, shale), and metamorphic (formed when existing rocks are changed by heat and pressure, e.g. marble from limestone, slate from mudstone).",
+  "KEY: Igneous (granite/basalt), Sedimentary (limestone/sandstone), Metamorphic (marble/slate).");
+
+q(2,"Earth","Sandstone is formed from coarse grains of sand compressed over time. What type of rock is sandstone, and what sediment is it made from?",
+  ["Igneous, formed from cooled lava","Metamorphic, formed from sand under pressure and heat","Sedimentary, formed from compressed coarse-grained sand sediment","Igneous, formed from sand and magma mixing","Metamorphic, formed by freeze-thaw of sand"],2,
+  "Sandstone literally contains sand. Think about which rock type forms from compressed layers of sediment.",
+  "Sandstone is a sedimentary rock. It is formed when coarse grains of sand are deposited in layers (often in riverbeds or deserts), then slowly compressed and cemented together by minerals over millions of years. The size of the grains in the original sediment determines whether the resulting rock is fine-grained or coarse-grained.",
+  "KEY: Sandstone = sedimentary rock formed from compressed coarse sand grains.");
+
+q(1,"Earth","What is the rock cycle?",
+  ["The daily movement of rocks due to earthquakes","The continuous process by which rocks are formed, broken down, and reformed over millions of years","The spinning of the Earth on its axis","The pattern of fossil formation in layers","The process of volcanic eruption only"],1,
+  "A cycle means something keeps going around and around. Think about how rocks can change from one type to another over very long periods.",
+  "The rock cycle is the continuous, slow process by which rocks of one type are converted into rocks of another type over millions of years. Igneous rocks can be weathered into sediments that form sedimentary rocks. Sedimentary or igneous rocks buried deep underground can be changed by heat and pressure into metamorphic rocks. Metamorphic rocks that melt become magma, which can cool to form igneous rocks again.",
+  "KEY: Rock cycle = continuous process converting rocks between igneous, sedimentary and metamorphic types.");
+
+q(3,"Earth","Shale is a fine-grained sedimentary rock. When subjected to heat and pressure deep underground, it becomes slate. Explain this transformation in terms of rock types.",
+  ["Shale is igneous, slate is sedimentary - formed by weathering","Shale is sedimentary, slate is metamorphic - heat and pressure change shale without melting it completely","Both are sedimentary - the grains just get smaller","Shale is metamorphic, slate is igneous - formed by cooling","Both are igneous - they both formed from magma"],1,
+  "Shale forms from fine sediment (sedimentary). What type of rock is formed when existing rocks are changed by heat and pressure?",
+  "Shale is a fine-grained sedimentary rock formed from compressed clay and mud sediment. When buried deep underground and subjected to high temperature and pressure, shale is transformed into slate - a metamorphic rock. The heat and pressure cause the minerals to recrystallise into flat, aligned layers, giving slate its characteristic ability to split into thin sheets.",
+  "KEY: Shale (sedimentary) + heat and pressure = Slate (metamorphic). Similar to limestone -> marble.");
+
+q(2,"Earth","Why are sedimentary rocks found in horizontal layers, with older layers at the bottom?",
+  ["Gravity pulls heavier rocks to the bottom","Sediment is deposited layer by layer over time; the first layers deposited are at the bottom and are therefore oldest","Older rocks sink over time","Erosion removes the top layers first","Water pushes older rocks downward"],1,
+  "Think about how sediment builds up. If you drop sediment into water repeatedly, where does the first layer end up?",
+  "When sediment is deposited in water or by wind, it settles in horizontal layers. Each new layer is deposited on top of existing layers. This means the lowest layers were deposited first and are therefore the oldest. The youngest layers are at the top. Scientists use this principle to determine the relative ages of rock layers and the fossils within them.",
+  "KEY: Oldest rock layer = bottom. Youngest = top. Layers deposited newest on top of oldest.");
+
+q(3,"Earth","A student finds a fossil of a sea creature on top of a mountain. What does this suggest about the geological history of that mountain?",
+  ["The fossil was carried up the mountain by animals","The mountain was once covered by the sea, and the seabed sedimentary rock was later pushed upward by geological forces","Sea creatures used to live on mountains","Fossils can form anywhere including mountains","The student found a fake fossil"],1,
+  "Fossils of sea creatures form in sedimentary rock at the bottom of the sea. How could that rock end up on a mountain?",
+  "Finding a marine fossil on a mountain tells us that the rock was once formed underwater as seafloor sediment. Over millions of years, tectonic forces (the movement of the Earth's plates) can push these sedimentary rocks upward to form mountains. The Himalayas, for example, contain marine fossils because they were formed when the Indian plate collided with the Eurasian plate, pushing ancient seabed rock upward.",
+  "KEY: Marine fossil on mountain = that rock was once seafloor, later lifted by tectonic forces.");
+
+q(2,"Earth","What causes biological weathering of rocks?",
+  ["Chemicals in rainwater dissolving rock minerals","Roots of plants growing into cracks widening them, and animals burrowing through rock","Freeze-thaw cycles of water in cracks","High temperatures during the day expanding the rock","Wind blowing rock particles against each other"],1,
+  "Biological means caused by living things. Which living things could physically break rock apart?",
+  "Biological weathering is caused by living organisms. Plant roots grow into cracks in rocks and gradually widen them as the plant grows, eventually splitting the rock. Animals such as earthworms and moles burrowing through soil and rock also cause biological weathering. Lichens growing on rock surfaces also produce weak acids that chemically break down the rock surface.",
+  "KEY: Biological weathering = living organisms (plant roots widening cracks, burrowing animals, lichens).");
+
+q(1,"Earth","Which layer of the Earth is the thickest?",
+  ["The crust","The inner core","The outer core","The mantle","The soil layer"],3,
+  "Think about the four layers from centre to surface. Which one takes up the most space?",
+  "The mantle is the thickest layer of the Earth. It extends from just below the crust to the outer core, making up about 84% of the Earth's total volume. The crust is the thinnest layer (only about 5-70 km thick), while the mantle extends for nearly 2900 km.",
+  "KEY: Thickest layer = mantle (about 84% of Earth's volume). Thinnest layer = crust.");
+
+q(2,"Earth","How do scientists know about the internal structure of the Earth if they have never drilled that deep?",
+  ["They guess based on the age of rocks","They study how seismic waves (earthquake waves) travel through the Earth at different speeds through different materials","They look at volcanoes","They use the colour of rocks at the surface","They calculate it from the Earth's weight"],1,
+  "Scientists cannot observe the Earth's interior directly. Think about what earthquakes produce that can be detected from a distance.",
+  "Scientists study the internal structure of the Earth by analysing seismic waves - the waves produced by earthquakes. Different types of seismic waves travel at different speeds through different materials, and some cannot travel through liquids. By studying how seismic waves change speed and direction as they pass through the Earth, scientists can infer what the different layers are made of and whether they are solid or liquid.",
+  "KEY: Earth's interior structure known from seismic wave behaviour - waves change speed/direction at boundaries.");
+
+// ═══════════════════════════════════════════════
+// NEW QUESTIONS: SPEED & MOTION (+11 = 25 total)
+// ═══════════════════════════════════════════════
+
+q(1,"Speed","A car travels 150 m in 30 seconds. What is its speed?",
+  ["4500 m/s","0.2 m/s","5 m/s","20 m/s","180 m/s"],2,
+  "Use speed = distance divided by time. Substitute the values.",
+  "Speed = distance divided by time = 150 m divided by 30 s = 5 m/s. Always check units: metres divided by seconds gives m/s, which is the correct unit for speed.",
+  "KEY: 150 divided by 30 = 5 m/s.");
+
+q(2,"Speed","A cheetah runs at 28 m/s. How long does it take to run 140 m?",
+  ["3920 s","5 s","0.2 s","168 s","14 s"],1,
+  "Rearrange speed = distance divided by time to find time. Time = distance divided by speed.",
+  "Time = distance divided by speed = 140 m divided by 28 m/s = 5 seconds. Rearranging the speed formula: if speed = distance over time, then time = distance over speed.",
+  "KEY: Time = distance divided by speed = 140 divided by 28 = 5 s.");
+
+q(2,"Speed","A cyclist averages 15 km/h over a 45 km journey. How long does the journey take?",
+  ["675 hours","30 hours","3 hours","0.33 hours","60 hours"],2,
+  "Use time = distance divided by speed. Make sure your units are consistent.",
+  "Time = distance divided by speed = 45 km divided by 15 km/h = 3 hours. The units km and km/h give hours as the answer, which is correct.",
+  "KEY: Time = 45 divided by 15 = 3 hours.");
+
+q(2,"Speed","Convert 72 km/h into m/s.",
+  ["72 m/s","7.2 m/s","20 m/s","0.02 m/s","720 m/s"],2,
+  "To convert km/h to m/s: multiply by 1000 (km to m) and divide by 3600 (hours to seconds). Or simply divide by 3.6.",
+  "To convert km/h to m/s: 72 km/h = 72 x 1000 m divided by 3600 s = 72000 divided by 3600 = 20 m/s. The shortcut is to divide by 3.6: 72 divided by 3.6 = 20 m/s.",
+  "KEY: km/h to m/s: divide by 3.6. So 72 divided by 3.6 = 20 m/s.");
+
+q(3,"Speed","A distance-time graph shows two sections: from 0-4s the object moves 20m, then from 4-8s it stays at 20m, then from 8-12s it moves from 20m back to 0m. Describe the motion.",
+  ["Constant speed throughout","Speeding up then stopping then reversing","Moving at 5 m/s, then stationary, then returning at 5 m/s","Accelerating, decelerating, then stationary","Moving backward throughout"],2,
+  "Work out the speed for each section separately using gradient = speed.",
+  "Section 1 (0-4s): 20m divided by 4s = 5 m/s (moving away). Section 2 (4-8s): no change in distance = stationary. Section 3 (8-12s): distance decreases from 20m to 0m in 4s = 5 m/s (returning). The object moves at constant speed, stops, then returns at the same speed.",
+  "KEY: Read each section separately. Flat line = stationary. Downward slope = returning toward start.");
+
+q(2,"Speed","On a distance-time graph, what does it mean if the line slopes downward (distance decreasing over time)?",
+  ["The object is getting faster","The object has stopped","The object is returning toward the starting point","The object is going underground","The graph has an error"],2,
+  "Distance from start is decreasing. What direction must the object be moving?",
+  "If distance is decreasing over time on a distance-time graph, the object is moving back toward its starting point. The distance from the origin is getting smaller, which means the object is returning. A downward slope represents motion back toward the start.",
+  "KEY: Downward slope on d-t graph = moving back toward starting point.");
+
+q(1,"Speed","What is the unit of distance in the SI system?",
+  ["Kilometre (km)","Centimetre (cm)","Mile","Metre (m)","Foot (ft)"],3,
+  "SI stands for International System of Units. What is the base unit of length/distance?",
+  "The SI base unit of distance (length) is the metre (m). All other units of length such as km, cm, and mm are derived from the metre. In speed calculations using SI units, distance should be in metres and time in seconds, giving speed in m/s.",
+  "KEY: SI unit of distance = metre (m). SI unit of time = second (s). SI unit of speed = m/s.");
+
+q(2,"Speed","A bus travels 60 km in the first hour, stops for 30 minutes, then travels 40 km in the next hour. What is the average speed for the whole journey?",
+  ["50 km/h","40 km/h","100 km/h","100 divided by 2 = 50 km/h","100 divided by 2.5 = 40 km/h"],4,
+  "Total distance = 60 + 40 = 100 km. Total time = 1 + 0.5 + 1 = 2.5 hours. Average speed = total distance divided by total time.",
+  "Total distance = 60 + 40 = 100 km. Total time = 1 hour + 0.5 hour (stop) + 1 hour = 2.5 hours. Average speed = 100 km divided by 2.5 hours = 40 km/h. The stop must be included in the total time for average speed.",
+  "KEY: Average speed includes ALL time (including stops). 100 km divided by 2.5 h = 40 km/h.");
+
+q(3,"Speed","Two objects A and B start from the same point at the same time. After 6 seconds, A has travelled 30m and B has travelled 18m. Which statement is correct?",
+  ["A and B have the same speed","B is faster because it has a smaller number","A is faster; speed A = 5 m/s, speed B = 3 m/s","B is faster; speed B = 3 m/s, speed A = 5 m/s","Cannot be determined without a graph"],2,
+  "Calculate the speed of each object. Speed = distance divided by time for both.",
+  "Speed A = 30 m divided by 6 s = 5 m/s. Speed B = 18 m divided by 6 s = 3 m/s. A is faster because it covers more distance in the same time. On a distance-time graph, A would have a steeper gradient.",
+  "KEY: Speed A = 30/6 = 5 m/s. Speed B = 18/6 = 3 m/s. A is faster.");
+
+q(2,"Speed","A car accelerates from a traffic light. On a distance-time graph, how would this appear?",
+  ["A straight horizontal line","A straight diagonal line with constant gradient","A curve that gets steeper over time","A curve that gets less steep over time","A vertical line"],2,
+  "Acceleration means increasing speed. Increasing speed means increasing gradient on a distance-time graph.",
+  "When a car accelerates from rest, its speed increases over time. On a distance-time graph, increasing speed is shown as an increasing gradient - the line curves upward, getting steeper and steeper. A straight line would show constant speed. A horizontal line would show no movement.",
+  "KEY: Acceleration on d-t graph = curve getting steeper (increasing gradient).");
+
+q(1,"Speed","What does the area under a speed-time graph represent?",
+  ["The acceleration of the object","The distance travelled by the object","The force applied to the object","The mass of the object","The time taken"],1,
+  "This is a slightly harder graph interpretation question. Think about what speed multiplied by time gives.",
+  "The area under a speed-time graph represents the distance travelled. This is because speed multiplied by time equals distance (the speed formula rearranged). For a rectangle, area = speed x time = distance. This is a useful way to find distance from a speed-time graph even when speed is not constant.",
+  "KEY: Area under speed-time graph = distance travelled. (Speed x time = distance).");
+
+// ═══════════════════════════════════════════════
+// NEW QUESTIONS: MAGNETS (+11 = 25 total)
+// ═══════════════════════════════════════════════
+
+q(1,"Magnets","What are the three main magnetic metals?",
+  ["Gold, silver, copper","Iron, nickel, cobalt","Aluminium, iron, tin","Steel, brass, bronze","Lead, zinc, mercury"],1,
+  "Only three common metals are magnetic. They are all transition metals in the Periodic Table.",
+  "The three main magnetic metals are iron, nickel, and cobalt. These are the only common metals that are attracted to magnets. Steel is also magnetic because it is an alloy that contains iron. Other metals such as copper, aluminium, gold, and silver are not magnetic.",
+  "KEY: Magnetic metals = iron, nickel, cobalt. Steel (iron alloy) is also magnetic.");
+
+q(2,"Magnets","How can you make a permanent magnet from a piece of iron using a bar magnet?",
+  ["Heat the iron and then cool it quickly","Stroke the iron repeatedly in the same direction with one pole of a bar magnet","Hit the iron repeatedly with a hammer","Place the iron near another magnet for a few seconds","Rub the iron with both poles alternately"],1,
+  "Making a magnet by stroking is called the stroking method. In which direction must you stroke to align the magnetic domains?",
+  "You can make a permanent magnet by the stroking method: stroke the iron bar repeatedly with one pole of a bar magnet, always in the same direction and lifting the magnet away before returning to the start. This gradually aligns the magnetic domains (tiny magnetic regions) inside the iron in the same direction, making it magnetic.",
+  "KEY: Stroking method = stroke iron in same direction with one pole repeatedly to align magnetic domains.");
+
+q(2,"Magnets","What happens to a magnet when it is hit repeatedly with a hammer or heated strongly?",
+  ["It becomes stronger","It loses its magnetism","It gains extra poles","It reverses its north and south poles","Nothing happens"],1,
+  "Strong physical shock or heat disrupts the order inside a magnet. Think about what order must be maintained for something to be magnetic.",
+  "When a magnet is hit repeatedly or heated strongly, the magnetic domains inside become randomly oriented again, destroying the overall magnetic alignment. This causes the magnet to lose its magnetism. This is why magnets should be stored carefully, away from strong heat and physical shocks.",
+  "KEY: Heat or physical shock = random domain orientation = magnet loses magnetism.");
+
+q(2,"Magnets","What is the difference between a temporary magnet and a permanent magnet?",
+  ["Temporary magnets are stronger","A temporary magnet is only magnetic when near another magnet or in a magnetic field; a permanent magnet retains magnetism on its own","Permanent magnets can be switched off","Temporary magnets are made of steel only","There is no difference"],1,
+  "Think about soft iron and steel. One keeps its magnetism, one does not. Which is which?",
+  "A temporary magnet (usually made of soft iron) is only magnetic when it is placed in a magnetic field or near another magnet. When removed from the field, it quickly loses its magnetism. A permanent magnet (usually made of steel or special alloys) retains its magnetism for a long time without needing an external magnetic field.",
+  "KEY: Soft iron = temporary magnet. Steel = permanent magnet. Temporary loses magnetism when field removed.");
+
+q(1,"Magnets","In which direction do magnetic field lines point outside a bar magnet?",
+  ["From south pole to north pole","From north pole to south pole","In random directions","Parallel to the magnet only","They form circles around the magnet"],1,
+  "By convention, magnetic field lines have a direction. A compass needle points from south to north inside the field - so which way do the lines run outside?",
+  "By convention, magnetic field lines outside a magnet point from the north pole to the south pole. A compass placed in the field will have its north pole pointing in the direction of the field line at that point - away from the magnet's north pole and toward its south pole.",
+  "KEY: Field lines outside magnet go FROM north pole TO south pole.");
+
+q(3,"Magnets","A student tests four objects with a magnet: a copper coin, an iron nail, a wooden ruler, and a steel paperclip. Which two will be attracted?",
+  ["Copper coin and wooden ruler","Iron nail and wooden ruler","Iron nail and steel paperclip","Copper coin and steel paperclip","All four will be attracted"],2,
+  "Remember the three magnetic metals. Steel is an alloy containing iron. Which of the four objects contain magnetic metals?",
+  "The iron nail and steel paperclip will be attracted to the magnet. Iron is a magnetic metal. Steel is an alloy that contains iron, so it is also magnetic. Copper is a non-magnetic metal, so the copper coin is not attracted. Wood is not a metal, so the wooden ruler is not attracted.",
+  "KEY: Iron nail (magnetic metal) and steel paperclip (iron alloy) = both attracted. Copper and wood = not attracted.");
+
+q(2,"Magnets","A compass is placed near a bar magnet and the needle swings around. When the compass is placed at the north pole end, which direction does the compass needle point?",
+  ["Toward the north pole of the bar magnet","Away from the north pole of the bar magnet","Sideways, perpendicular to the magnet","Straight up","It spins continuously"],1,
+  "The north pole of the compass needle is repelled by the north pole of the bar magnet. So which way does it point?",
+  "The north pole of the compass needle is repelled by the north pole of the bar magnet and attracted to its south pole. So when the compass is placed near the north pole of the bar magnet, the compass needle's north pole points AWAY from the magnet's north pole. The south end of the compass needle points toward the bar magnet's north pole.",
+  "KEY: Like poles repel. Compass north near magnet north = compass north points AWAY from magnet.");
+
+q(2,"Magnets","What is the purpose of using iron filings to study a magnetic field?",
+  ["Iron filings measure the exact strength of the field","Iron filings align with the magnetic field lines, making them visible as a pattern","Iron filings strengthen the magnetic field","Iron filings show the temperature of the magnet","Iron filings are used to demagnetise a magnet"],1,
+  "Iron filings are attracted to magnetic fields. When sprinkled around a magnet, what do they do that makes the field visible?",
+  "Iron filings are tiny pieces of iron that each become small temporary magnets when placed in a magnetic field. They align themselves along the magnetic field lines, making the invisible field visible as a pattern of lines. The iron filings cluster most densely near the poles (strong field) and spread out further away (weaker field).",
+  "KEY: Iron filings align with field lines = makes invisible magnetic field visible as a pattern.");
+
+q(3,"Magnets","A student places two bar magnets end to end with north pole facing north pole. She places iron filings around them. What pattern would she see between the two north poles?",
+  ["Field lines going from one north pole to the other","A neutral point with few or no field lines between the two north poles, as the fields cancel each other","Iron filings forming a straight line between the poles","No pattern at all","A circular pattern around both magnets combined"],1,
+  "Two like poles are repelling each other. What happens to the magnetic field in the space directly between them?",
+  "Between two north poles, the magnetic field lines from each magnet push against each other. There is a neutral point between the poles where the two opposing fields exactly cancel out. At this neutral point, the net magnetic field is zero. Iron filings would show field lines curving away from the space between the two poles rather than connecting them.",
+  "KEY: Two like poles facing each other = neutral point between them where fields cancel = few iron filings there.");
+
+q(1,"Magnets","Which property of magnets makes them useful in compasses?",
+  ["Magnets are heavy and stable","A freely suspended magnet always aligns with the Earth magnetic field, pointing north-south","Magnets can pick up all metals","Magnets glow in the dark","Magnets can store electricity"],1,
+  "Think about what a compass does and what property of a magnet makes that possible.",
+  "A freely suspended magnet always aligns with the Earth's magnetic field, with its north pole pointing toward geographic north. This is the property that makes magnets useful in compasses. The compass needle is a small, lightweight magnet that can rotate freely on a pivot, allowing it to always show north.",
+  "KEY: Freely suspended magnet aligns with Earth's field = always points north-south = useful for compass.");
+
+q(2,"Magnets","What is an induced magnet, and give an example?",
+  ["A magnet made by electricity only","A material that becomes temporarily magnetic when placed in a magnetic field, such as an iron nail near a magnet","A magnet that can never lose its magnetism","A type of permanent magnet made of steel","A magnet found naturally in the ground"],1,
+  "When you bring an unmagnetised piece of iron near a magnet, what happens to the iron?",
+  "An induced magnet is a magnetic material that becomes temporarily magnetic when placed in or near a magnetic field. For example, an iron nail placed near a bar magnet becomes an induced magnet and can itself attract other small iron objects like paper clips. When removed from the magnetic field, the induced magnet loses most of its magnetism quickly.",
+  "KEY: Induced magnet = temporarily magnetic when in a magnetic field. Iron nail near a magnet = induced magnet.");
+
+// ═══════════════════════════════════════════════
+// NEW QUESTIONS: SPACE / EARTH AND BEYOND (25 new)
+// ═══════════════════════════════════════════════
+
+q(1,"Space","What is a star?",
+  ["A planet that reflects light from the Sun","A huge ball of hot gases that produces its own light and heat","A natural satellite orbiting a planet","A large rock that orbits the Sun","A comet made of ice and dust"],1,
+  "Think about the Sun. What is it made of and where does its light come from?",
+  "A star is a huge ball of hot gases (mainly hydrogen and helium) that produces its own light and heat through nuclear fusion reactions in its core. The Sun is the nearest star to the Earth. Stars are luminous objects - they give off their own light. This distinguishes them from planets and moons which only reflect light.",
+  "KEY: Star = huge ball of hot gas that produces its own light. The Sun is our nearest star.");
+
+q(1,"Space","Why can we see the Moon even though it does not produce its own light?",
+  ["The Moon glows from stored heat during the day","The Moon reflects sunlight toward the Earth","The Moon has its own small nuclear reactor","The Moon is lit up by light from other stars","The Moon produces light only at night"],1,
+  "The Moon is a non-luminous object. Non-luminous objects can still be seen. How?",
+  "The Moon is a non-luminous object - it does not produce its own light. We can see it because it reflects sunlight. The side of the Moon facing the Sun is lit up, and some of that reflected light reaches the Earth, allowing us to see the Moon. This is the same reason we can see planets.",
+  "KEY: Moon = non-luminous. We see it because it reflects sunlight toward Earth.");
+
+q(1,"Space","What causes day and night on Earth?",
+  ["The Sun orbits the Earth once every 24 hours","The Earth rotates on its axis once every 24 hours","The Moon blocks sunlight from reaching parts of Earth","The Earth orbits the Sun once every 24 hours","The Sun switches off at night"],1,
+  "Day and night alternate every 24 hours. Think about the Earth spinning, not the Sun moving.",
+  "Day and night are caused by the Earth rotating (spinning) on its own axis once every 24 hours. The half of the Earth facing the Sun experiences daytime, while the half facing away experiences nighttime. The Sun does not move around the Earth - it only appears to rise in the east and set in the west because of the Earth's rotation.",
+  "KEY: Day and night = Earth rotates on its axis every 24 hours. Sun appears to move but Earth is spinning.");
+
+q(1,"Space","How long does it take the Earth to orbit the Sun once?",
+  ["24 hours","28 days","365.25 days (one year)","12 months exactly","7 days"],2,
+  "One complete orbit of the Earth around the Sun = one year. How many days is that?",
+  "The Earth takes approximately 365.25 days (one year) to complete one orbit around the Sun. The extra quarter day is why we have a leap year every 4 years, adding an extra day (29 February) to keep the calendar aligned with the Earth's actual orbit.",
+  "KEY: Earth orbit = 365.25 days = one year. The 0.25 extra day causes leap years every 4 years.");
+
+q(1,"Space","What is the correct order of the planets from closest to furthest from the Sun?",
+  ["Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune","Venus, Mercury, Mars, Earth, Jupiter, Saturn, Uranus, Neptune","Mercury, Earth, Venus, Mars, Saturn, Jupiter, Neptune, Uranus","Earth, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune","Mercury, Venus, Mars, Earth, Jupiter, Saturn, Neptune, Uranus"],0,
+  "Use the mnemonic: My Very Educated Mother Just Served Us Noodles. First letters = M, V, E, M, J, S, U, N.",
+  "The correct order from closest to furthest from the Sun is: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune. A useful mnemonic is My Very Educated Mother Just Served Us Noodles. Mercury is the smallest planet and closest to the Sun; Neptune is the furthest.",
+  "KEY: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune. Mnemonic: My Very Educated Mother Just Served Us Noodles.");
+
+q(2,"Space","What is the difference between inner planets and outer planets?",
+  ["Inner planets are larger and made of gas; outer planets are small and rocky","Inner planets (Mercury, Venus, Earth, Mars) are small, rocky, and dense; outer planets (Jupiter, Saturn, Uranus, Neptune) are large gas/ice giants","Inner planets have no moons; outer planets all have moons","Inner planets are hotter because they are closer to the Sun","There is no difference between them"],1,
+  "The asteroid belt divides the inner and outer planets. Think about size and composition.",
+  "The four inner planets (Mercury, Venus, Earth, Mars) are relatively small, rocky, and dense - called terrestrial planets. The four outer planets (Jupiter, Saturn, Uranus, Neptune) are much larger and composed mainly of gas and ice - called gas giants or ice giants. The inner and outer planets are separated by the asteroid belt between Mars and Jupiter.",
+  "KEY: Inner = small, rocky (Mercury, Venus, Earth, Mars). Outer = large, gas/ice giants (Jupiter, Saturn, Uranus, Neptune).");
+
+q(1,"Space","What is the Solar System?",
+  ["All the stars in the Milky Way galaxy","The Sun and all objects that orbit it, including planets, moons, asteroids, and comets","Just the Earth and the Moon","The eight planets and nothing else","The Sun, Earth and Moon only"],1,
+  "The Solar System is named after the Sun (Sol). It includes everything that is gravitationally bound to the Sun.",
+  "The Solar System consists of the Sun and all objects that orbit it, held by the Sun's gravitational pull. This includes the eight planets and their moons, dwarf planets (like Pluto), asteroids, comets, and other small bodies. The Sun contains more than 99% of the total mass of the Solar System.",
+  "KEY: Solar System = Sun + everything orbiting it (planets, moons, asteroids, comets, dwarf planets).");
+
+q(1,"Space","What is the asteroid belt, and where is it located?",
+  ["A ring of gas surrounding Saturn","A region of rocky objects orbiting the Sun between Mars and Jupiter","A belt of comets beyond Neptune","A ring of moons around Jupiter","A zone of dust between Venus and Earth"],1,
+  "The asteroid belt separates the inner and outer planets. Which two planets is it between?",
+  "The asteroid belt is a region of rocky, irregularly-shaped objects called asteroids that orbit the Sun between Mars and Jupiter. Most asteroids are smaller than planets and range from tiny pebbles to hundreds of kilometres across. Ceres is the largest object in the asteroid belt and is classified as a dwarf planet.",
+  "KEY: Asteroid belt = rocky objects between Mars and Jupiter. Separates inner and outer planets.");
+
+q(1,"Space","What is a comet?",
+  ["A small rocky planet beyond Neptune","A non-luminous object made of ice, dust, and rock that orbits the Sun, forming a dust tail as it nears the Sun","A very bright star","A moon that has escaped from its planet","A type of asteroid made of metal"],1,
+  "Comets are famous for their tails. What are they made of and what causes the tail to appear?",
+  "A comet is a non-luminous object made of ice, dust, and rock that orbits the Sun in an elliptical path. As a comet approaches the Sun, the ice heats up and turns to gas, releasing dust particles. The Sun's radiation pushes the dust outward to form a visible tail that always points away from the Sun.",
+  "KEY: Comet = ice, dust, rock. Tail forms when near the Sun (ice becomes gas, dust pushed outward by solar radiation).");
+
+q(2,"Space","Why does the Moon appear to change shape throughout the month?",
+  ["The Moon actually changes size","Different amounts of the lit half of the Moon are visible from Earth as the Moon orbits the Earth","Clouds on the Moon cover parts of it","The Earth's shadow falls on different parts of the Moon each night","The Moon spins very fast, hiding parts of itself"],1,
+  "The Moon is always half lit by the Sun. As it orbits the Earth, we see different amounts of that lit half.",
+  "The Moon always has one half lit by the Sun and one half in shadow. As the Moon orbits the Earth over approximately 28 days, we see different proportions of the lit half from Earth. When the fully lit half faces us, we see a full moon. When the lit half faces away, we see a new moon (not visible). The changing appearance is called the phases of the Moon.",
+  "KEY: Moon phases = we see different amounts of the lit half as Moon orbits Earth over ~28 days.");
+
+q(1,"Space","How long does the Moon take to orbit the Earth once?",
+  ["24 hours","7 days","About 28 days (approximately one month)","365 days","12 hours"],2,
+  "The Moon's orbit time is linked to why we have months. Think about the calendar.",
+  "The Moon takes approximately 28 days (about one month) to complete one orbit around the Earth. This is why the word month comes from moon. The full cycle of Moon phases (new moon to full moon and back) also takes approximately 28 days.",
+  "KEY: Moon orbits Earth in about 28 days (~1 month). Earth rotates in 24h. Earth orbits Sun in 365.25 days.");
+
+q(2,"Space","What is a galaxy, and what galaxy does our Solar System belong to?",
+  ["A galaxy is a single star system; we live in the Andromeda galaxy","A galaxy is a collection of millions or billions of stars, gas, dust and other matter; our Solar System is in the Milky Way galaxy","A galaxy is the same as a solar system","A galaxy is a type of planet; we live in the Milky Way planet","A galaxy is a very large comet; we live in the Solar galaxy"],1,
+  "Think about how large a galaxy is compared to a solar system. Our galaxy has a special name.",
+  "A galaxy is a vast collection of millions or billions of stars, gas, dust, and other matter held together by gravity. Our Solar System is located in the Milky Way galaxy, which contains hundreds of billions of stars. The Milky Way is a spiral galaxy, and our Solar System is located about two-thirds of the way from the centre.",
+  "KEY: Galaxy = billions of stars + gas + dust. Our Solar System is in the Milky Way galaxy.");
+
+q(2,"Space","What did Nicolaus Copernicus propose that changed our understanding of the Solar System?",
+  ["That the Earth is flat","That the Sun is at the centre of the Solar System (heliocentric model), with planets orbiting the Sun","That the Moon orbits the Sun directly","That there are only five planets in the Solar System","That the Earth does not rotate"],1,
+  "Before Copernicus, most people believed the Earth was at the centre. What did Copernicus suggest instead?",
+  "Nicolaus Copernicus (1473-1543) proposed the heliocentric model of the Solar System, placing the Sun at the centre with the planets orbiting around it. This was revolutionary because the prevailing view was the geocentric model (Earth at the centre, proposed by Ptolemy). Copernicus suggested the Earth's rotation caused the apparent daily movement of the Sun and stars.",
+  "KEY: Copernicus = heliocentric model (Sun at centre). Before = geocentric (Earth at centre, Ptolemy).");
+
+q(2,"Space","What observations did Galileo Galilei make that supported the heliocentric model?",
+  ["He proved the Earth is spherical","He observed Jupiter's four moons orbiting Jupiter (not Earth), and saw the phases of Venus, both supporting the heliocentric model","He discovered the asteroid belt","He measured the distance to the Sun","He proved the Moon is made of rock"],1,
+  "Galileo used a telescope. What did he observe that showed not everything orbits the Earth?",
+  "Galileo (1564-1642) used telescopes he designed himself to make several key observations. He discovered four moons orbiting Jupiter, proving that not all celestial bodies orbit the Earth. He also observed the phases of Venus, which could only be explained if Venus orbits the Sun (not Earth). He also saw craters on the Moon, sunspots, and that Saturn had rings.",
+  "KEY: Galileo supported heliocentric model by: seeing Jupiter's moons (orbit Jupiter not Earth) and Venus phases.");
+
+q(1,"Space","What is the geocentric model of the Solar System?",
+  ["The model where the Sun is at the centre","The model where the Earth is at the centre, with the Sun, Moon, and planets orbiting around it","The model where all planets orbit Jupiter","The modern accepted model of the Solar System","The model proposed by Copernicus"],1,
+  "Geo means Earth. Which model puts Earth at the centre?",
+  "The geocentric model (from Greek: geo = Earth, centric = centre) was the ancient belief that the Earth is at the centre of the Universe, with the Sun, Moon, planets, and stars all orbiting around it. This model was proposed by Claudius Ptolemy (100-170 AD) and was widely accepted for over 1400 years until Copernicus proposed the heliocentric model.",
+  "KEY: Geocentric = Earth at centre (Ptolemy). Heliocentric = Sun at centre (Copernicus). Modern view = heliocentric.");
+
+q(2,"Space","Why do stars appear to move across the night sky during the course of one night?",
+  ["Stars are actually moving very fast through space","The Earth rotates on its axis, making stars appear to move from east to west across the sky","The Moon pushes stars across the sky","Stars orbit the Earth daily","The atmosphere bends the light from stars"],1,
+  "Stars are so far away that they do not actually move noticeably. What is moving that makes them appear to move?",
+  "Stars appear to move across the night sky because the Earth is rotating on its axis. As the Earth spins from west to east, stars appear to move from east to west across the sky. From the equator, stars appear to rise in the east and set in the west. From the poles, stars appear to move in circles around the celestial pole. The apparent movement is due to the Earth's rotation, not the stars moving.",
+  "KEY: Stars appear to move because Earth is rotating. Earth spins west to east = stars appear to go east to west.");
+
+q(1,"Space","What is a dwarf planet? Give one example.",
+  ["A very small moon","An object that orbits the Sun, is rounded by its gravity, but has not cleared its orbital neighbourhood - e.g. Pluto","A small asteroid","A planet that has no moons","A planet smaller than Earth's Moon - e.g. Mercury"],1,
+  "Pluto used to be called the 9th planet but was reclassified in 2006. What category was it moved to?",
+  "A dwarf planet is an object that orbits the Sun and is rounded by its own gravity (like a planet), but has not cleared its orbital neighbourhood of other debris. Pluto was reclassified from a planet to a dwarf planet in 2006 because it shares its orbit with many other Kuiper belt objects. Other dwarf planets include Eris, Ceres, Haumea, and Makemake.",
+  "KEY: Dwarf planet = orbits Sun, rounded, but has NOT cleared its orbit. Pluto was reclassified in 2006.");
+
+q(2,"Space","What causes the seasons (summer and winter) on Earth?",
+  ["The Earth moves closer to the Sun in summer and further away in winter","The Earth's axis is tilted at 23.5 degrees; when the northern hemisphere tilts toward the Sun it is summer there","The Sun produces more heat in summer","The Moon blocks some sunlight in winter","The Earth spins faster in summer"],1,
+  "The Earth's orbit is not perfectly circular, but that barely affects seasons. Think about tilt instead.",
+  "Seasons are caused by the tilt of the Earth's axis (about 23.5 degrees), not by the Earth's distance from the Sun. When the northern hemisphere is tilted toward the Sun, it receives sunlight at a more direct angle and for longer each day - this is summer in the north. At the same time, the southern hemisphere is tilted away, experiencing winter.",
+  "KEY: Seasons caused by Earth's TILT (23.5 degrees), not by distance from Sun. Tilt toward Sun = summer.");
+
+q(3,"Space","A planet further from the Sun takes longer to complete one orbit. Which of the following correctly explains why?",
+  ["Further planets are heavier so they move slower","Further planets have longer orbital paths to travel, and the Sun's gravity is weaker at greater distances, so they move more slowly","Further planets are colder so they slow down","Further planets have more moons slowing them down","The further from the Sun, the stronger the gravity"],1,
+  "Two factors: the orbital path is longer (bigger circle/ellipse) and the gravitational pull from the Sun is weaker.",
+  "Planets further from the Sun have two reasons for longer orbits: their orbital path is much larger (a bigger ellipse), and the Sun's gravitational pull is weaker at greater distances, meaning they move more slowly through space. Both factors combine to give outer planets much longer years. For example, Neptune's year is about 165 Earth years.",
+  "KEY: Further planet = longer path + weaker Sun gravity = slower orbit = longer year. Neptune year = 165 Earth years.");
+
+q(2,"Space","How do telescopes, satellites, and space probes help us learn about space?",
+  ["They bring rocks from space to Earth only","They allow us to observe and study distant objects in space that we cannot physically visit, collecting data and images","They produce the light that stars give off","They allow astronauts to live in space permanently","They are used only to study the Moon"],1,
+  "Most of space is too far to visit physically. How do these tools extend our ability to observe?",
+  "Telescopes (ground-based and space-based like the Hubble Space Telescope) collect light from distant stars and galaxies, allowing us to see objects billions of light-years away. Artificial satellites orbit the Earth collecting data about our planet and the universe. Space probes are unmanned spacecraft sent to explore planets, moons, and other objects, transmitting data back to Earth.",
+  "KEY: Telescopes observe from afar. Satellites orbit Earth. Space probes explore other bodies. All extend our reach.");
+
+q(1,"Space","What is a constellation?",
+  ["A group of planets in the Solar System","A group of stars that form an imaginary pattern or shape as seen from Earth","A type of galaxy","A cluster of asteroids","A ring of moons around a planet"],1,
+  "Think about the patterns of stars people see in the night sky and give names to.",
+  "A constellation is a group of stars that appear to form an imaginary pattern or picture in the sky as seen from Earth. Famous examples include Orion (the hunter), Ursa Major (the Great Bear, containing the Big Dipper), and Leo (the lion). The stars in a constellation are not necessarily close to each other in space - they just appear close from Earth's viewpoint.",
+  "KEY: Constellation = group of stars forming an imaginary pattern as seen from Earth. E.g. Orion, Ursa Major.");
+
+q(2,"Space","Why is the North Star (Polaris) useful for navigation?",
+  ["It is the brightest star in the sky","It is positioned almost directly above the Earth's North Pole so it remains nearly stationary in the night sky while other stars appear to rotate around it","It points south","It is visible during the day","It is the closest star to Earth"],1,
+  "Most stars appear to move during the night. The North Star is special because of where it is positioned relative to Earth's axis.",
+  "Polaris (the North Star) is located almost directly above the Earth's North Pole, aligned with Earth's rotational axis. As the Earth spins, other stars appear to rotate around Polaris, while Polaris itself appears nearly stationary in the sky. This makes it a reliable indicator of true north for navigation. If you face Polaris, you are facing geographic north.",
+  "KEY: Polaris stays nearly still because it aligns with Earth's rotation axis. Always marks geographic north.");
+
+q(3,"Space","The Sun makes up more than 99% of the mass of the Solar System. What role does this massive size play in holding the Solar System together?",
+  ["The Sun's heat pushes planets into orbit","The Sun's enormous mass creates a strong gravitational force that keeps all planets and other objects in orbit around it","The Sun's light attracts planets magnetically","The Sun spins and drags planets around with it","The Sun creates pressure waves that push planets into circular paths"],1,
+  "Think about what gravity does and how it relates to mass. More mass = stronger gravitational pull. What does this pull do to orbiting objects?",
+  "The Sun's enormous mass (over 99% of the Solar System's total mass) creates a very strong gravitational field. This gravitational force pulls on all planets, moons, asteroids, and comets, keeping them in orbit around the Sun. Without the Sun's gravity, these objects would travel in straight lines into space. Gravity provides the centripetal force that curves their paths into orbits.",
+  "KEY: Sun's mass = strong gravity = keeps all Solar System objects in orbit. More mass = stronger gravity.");
+
+q(2,"Space","What size order is correct from largest to smallest?",
+  ["Planet, Star, Solar System, Galaxy","Galaxy, Solar System, Star, Planet","Star, Galaxy, Planet, Solar System","Solar System, Galaxy, Star, Planet","Planet, Solar System, Star, Galaxy"],1,
+  "Think about the scale: a galaxy contains billions of stars, a solar system orbits one star, a planet is one member of a solar system.",
+  "From largest to smallest: Galaxy (contains hundreds of billions of stars), Solar System (one star and all objects orbiting it), Star (e.g. the Sun), Planet (one of several objects orbiting a star). The Milky Way galaxy is about 100,000 light-years across, while our Solar System is about 287 billion km across, and Earth is about 12,742 km in diameter.",
+  "KEY: Largest to smallest: Galaxy > Solar System > Star (Sun) > Planet.");
+
+q(1,"Space","Which planet is known as the Red Planet, and what gives it its colour?",
+  ["Venus; caused by thick clouds","Saturn; caused by its rings","Mars; caused by iron oxide (rust) on its surface","Jupiter; caused by its Great Red Spot","Mercury; caused by volcanic rock"],2,
+  "Think about which planet has a distinctive reddish colour when seen from Earth.",
+  "Mars is known as the Red Planet. Its reddish colour is caused by iron oxide (rust) that covers much of its surface. Mars is the fourth planet from the Sun, one of the inner rocky planets. It has two small moons (Phobos and Deimos) and the largest volcano in the Solar System (Olympus Mons).",
+  "KEY: Mars = Red Planet. Red colour from iron oxide (rust) on surface. 4th planet from Sun.");
+
+// ═══════════════════════════════════════════════
+// END OF QUESTION POOL
+// ═══════════════════════════════════════════════
+
+var QS_PER_ROUND = 25;
+var deck=[], cur=0, rights=0, wrongs=0, hintCount=0, hist=[];
+var L = ["A","B","C","D","E"];
+var pillMap = {
+  "Particle":"Particle","Elements":"Elements","Earth":"Earth","Speed":"Speed","Magnets":"Magnets","Space":"Space"
+};
+var diffMap = {1:"easy",2:"medium",3:"hard"};
+var diffLabel = {1:"Easy",2:"Medium",3:"Hard"};
+
+function shuffle(arr){
+  for(var i=arr.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=arr[i];arr[i]=arr[j];arr[j]=t;
+  }
+}
+
+function init(){
+  shuffle(POOL);
+  deck=POOL.slice(0,QS_PER_ROUND);
+  cur=0;rights=0;wrongs=0;hintCount=0;hist=[];
+  document.getElementById('scr').textContent=0;
+  document.getElementById('scw').textContent=0;
+  document.getElementById('rscreen').style.display='none';
+  document.querySelector('.wrap').style.display='block';
+  document.getElementById('fixednext').style.display='none';
+  document.body.className='';
+  render();
+}
+
+function render(){
+  if(cur>=deck.length){showResult();return;}
+  var qobj=deck[cur];
+  var pct=Math.round((cur/deck.length)*100);
+  document.getElementById('pfill').style.width=pct+'%';
+  document.getElementById('qcounter').textContent='Question '+(cur+1)+' of '+deck.length;
+  var typeClass = pillMap[qobj.type]||'medium';
+  var dClass = diffMap[qobj.d]||'medium';
+  var html='<div class="card">';
+  html+='<div class="qmeta">';
+  html+='<span class="qnum">Q'+(cur+1)+'</span>';
+  html+='<span class="qpill '+typeClass+'">'+qobj.type+'</span>';
+  html+='<span class="qpill '+dClass+'">'+diffLabel[qobj.d]+'</span>';
+  html+='</div>';
+  html+='<div class="qtext">'+qobj.text+'</div>';
+  for(var i=0;i<qobj.opts.length;i++){
+    html+='<button class="opt" id="opt'+i+'" onclick="answer('+i+')">'+L[i]+'. '+qobj.opts[i]+'</button>';
+  }
+  html+='<div class="rlabel" id="rlbl"></div>';
+  html+='<button id="hbtn" onclick="toggleHint()">Show first-step hint</button>';
+  html+='<div id="hbox">'+qobj.hint+'</div>';
+  html+='<div id="ebox">';
+  html+='<div class="expl-box">'+qobj.expl+'</div>';
+  html+='<div class="insight-box"><div class="insight-lbl">&#128161; Aha insight</div>'+qobj.insight+'</div>';
+  html+='</div>';
+  html+='</div>';
+  document.getElementById('maincard').innerHTML=html;
+  document.getElementById('fixednext').style.display='none';
+  window.scrollTo(0,0);
+}
+
+function answer(chosen){
+  var qobj=deck[cur];
+  var opts=document.querySelectorAll('.opt');
+  for(var i=0;i<opts.length;i++) opts[i].disabled=true;
+  var lbl=document.getElementById('rlbl');
+  lbl.style.display='block';
+  if(chosen===qobj.ans){
+    document.getElementById('opt'+chosen).classList.add('correct');
+    rights++;document.getElementById('scr').textContent=rights;
+    hist.push('ok');
+    lbl.textContent='Correct! Well done!';
+    lbl.className='rlabel ok';
+  } else {
+    document.getElementById('opt'+chosen).classList.add('wrong');
+    document.getElementById('opt'+qobj.ans).classList.add('reveal');
+    wrongs++;document.getElementById('scw').textContent=wrongs;
+    hist.push('w');
+    lbl.textContent='Wrong - the answer was ('+L[qobj.ans]+')';
+    lbl.className='rlabel ng';
+  }
+  document.getElementById('ebox').style.display='block';
+  document.getElementById('hbtn').style.display='none';
+  document.getElementById('hbox').style.display='none';
+  document.getElementById('fixednext').style.display='block';
+  document.body.className='answered';
+}
+
+function toggleHint(){
+  var hbox=document.getElementById('hbox');
+  var hbtn=document.getElementById('hbtn');
+  if(hbox.style.display==='none'){
+    hbox.style.display='block';hbtn.textContent='Hide hint';hintCount++;
+  } else {
+    hbox.style.display='none';hbtn.textContent='Show first-step hint';
+  }
+}
+
+function nextQ(){
+  cur++;
+  document.getElementById('fixednext').style.display='none';
+  document.body.className='';
+  if(cur>=deck.length){showResult();return;}
+  render();
+  window.scrollTo(0,0);
+}
+
+function showResult(){
+  document.querySelector('.wrap').style.display='none';
+  document.getElementById('rscreen').style.display='block';
+  var pct=Math.round(rights/deck.length*100);
+  document.getElementById('rscore').textContent=rights+' / '+deck.length;
+  document.getElementById('rbc').textContent=rights;
+  document.getElementById('rbw').textContent=wrongs;
+  document.getElementById('rbh').textContent=hintCount;
+  document.getElementById('rbp').textContent=pct+'%';
+  var dd=document.getElementById('dots');dd.innerHTML='';
+  for(var i=0;i<hist.length;i++){
+    var d=document.createElement('div');
+    d.className='dot '+hist[i];dd.appendChild(d);
+  }
+  var msg;
+  if(pct>=90) msg='Outstanding! You are really well prepared for the exam!';
+  else if(pct>=75) msg='Really well done! Review the questions you missed and try again.';
+  else if(pct>=55) msg='Good effort! Read the explanations and insights, then try a new round.';
+  else msg='Keep going! Study the insights carefully and try again - you will improve!';
+  document.getElementById('rmsg').textContent=msg;
+  document.getElementById('pool-info').textContent='Pool size: '+POOL.length+' questions. New round reshuffles randomly.';
+  window.scrollTo(0,0);
+}
+
+function restart(){
+  document.querySelector('.wrap').style.display='block';
+  init();
+}
+init();
+</script>
+</body>
+</html>
