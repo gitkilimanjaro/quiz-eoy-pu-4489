@@ -1557,10 +1557,10 @@ function answer(chosen){
       rec.status  = 'mastered';
       rec.streak  = STREAK_TO_MASTER; // cap
       masteredThisRound++;
-      lbl.textContent = '&#127942; Correct — MASTERED! This question is now retired.';
+      lbl.textContent = '\uD83C\uDFC6 Correct — MASTERED! This question is now retired.';
       lbl.className   = 'rlabel ok';
     } else {
-      lbl.textContent = '&#10003; Correct! Streak: ' + rec.streak + ' / ' + STREAK_TO_MASTER + ' to master.';
+      lbl.textContent = '\u2713 Correct! Streak: ' + rec.streak + ' / ' + STREAK_TO_MASTER + ' to master.';
       lbl.className   = 'rlabel ok';
     }
   } else {
@@ -1572,7 +1572,7 @@ function answer(chosen){
 
     // SRS: reset streak on wrong answer
     rec.streak = 0;
-    lbl.textContent = '&#10007; Wrong — the answer was (' + L[qobj.ans] + '). Streak reset.';
+    lbl.textContent = '\u2717 Wrong — the answer was (' + L[qobj.ans] + '). Streak reset.';
     lbl.className   = 'rlabel ng';
   }
 
@@ -1649,7 +1649,7 @@ function showResult(){
   var delta = document.getElementById('mastery-delta');
   if(masteredThisRound > 0){
     delta.style.display = 'block';
-    delta.textContent   = '&#127942; ' + masteredThisRound + ' question' + (masteredThisRound>1?'s':'') + ' mastered and retired this round!';
+    delta.textContent   = '\uD83C\uDFC6 ' + masteredThisRound + ' question' + (masteredThisRound>1?'s':'') + ' mastered and retired this round!';
   } else {
     delta.style.display = 'none';
   }
