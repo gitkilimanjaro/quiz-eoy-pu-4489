@@ -162,7 +162,7 @@ body.answered{padding-bottom:72px}
 <!-- ═══════════ QUIZ SCREEN ═══════════ -->
 <div id="qscreen">
   <div class="topbar">
-    <span class="topbar-left" id="qcounter">Question 1 of 25</span>
+    <span class="topbar-left" id="qcounter">Question 1 of 16</span>
     <div class="scores">
       <span class="sc ok">&#10003; <span id="scr">0</span></span>
       <span class="sc ng">&#10007; <span id="scw">0</span></span>
@@ -643,7 +643,7 @@ q(2,"Population","Which of the following is a direct consequence of overpopulati
 // SRS ENGINE
 // ═══════════════════════════════════════════════
 var LS_KEY = 'geo_srs_v1';
-var QS_PER_ROUND = 25;
+var QS_PER_ROUND = 16;
 var MASTERY_STREAK = 2;
 
 // ── Ledger helpers ──────────────────────────────
@@ -708,7 +708,7 @@ function updateDash() {
   document.getElementById('stat-pct').textContent = pct + '%';
   document.getElementById('pb-fill').style.width = pct + '%';
   document.getElementById('pool-info').textContent =
-    stats.total + ' questions total \u00b7 mastery = 2 correct answers in a row';
+    stats.total + ' questions total \u00b7 16 per round \u00b7 mastery = 2 correct in a row';
 
   var btnContinue = document.getElementById('btn-continue');
   var allDone = document.getElementById('all-done-banner');
