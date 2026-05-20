@@ -191,7 +191,7 @@ body.answered{padding-bottom:70px}
 <!-- ═══════════════ HOME SCREEN ═══════════════ -->
 <div class="wrap" id="homescreen">
   <h1>&#9883; Grade 7 Physical Science</h1>
-  <p class="sub">Spaced Repetition &middot; 329 Questions &middot; 11 Topics &middot; 16 per session</p>
+  <p class="sub">Spaced Repetition &middot; 336 Questions &middot; 11 Topics &middot; 16 per session</p>
 
   <div class="topic-bar">
     <span class="tbadge tb-som">States of Matter</span>
@@ -214,7 +214,7 @@ body.answered{padding-bottom:70px}
       <div class="dash-metric">
         <span class="dash-icon">&#127919;</span>
         <div>
-          <div class="dash-val" id="dash-active">329</div>
+          <div class="dash-val" id="dash-active">336</div>
           <div class="dash-lbl">Active Questions</div>
         </div>
       </div>
@@ -235,7 +235,7 @@ body.answered{padding-bottom:70px}
   <!-- SRS info -->
   <div class="card" style="margin-bottom:10px">
     <div style="font-size:.82rem;color:#283593;line-height:1.5">
-      <strong>How it works:</strong> Answer correctly twice in a row to master and retire a question. One wrong answer resets its streak. Work through all 329 questions to complete the course.
+      <strong>How it works:</strong> Answer correctly twice in a row to master and retire a question. One wrong answer resets its streak. Work through all 336 questions to complete the course.
     </div>
   </div>
 
@@ -251,7 +251,7 @@ body.answered{padding-bottom:70px}
 
   <!-- All mastered banner -->
   <div class="all-done" id="all-done" style="display:none">
-    &#127881; You have mastered all 329 questions! Tap <em>Start All Over</em> to begin again.
+    &#127881; You have mastered all 336 questions! Tap <em>Start All Over</em> to begin again.
   </div>
 </div>
 
@@ -298,7 +298,7 @@ body.answered{padding-bottom:70px}
 <div id="modal-overlay" style="display:none" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title">&#9888; Reset all progress?</div>
-    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 329 questions will return to active rotation. This cannot be undone.</p>
+    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 336 questions will return to active rotation. This cannot be undone.</p>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-confirm" onclick="doReset()">Yes, start all over</button>
@@ -697,6 +697,24 @@ const BANK = [
 // ══════════════════════════════════════════════════════
 {t:"Magnets",q:"What three components are needed to make a simple electromagnet?",o:["A glass rod, copper wire, and a switch","A wire coil, an iron core, and a battery or power supply","A steel bar, rubber insulation, and a motor","A plastic tube, aluminium foil, and a light bulb"],a:1,h:"An electromagnet uses electricity to create magnetism. Think about what carries the current, what it is wrapped around, and what powers it.",expl:"A simple electromagnet needs three components: a wire coil (the wire is wrapped many times to create a solenoid), an iron core (the wire is wrapped around it — iron becomes a strong temporary magnet), and a battery or power supply (provides the electric current). When current flows through the coil, it creates a magnetic field that magnetises the iron core.",insight:"KEY VOCAB: Electromagnet = wire coil + iron core + battery/power supply. Switch off the current → magnetism stops immediately."},
 {t:"Magnets",q:"A student makes an electromagnet and wants to make it stronger. Which TWO changes would increase its strength?",o:["Use a plastic core and remove some coils","Increase the number of wire coils AND increase the current from the battery","Decrease the current and use a copper core","Use thicker wire and reduce the number of coils"],a:1,h:"The revision note lists three ways to strengthen an electromagnet. Which option matches two of them?",expl:"To increase the strength of an electromagnet: increase the number of coils of wire (more coils = stronger magnetic field), increase the electric current (more current = stronger field), and use an iron core (iron is easily magnetised and greatly strengthens the field). A plastic or copper core would not work — iron is essential. These are the three standard exam answers for strengthening an electromagnet.",insight:"KEY: Stronger electromagnet = more coils OR more current OR use iron core (not plastic/copper). All three are valid exam answers."}
+
+// ══════════════════════════════════════════════════════
+// GAP-FILL QUESTIONS — from EOY revision note audit
+// ══════════════════════════════════════════════════════
+,
+{t:"States of Matter",q:"The table describes particles in solids, liquids, and gases. Which row is correct for a SOLID?",o:["Arrangement: random; Spacing: far apart; Movement: move freely","Arrangement: regular; Spacing: very close together; Movement: vibrate in fixed positions","Arrangement: irregular; Spacing: close together; Movement: slide over each other","Arrangement: regular; Spacing: far apart; Movement: move randomly"],a:1,h:"Use the exact scientific terms from the revision note: regular or irregular? closely packed or far apart? vibrate or move freely?",expl:"A solid has particles in a REGULAR arrangement (fixed ordered pattern), spaced VERY CLOSE TOGETHER (closely packed), that VIBRATE IN FIXED POSITIONS. These are the exact terms required in the exam. A liquid has irregular arrangement, close together, moving around each other. A gas has random arrangement, far apart, moving freely and randomly.",insight:"KEY VOCAB: Solid = regular arrangement, closely packed, vibrate in fixed positions. Learn all three terms — the exam table question uses exactly these words."},
+
+{t:"States of Matter",q:"A student completes a table about states of matter. Which row correctly describes a LIQUID?",o:["Regular arrangement; very close together; vibrate in fixed positions","Random arrangement; far apart; move freely and randomly","Irregular arrangement; close together; move around each other","Regular arrangement; close together; move around each other"],a:2,h:"Liquid is the middle state. Not as ordered as solid, not as spread out as gas. Which terms fit?",expl:"A liquid has an IRREGULAR arrangement (no fixed pattern, unlike a solid), particles are CLOSE TOGETHER (not as far apart as gas — liquids have a definite volume), and particles MOVE AROUND EACH OTHER (they flow, unlike solids). In the exam table question, these three descriptions must be matched correctly to the liquid column.",insight:"KEY VOCAB: Liquid = irregular arrangement, close together, move around each other. These exact terms are tested in Q1 of both mock exam papers."},
+
+{t:"States of Matter",q:"Which phrase correctly describes the spacing of particles in a gas?",o:["Closely packed","Close together","Very close together","Far apart"],a:3,h:"Gas particles have very little attraction between them. Think about how spread out they are compared to solids and liquids.",expl:"Gas particles are FAR APART from each other. This is why gases can be compressed and why they fill any container. In contrast, solid particles are VERY CLOSE TOGETHER (closely packed) and liquid particles are CLOSE TOGETHER. These three distinct descriptions — very close, close, far apart — are the exact vocabulary the exam tests in the particle arrangement table.",insight:"KEY VOCAB TABLE: Solid = very close together. Liquid = close together. Gas = far apart. Learn all three — they come up in Q1 every year."},
+
+{t:"Forces",q:"What is thrust?",o:["The force that opposes motion between two surfaces","A forward-driving force that pushes an object in the direction of motion","The downward force caused by gravity","The resistance force from air or water"],a:1,h:"Think about a rocket or a car engine. What force pushes it forward?",expl:"Thrust is the forward-driving force that propels an object in the direction of motion. Examples include the thrust from a rocket engine, a jet engine, or a car engine. In a force diagram, thrust is shown as an arrow pointing in the direction of movement. Thrust is opposed by drag (air/water resistance) and friction.",insight:"KEY VOCAB: Thrust = forward driving force. Drag = backward resistance force. Lift = upward force. Weight = downward force. All four appear in force diagrams."},
+
+{t:"Forces",q:"A plane is flying horizontally at constant speed. Four forces act on it: thrust, drag, weight, and lift. What must be true about these forces?",o:["Thrust must be greater than drag, and weight must be greater than lift","Thrust equals drag AND lift equals weight — all forces are balanced","Only thrust and lift are acting — drag and weight cancel each other","Thrust must be less than drag for the plane to keep moving"],a:1,h:"Constant speed = no change in motion = balanced forces. Which pairs of forces balance each other on a plane?",expl:"For a plane flying at constant speed and constant height, all forces are balanced. Thrust (forward) equals drag (backward resistance), so there is no change in horizontal speed. Lift (upward, from wings) equals weight (downward, gravity), so the plane neither rises nor falls. Balanced forces mean no acceleration — constant speed in a straight line.",insight:"KEY: Constant speed = balanced forces. For a plane: thrust = drag (horizontal balance) and lift = weight (vertical balance). Draw force diagrams with equal-length arrows."},
+
+{t:"Energy",q:"Complete this conservation of energy statement: Energy cannot be ___ or ___. It can only be ___ or transferred.",o:["used or saved; created","created or destroyed; transformed","lost or found; transferred","made or broken; changed"],a:1,h:"This exact sentence appears in both mock exam papers. The three missing words are fundamental to the law of conservation of energy.",expl:"The full statement is: 'Energy cannot be CREATED or DESTROYED. It can only be TRANSFORMED or transferred.' This is the law of conservation of energy. Energy always exists in some form — it changes from one type to another (transformation) or moves from one object to another (transfer), but the total amount stays the same. This exact wording is required in the exam.",insight:"MEMORISE: 'Energy cannot be created or destroyed. It can only be transformed or transferred.' This sentence appears word-for-word in Q11 of both mock papers."},
+
+{t:"Speed",q:"A student is plotting a distance-time graph. Which axis should distance (km) be placed on, and which should time (hours) be placed on?",o:["Distance on the x-axis (horizontal); time on the y-axis (vertical)","Distance on the y-axis (vertical); time on the x-axis (horizontal)","Both distance and time on the x-axis","It does not matter which axis is used"],a:1,h:"Remember: distance-time graph. The first word goes on the y-axis, the second on the x-axis. Always label with units.",expl:"On a distance-time graph, distance is always on the y-axis (vertical) and time is always on the x-axis (horizontal). Both axes must be labelled with the quantity AND its unit — for example: 'Distance / km' and 'Time / hours'. Marks are lost in the exam for missing labels or wrong axis placement. The gradient (slope) of the line gives the speed.",insight:"KEY GRAPH SKILL: Distance (y-axis, vertical) vs Time (x-axis, horizontal). Always label axes with quantity AND unit. Gradient = speed."}
 
 ]; // end BANK
 
