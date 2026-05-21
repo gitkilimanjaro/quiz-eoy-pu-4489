@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>&#127758; Grade 7 Geography — SRS</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f5f3ee;
@@ -27,16 +26,16 @@
   --pink-lt:#fce7f3;
   --gold:#b45309;
 }
-body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;padding:20px 16px 80px}
+body{font-family:Arial,sans-serif;background:var(--bg);min-height:100vh;padding:20px 16px 80px}
 .wrap{max-width:640px;margin:0 auto}
 
 /* ── HOME SCREEN ── */
 #home{display:block}
 .home-header{text-align:center;padding:28px 0 20px}
-.home-header h1{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--text);line-height:1.2;margin-bottom:6px}
+.home-header h1{font-family:Arial,sans-serif;font-size:2rem;color:var(--text);line-height:1.2;margin-bottom:6px}
 .home-header p{font-size:.82rem;color:var(--muted)}
 .dash-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:14px}
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
 .dash-stat{background:var(--bg);border-radius:12px;padding:14px 12px;text-align:center}
 .dash-stat .stat-icon{font-size:1.4rem;margin-bottom:4px}
 .dash-stat .stat-val{font-size:1.6rem;font-weight:600;color:var(--text);line-height:1}
@@ -45,7 +44,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;padd
 .progress-bar-wrap .pb-label{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:6px}
 .pb-track{height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
 .pb-fill{height:100%;background:linear-gradient(90deg,var(--accent),#52b788);border-radius:4px;transition:width .6s ease}
-.btn{display:block;width:100%;border:none;border-radius:12px;padding:15px 20px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;text-align:center;transition:opacity .15s,transform .1s}
+.btn{display:block;width:100%;border:none;border-radius:12px;padding:15px 20px;font-family:Arial,sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;text-align:center;transition:opacity .15s,transform .1s}
 .btn:active{transform:scale(.98)}
 .btn-primary{background:var(--text);color:#fff;margin-bottom:10px}
 .btn-primary:disabled{background:#ccc;color:#888;cursor:not-allowed}
@@ -75,9 +74,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;padd
 .map{background:var(--warn-lt);color:var(--warn);border:1px solid #fcd34d}
 .riv{background:var(--purple-lt);color:var(--purple);border:1px solid #c4b5fd}
 .eros{background:var(--pink-lt);color:var(--pink);border:1px solid #f9a8d4}
-.qtext{font-family:'DM Serif Display',serif;font-size:1.05rem;line-height:1.55;margin-bottom:16px;color:var(--text)}
+.qtext{font-family:Arial,sans-serif;font-size:1.05rem;line-height:1.55;margin-bottom:16px;color:var(--text)}
 .opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.opt{display:flex;align-items:center;gap:11px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px 15px;cursor:pointer;font-size:.88rem;font-family:'DM Sans',sans-serif;color:var(--text);text-align:left;width:100%;transition:border-color .15s,background .15s}
+.opt{display:flex;align-items:center;gap:11px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px 15px;cursor:pointer;font-size:.88rem;font-family:Arial,sans-serif;color:var(--text);text-align:left;width:100%;transition:border-color .15s,background .15s}
 .opt:hover{background:#eeeae3;border-color:#b0a89c}
 .oletter{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;color:var(--muted);background:var(--card)}
 .opt.correct{border-color:var(--accent)!important;background:var(--accent-lt)!important}
@@ -89,7 +88,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;padd
 .result-label{font-size:.85rem;font-weight:600;margin-bottom:10px;padding:9px 13px;border-radius:10px}
 .result-label.ok{color:#15803d;background:var(--accent-lt);border:1px solid #86efac}
 .result-label.ng{color:var(--danger);background:var(--danger-lt);border:1px solid #fca5a5}
-.hbtn{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:6px 14px;font-size:.76rem;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px}
+.hbtn{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:6px 14px;font-size:.76rem;color:var(--muted);cursor:pointer;font-family:Arial,sans-serif;margin-bottom:8px}
 .hbox{font-size:.81rem;line-height:1.6;color:var(--blue);padding:10px 13px;border-left:3px solid #6b9df2;background:var(--blue-lt);border-radius:0 10px 10px 0;margin-bottom:8px}
 .explbox{padding:13px;background:var(--bg);border-radius:12px;border:1px solid var(--border)}
 .explabel{font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
@@ -98,13 +97,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;padd
 .mastered-flash{font-size:.75rem;font-weight:600;color:var(--accent);background:var(--accent-lt);border:1px solid #95d5b2;border-radius:8px;padding:5px 10px;display:inline-block;margin-top:8px}
 
 /* ── FIXED NEXT BTN ── */
-#fixednext{position:fixed;bottom:0;left:0;right:0;background:var(--text);color:#fff;border:none;padding:18px;font-size:1rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:none;z-index:999;text-align:center;letter-spacing:.01em}
+#fixednext{position:fixed;bottom:0;left:0;right:0;background:var(--text);color:#fff;border:none;padding:18px;font-size:1rem;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;display:none;z-index:999;text-align:center;letter-spacing:.01em}
 #fixednext:hover{background:#333}
 body.answered{padding-bottom:72px}
 
 /* ── RESULT SCREEN ── */
 #rscreen{display:none}
-.rscore-big{font-family:'DM Serif Display',serif;font-size:3.2rem;color:var(--text);margin:8px 0}
+.rscore-big{font-family:Arial,sans-serif;font-size:3.2rem;color:var(--text);margin:8px 0}
 .rmsg{color:var(--muted);font-size:.88rem;line-height:1.6;margin-bottom:16px}
 .dots{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
 .dot{width:11px;height:11px;border-radius:50%;background:var(--border)}
@@ -141,6 +140,11 @@ body.answered{padding-bottom:72px}
         <div class="stat-lbl">Active questions</div>
       </div>
       <div class="dash-stat">
+        <div class="stat-icon">&#128293;</div>
+        <div class="stat-val" id="stat-halfway">—</div>
+        <div class="stat-lbl">Correct once</div>
+      </div>
+      <div class="dash-stat">
         <div class="stat-icon">&#127942;</div>
         <div class="stat-val" id="stat-mastered">—</div>
         <div class="stat-lbl">Mastered &amp; retired</div>
@@ -175,7 +179,7 @@ body.answered{padding-bottom:72px}
 <!-- ═══════════ RESULT SCREEN ═══════════ -->
 <div id="rscreen">
   <div class="dash-card">
-    <h2 style="font-family:'DM Serif Display',serif;margin-bottom:4px">Round complete!</h2>
+    <h2 style="font-family:Arial,sans-serif;margin-bottom:4px">Round complete!</h2>
     <div class="rscore-big" id="rscore"></div>
     <div class="dots" id="dots"></div>
     <div class="rmsg" id="rmsg"></div>
@@ -829,13 +833,19 @@ function getEntry(ledger, id) {
 
 function countStats(ledger) {
   var mastered = 0;
+  var halfway = 0;
   for (var i = 0; i < POOL.length; i++) {
     var e = ledger[POOL[i].id];
-    if (e && e.status === 'mastered') mastered++;
+    if (e && e.status === 'mastered') {
+      mastered++;
+    } else if (e && e.streak >= 1) {
+      halfway++;
+    }
   }
   return {
     total: POOL.length,
     mastered: mastered,
+    halfway: halfway,
     active: POOL.length - mastered
   };
 }
@@ -868,6 +878,7 @@ function updateDash() {
   var pct = Math.round(stats.mastered / stats.total * 100);
 
   document.getElementById('stat-active').textContent = stats.active;
+  document.getElementById('stat-halfway').textContent = stats.halfway;
   document.getElementById('stat-mastered').textContent = stats.mastered;
   document.getElementById('stat-pct').textContent = pct + '%';
   document.getElementById('pb-fill').style.width = pct + '%';
@@ -945,7 +956,7 @@ function render() {
     html += '</button>';
   }
   html += '</div>';
-  html += '<button class="hbtn" id="hbtn" onclick="toggleHint()">&#128161; Show first-step hint</button>';
+  html += '<button class="hbtn" id="hbtn" onclick="toggleHint()">&#128161; Show hint</button>';
   html += '<div class="hbox" id="hbox" style="display:none">' + qobj.hint + '</div>';
   html += '<div id="ebox" style="display:none">';
   html += '<div class="result-label" id="rlabel"></div>';
@@ -1020,7 +1031,7 @@ function toggleHint() {
     hintCount++;
   } else {
     hbox.style.display = 'none';
-    hbtn.textContent = 'Show first-step hint';
+    hbtn.textContent = 'Show hint';
   }
 }
 

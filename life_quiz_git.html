@@ -147,6 +147,13 @@ body.answered{padding-bottom:70px}
         </div>
       </div>
       <div class="dash-metric">
+        <span class="dash-icon">&#11088;</span>
+        <div>
+          <div class="dash-val" style="color:#f57f17" id="dash-once">&#8212;</div>
+          <div class="dash-lbl">Correct Once &#128521;</div>
+        </div>
+      </div>
+      <div class="dash-metric">
         <span class="dash-icon">&#127942;</span>
         <div>
           <div class="dash-val mastered" id="dash-mastered">&#8212;</div>
@@ -1491,12 +1498,13 @@ function getRecord(ledger, id){
 
 // ------ METRICS ---------------------------------------------------------------------------------------
 function calcMetrics(ledger){
-  var mastered=0;
+  var mastered=0, once=0;
   POOL.forEach(function(q){
     var r=ledger[q.id];
     if(r && r.status==='mastered') mastered++;
+    else if(r && r.streak===1) once++;
   });
-  return {mastered:mastered, active:POOL.length-mastered, total:POOL.length};
+  return {mastered:mastered, once:once, active:POOL.length-mastered, total:POOL.length};
 }
 function hasProgress(ledger){
   return Object.keys(ledger).length>0;
@@ -1525,6 +1533,7 @@ function updateDashboard(){
   var m=calcMetrics(ledger);
   var pct=Math.round((m.mastered/m.total)*100);
   document.getElementById('dash-active').textContent=m.active+' questions';
+  document.getElementById('dash-once').textContent=m.once+' questions';
   document.getElementById('dash-mastered').textContent=m.mastered+' questions ('+pct+'%)';
   document.getElementById('dash-bar').style.width=pct+'%';
   document.getElementById('dash-pct').textContent=pct+'% complete';
@@ -1597,7 +1606,7 @@ function render(){
     html+='<button class="opt" id="opt'+i+'" onclick="answer('+i+')">'+L[i]+'. '+qobj.opts[i]+'</button>';
   }
   html+='<div class="rlabel" id="rlbl"></div>';
-  html+='<button id="hbtn" onclick="toggleHint()">Show first-step hint</button>';
+  html+='<button id="hbtn" onclick="toggleHint()">Show hint</button>';
   html+='<div id="hbox">'+qobj.hint+'</div>';
   html+='<div id="ebox">';
   html+='<div class="expl-box">'+qobj.expl+'</div>';
@@ -1661,7 +1670,7 @@ function toggleHint(){
   if(hbox.style.display==='none'){
     hbox.style.display='block'; hbtn.textContent='Hide hint'; hintCount++;
   } else {
-    hbox.style.display='none'; hbtn.textContent='Show first-step hint';
+    hbox.style.display='none'; hbtn.textContent='Show hint';
   }
 }
 
