@@ -159,12 +159,12 @@ body.answered{padding-bottom:70px}
   </div>
   <div class="srs-info">
     <strong>How it works:</strong> Answer a question correctly twice in a row to master and retire it.
-    One wrong answer resets its streak back to zero. Work through all 191 questions to complete the course.
+    One wrong answer resets its streak back to zero. Work through all 190 questions to complete the course.
   </div>
   <button class="btn-continue" id="btn-continue" onclick="startRound()">&#9654; Continue Progress</button>
   <button class="btn-reset" onclick="confirmReset()">&#8635; Start All Over</button>
   <div class="all-done" id="all-done" style="display:none">
-    &#127881; You have mastered all 191 questions! Tap <em>Start All Over</em> to begin again.
+    &#127881; You have mastered all 190 questions! Tap <em>Start All Over</em> to begin again.
   </div>
 </div>
 
@@ -206,7 +206,7 @@ body.answered{padding-bottom:70px}
 <div id="modal-overlay" style="display:none" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title">&#9888; Reset all progress?</div>
-    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 191 questions will return to active rotation. This cannot be undone.</p>
+    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 190 questions will return to active rotation. This cannot be undone.</p>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-confirm" onclick="doReset()">Yes, start all over</button>
@@ -332,11 +332,11 @@ q(1,"IntroSci","Which instrument is used to measure the volume of a liquid in a 
   "A measuring cylinder is used to measure the volume of a liquid. When reading a measuring cylinder, you should read at eye level and read from the bottom of the meniscus (the curved surface of the liquid) to get an accurate reading.",
   "KEY: Measuring cylinder measures liquid volume. Read from the bottom of the meniscus at eye level.");
 
-q(2,"IntroSci","A student measures the length of a worm as 8 cm, but the actual length is 10 cm. What type of error is this most likely?",
-  ["A random error caused by the worm moving","A systematic error from not starting the ruler at zero","A calculation error","A hypothesis error","A controlled variable error"],1,
-  "If the error is always in the same direction (always too small or too big), it is systematic. Could starting measurement incorrectly cause a consistent offset?",
-  "A systematic error is one that consistently shifts all measurements in the same direction. If the student always forgot to align the ruler at zero (e.g., started at 1 cm instead of 0), every reading would be 2 cm too small. Systematic errors affect accuracy, not precision.",
-  "KEY: Systematic error = consistent offset in all readings, often due to instrument misuse or miscalibration.");
+q(1,"IntroSci","A chemical bottle has a skull-and-crossbones symbol on its label. What does this hazard symbol mean?",
+  ["The chemical is flammable","The chemical is corrosive and causes burns","The chemical is toxic or poisonous","The chemical is explosive","The chemical is an irritant"],2,
+  "The skull-and-crossbones is used on poisonous substances. Think: mercury, cyanide, and chlorine all carry this symbol.",
+  "The skull-and-crossbones hazard symbol indicates that a substance is toxic (poisonous). Toxic substances such as mercury, cyanide, and chlorine can cause serious harm or death if swallowed, inhaled, or absorbed through the skin. They must be handled according to strict safety instructions and never eaten, drunk, or tasted.",
+  "KEY: Skull-and-crossbones = TOXIC (poisonous). Do not eat, drink, or taste. Handle with care.");
 
 q(1,"IntroSci","What is the purpose of safety goggles in a science laboratory?",
   ["To help you see better in the dark","To protect your eyes from chemical splashes and flying debris","To measure how clear a liquid is","To see through microscopes better","To prevent skin burns"],1,
@@ -398,17 +398,41 @@ q(3,"IntroSci","A student notices that their results from two repeat trials are 
   "An anomalous result (outlier) is a data point that does not fit the pattern of other results. The student should investigate the cause, decide if it was a mistake or a genuine unusual result, and consider repeating the trial. In most cases, confirmed anomalous results are excluded when calculating the average, and the reason is noted.",
   "KEY: Anomalous result = outlier that does not fit the pattern. Investigate, repeat, and exclude if confirmed.");
 
-q(2,"IntroSci","What is the difference between accuracy and precision in measurements?",
-  ["They mean the same thing","Accuracy means how close a measurement is to the true value; precision means how consistent repeated measurements are","Precision means how close to the true value; accuracy means how consistent","Accuracy is about volume; precision is about mass","Both refer only to how many decimal places are used"],1,
-  "Think: accuracy = correct, precision = consistent. Can a measurement be precise but not accurate?",
-  "Accuracy refers to how close a measured value is to the true or accepted value. Precision refers to how consistent or repeatable measurements are. A precise measurement gives similar results each time, but may still be inaccurate if there is a systematic error. The goal in science is both accurate AND precise measurements.",
-  "KEY: Accuracy = closeness to true value. Precision = consistency of repeated measurements.");
+q(1,"IntroSci","Which hazard symbol warns that a substance can cause burns to skin and damage materials on contact?",
+  ["Flammable (flame symbol)","Explosive (burst symbol)","Corrosive (test tube dripping onto hand)","Toxic (skull and crossbones)","Irritant (exclamation mark)"],2,
+  "Corrosive substances eat away at materials including skin, eyes, and clothing. Strong acids and alkalis carry this symbol.",
+  "The corrosive hazard symbol shows a test tube dripping liquid onto a hand and a surface, representing damage caused on contact. Corrosive substances such as strong acids and alkalis can burn skin, damage eyes, and eat through materials. If a corrosive substance spills on skin or clothing, wash it off immediately with plenty of water.",
+  "KEY: Corrosive symbol = test tube dripping onto hand. Strong acids and alkalis. Wash off immediately with water if contacted.");
 
 q(1,"IntroSci","Which of the following best represents a fair test?",
   ["Changing all variables at once to get faster results","Changing only the independent variable while keeping all others constant","Changing the dependent variable while keeping the independent variable constant","Not having any controlled variables","Using different equipment each time the experiment is repeated"],1,
   "A fair test allows only one thing to change at a time. What does that mean for the other variables?",
   "A fair test is one where only the independent variable is changed and all other variables (controlled variables) are kept constant. This ensures that any change in the dependent variable is caused by the independent variable and nothing else. Fair tests are the foundation of valid scientific experiments.",
   "KEY: Fair test = only ONE variable changed. Everything else stays the same.");
+
+q(1,"IntroSci","A chemical bottle shows a symbol of an object bursting apart with lines radiating outward. What does this hazard symbol mean?",
+  ["The chemical is toxic","The chemical is corrosive","The chemical is flammable","The chemical is explosive","The chemical is an irritant"],3,
+  "This symbol looks like something exploding. Think about what happens to explosive substances when they are heated or lit.",
+  "The explosive hazard symbol shows a burst or exploding object. Explosive substances can explode violently when heated, lit, or subjected to impact. Examples include certain mixtures of gases and some unstable chemicals. They must be used strictly according to instructions, kept away from heat and flames, and handled in small quantities.",
+  "KEY: Burst/explosion symbol = EXPLOSIVE. Keep away from heat and flames. Use strictly according to instructions.");
+
+q(1,"IntroSci","A chemical is labelled with an exclamation mark inside a diamond. What does this hazard symbol indicate?",
+  ["The chemical is explosive","The chemical is toxic enough to cause death","The chemical is irritating or harmful if inhaled or touched","The chemical is radioactive","The chemical is safe to handle without gloves"],2,
+  "The exclamation mark symbol is less severe than the skull. Think: irritating, not immediately deadly.",
+  "The exclamation mark (or harmful/irritant) hazard symbol indicates a substance that is irritating to the skin, eyes, or respiratory system, or harmful in large amounts. Examples include chloroform, bromine vapour, and some cleaning chemicals. Such substances should be used in a fume chamber or with proper ventilation to avoid inhaling the vapour.",
+  "KEY: Exclamation mark = IRRITANT or HARMFUL. Avoid inhaling vapour. Use in a fume chamber or with ventilation.");
+
+q(1,"IntroSci","Which scientific skill involves explaining or interpreting an observation based on your existing knowledge?",
+  ["Observing","Measuring","Predicting","Inferring","Communicating"],3,
+  "The revision guide lists six scientific skills. One of them involves reasoning to explain what you have seen. Which one?",
+  "Inferring means using existing knowledge and reasoning to explain an observation. For example, seeing smoke and inferring that something is burning. The six scientific skills in the revision guide are: Observing, Measuring, Classifying, Predicting, Inferring, and Communicating. Each has a distinct role in scientific investigation.",
+  "KEY: Inferring = explaining or interpreting an observation using prior knowledge. One of the 6 scientific skills.");
+
+q(1,"IntroSci","What is a beaker used for in the laboratory?",
+  ["Measuring the exact volume of a liquid","Holding and containing liquids","Measuring the mass of a substance","Viewing small objects","Measuring temperature"],1,
+  "A beaker is one of the most common pieces of lab equipment. It is NOT used for precise measurement. What is its main purpose?",
+  "A beaker is used for holding and containing liquids during experiments. It is not suitable for precise volume measurement — a measuring cylinder is used for that. Other apparatus listed in the revision guide include: thermometer (temperature), balance (mass), stopwatch (time), microscope (viewing small objects), and test tube (small experiments).",
+  "KEY: Beaker = holding liquids. NOT for precise measurement. Use a measuring cylinder for accurate volume.");
 
 // ======================================
 // TOPIC 2: MEASUREMENTS (30 Qs)
@@ -462,11 +486,11 @@ q(1,"Measurements","What is the correct way to read the level of liquid in a mea
   "To read the volume of a liquid accurately in a measuring cylinder, you should read at eye level from the bottom of the meniscus. The meniscus is the curved surface formed by liquid against glass. Reading from the top of the meniscus or at an angle causes a parallax error.",
   "KEY: Read liquid volume at eye level from the BOTTOM of the meniscus to avoid parallax error.");
 
-q(2,"Measurements","A student measures a pencil and gets 14.5 cm. The actual length is 15.0 cm. What is the percentage error?",
-  ["0.5%","3.3%","5.0%","14.5%","1.5%"],1,
-  "Percentage error = (difference / true value) x 100. Calculate: (15.0 - 14.5) / 15.0 x 100.",
-  "Percentage error = (difference between measured and true value / true value) x 100. Here: (15.0 - 14.5) / 15.0 x 100 = 0.5 / 15.0 x 100 = 3.3%. A lower percentage error means a more accurate measurement. Minimising errors is important in scientific work.",
-  "KEY: Percentage error = (|measured - true| / true value) x 100%. Here, 3.3%.");
+q(1,"Measurements","What is a parallax error and how can it be avoided when measuring length?",
+  ["An error caused by using the wrong instrument","An error caused by reading a scale from the wrong angle; avoided by placing your eye directly above the mark being read","An error caused by using a broken ruler","An error caused by measuring too quickly","An error caused by recording the wrong units"],1,
+  "Parallax error happens when your eye is not in line with the measurement mark. What is the correct eye position when reading a ruler?",
+  "A parallax error occurs when the eye is not positioned directly above (vertically over) the mark on the scale being read. This causes the reading to appear shifted left or right, giving an inaccurate measurement. To avoid it, always place your eye directly above the measurement mark and read at eye level.",
+  "KEY: Parallax error = reading a scale from the wrong angle. Avoid by placing eye directly above the mark on the scale.");
 
 q(1,"Measurements","What physical quantity does a thermometer measure?",
   ["Volume","Mass","Time","Temperature","Length"],3,
@@ -616,12 +640,6 @@ q(1,"LivingThings","What is the function of the nucleus in a cell?",
   "The nucleus controls the activities of the cell and contains the genetic information (DNA) that determines the characteristics of the organism and is passed on during reproduction. The nucleus is found in both plant and animal cells. Cells without a nucleus (like red blood cells) cannot reproduce.",
   "KEY: Nucleus = control centre of the cell. Contains DNA (genetic information).");
 
-q(2,"LivingThings","What is the function of the mitochondria in a cell?",
-  ["To carry out photosynthesis","To store water","To produce energy through respiration","To control what enters and exits the cell","To support the cell structure"],2,
-  "Mitochondria are the powerhouses of the cell. What process releases energy from glucose?",
-  "Mitochondria are the sites of cellular respiration, the process that releases energy from glucose. This energy is used for all cell activities, such as movement, growth, and chemical reactions. Mitochondria are found in both plant and animal cells. Cells that need a lot of energy (like muscle cells) have more mitochondria.",
-  "KEY: Mitochondria = site of respiration. Releases energy from glucose for cell activities.");
-
 q(1,"LivingThings","What is the function of the cell wall in plant cells?",
   ["To carry out photosynthesis","To store DNA","To provide strength and support to the plant cell","To control what enters the cell","To produce energy"],2,
   "The cell wall is made of cellulose. Think about what a rigid outer layer does for the cell.",
@@ -735,12 +753,6 @@ q(1,"LivingThings","Which characteristic of MRS GREN involves detecting and resp
   "Think about a plant bending toward light, or you blinking when something comes close to your eye.",
   "Sensitivity is the ability to detect and respond to changes (stimuli) in the internal or external environment. Examples include a plant bending toward light (phototropism), a cat hearing a sound and turning its head, and a human hand pulling away from a hot surface. Sensitivity helps organisms survive.",
   "KEY: Sensitivity = detect and respond to stimuli. Essential for survival of all living things.");
-
-q(2,"LivingThings","What is the role of tendons in the body?",
-  ["To connect two bones together","To connect muscles to bones","To protect joints","To produce red blood cells","To carry electrical signals"],1,
-  "Tendons attach muscles to bones. When a muscle contracts, it pulls on the tendon, which then pulls the bone.",
-  "Tendons are tough, non-elastic cords that connect muscles to bones. When a muscle contracts, it shortens and pulls on the tendon, which transmits the force to the bone, causing movement. Ligaments, by contrast, connect bone to bone and stabilise joints.",
-  "KEY: Tendons connect muscle to bone. Ligaments connect bone to bone. Important to remember the difference.");
 
 q(3,"LivingThings","Which of the following correctly distinguishes a plant cell from an animal cell when viewed under a microscope?",
   ["Plant cells are always smaller","Plant cells have a regular shape and rigid cell wall; animal cells have irregular shapes and no cell wall","Animal cells always appear green","Plant cells have no nucleus","Animal cells have a cell wall but no membrane"],1,
@@ -872,11 +884,11 @@ q(1,"Microorganisms","What does vaccination do to protect the body against disea
   "Vaccination introduces a weakened, inactive, or partial form of a pathogen (or instructions to make part of one) into the body. The immune system responds by producing antibodies and memory cells. If the same pathogen is encountered later, the immune system responds quickly and powerfully, preventing serious illness.",
   "KEY: Vaccine = trains immune system using a safe form of the pathogen, so it responds fast if infected later.");
 
-q(3,"Microorganisms","Why is it more difficult to develop antibiotics against viruses than against bacteria?",
-  ["Viruses are larger than bacteria","Bacteria have no cell membrane, so antibiotics cannot attack them","Viruses do not have cells and replicate inside the host's own cells, making them difficult to target without damaging the host","Antibiotics only work in warm temperatures","Viruses produce acids that destroy antibiotics"],2,
-  "Antibiotics target structures in bacteria (like cell walls). Viruses do not have those structures. What do viruses use to reproduce?",
-  "Viruses do not have cell walls, ribosomes, or other bacterial structures that antibiotics target. Viruses hijack host cells to reproduce, meaning any antiviral drug must target the virus without damaging the host cells. This makes developing antivirals very challenging. Antibiotics are completely ineffective against viral infections.",
-  "KEY: Antibiotics do not work on viruses because viruses have no cells. Antivirals must be used instead.");
+q(1,"LivingThings","Which scientist studies muscles and movement, and helps patients recover from injuries?",
+  ["Doctor","Nutritionist","Physiotherapist","Microbiologist","Astronomer"],2,
+  "This scientist works with patients who have muscle or movement problems, helping them recover through exercise and therapy.",
+  "A physiotherapist studies muscles and movement and helps patients recover from injuries, strokes, and other conditions that affect movement. A doctor studies and treats human health broadly. A nutritionist studies diet and nutrition. Knowing the names and roles of these body scientists is a key part of the revision guide.",
+  "KEY: Physiotherapist = muscles and movement. Doctor = human health. Nutritionist = diet and nutrition.");
 
 q(2,"Microorganisms","What is fermentation?",
   ["The process of heating food to kill microorganisms","The process in which microorganisms break down sugars to produce alcohol or acids and gases","The process of filtering water to remove microorganisms","The cooling of food to slow microbial growth","The process by which yeast absorbs sunlight"],1,
@@ -913,6 +925,18 @@ q(3,"Microorganisms","A student is asked why we should cover coughs and sneezes.
   "Think about what is in the droplets released during a cough or sneeze, and how disease spreads.",
   "Coughs and sneezes release tiny droplets that can carry pathogens (bacteria and viruses) into the air. Other people can inhale these droplets and become infected. Covering the mouth and nose prevents these pathogen-laden droplets from spreading. This reduces the transmission of diseases like flu, COVID-19, and tuberculosis.",
   "KEY: Cover coughs/sneezes to prevent airborne transmission of pathogens in respiratory droplets.");
+
+q(1,"LivingThings","What is the function of a red blood cell?",
+  ["To send electrical messages around the body","To carry oxygen around the body","To absorb water from the soil","To carry out photosynthesis","To store energy as fat"],1,
+  "Red blood cells are found in the blood. Think about what the blood delivers to every cell in the body.",
+  "Red blood cells are specialised cells adapted to carry oxygen around the body. They contain haemoglobin, which binds to oxygen in the lungs and releases it at body tissues. They are disc-shaped and have no nucleus, allowing more room for haemoglobin. Other specialised cells in the revision guide include nerve cells (messages), root hair cells (absorb water), and palisade cells (photosynthesis).",
+  "KEY: Red blood cell = carries oxygen. Specialised cells are adapted for specific jobs. From revision guide section 3.4.");
+
+q(1,"LivingThings","Which of the following is a function of the human skeleton?",
+  ["To digest food","To carry oxygen to cells","To produce blood cells in the bone marrow","To carry out photosynthesis","To filter waste from the blood"],2,
+  "The revision guide lists four functions of the skeleton. Support, protection, and movement are three of them. What is the fourth?",
+  "The four functions of the human skeleton are: support (holds the body upright), protection (skull protects brain, rib cage protects heart and lungs), movement (bones work with muscles), and blood cell production (red and white blood cells are made in the bone marrow inside bones). Key bones include the skull, rib cage, femur, and spine.",
+  "KEY: Skeleton functions: support, protection, movement, blood cell production. Blood cells made in bone marrow.");
 
 // ======================================
 // TOPIC 4 EXTRA QUESTIONS (10 more = 40 total)
@@ -972,11 +996,11 @@ q(3,"Microorganisms","How did Louis Pasteur's swan-neck flask experiment prove t
   "Pasteur placed broth in flasks with long curved (swan) necks that allowed air in but trapped microorganisms. The broth stayed fresh. When the necks were broken, allowing microorganisms to enter, the broth quickly went bad. This proved that decay is caused by microorganisms in the air, disproving the idea of spontaneous generation.",
   "KEY: Swan-neck experiment proved microorganisms in the air cause decay, not spontaneous generation. Foundation of germ theory.");
 
-q(2,"Microorganisms","What is the difference between sterilisation and pasteurisation?",
-  ["They are the same process","Sterilisation kills all microorganisms including spores; pasteurisation kills most harmful microorganisms but not all","Pasteurisation kills all microorganisms; sterilisation only kills some","Sterilisation is used for food only; pasteurisation is only used for equipment","Neither actually kills microorganisms"],1,
-  "Both processes use heat, but to different degrees. Which one is more extreme and more thorough?",
-  "Sterilisation uses higher temperatures (e.g., in an autoclave at 121 degrees C) to kill ALL microorganisms including heat-resistant spores. It is used for surgical equipment and laboratory glassware. Pasteurisation uses lower temperatures to kill most harmful microorganisms but may leave some heat-resistant spores, which is why pasteurised products still have a limited shelf life.",
-  "KEY: Sterilisation kills ALL microorganisms (including spores). Pasteurisation kills MOST harmful ones. Sterilisation is more thorough.");
+q(1,"Microorganisms","Why does pasteurisation extend the shelf life of milk without changing its taste significantly?",
+  ["It adds preservatives to the milk","It removes all water from the milk","It heats the milk to kill most harmful microorganisms without cooking it","It freezes the milk to stop all microbial activity","It seals the milk in a vacuum to remove all oxygen"],2,
+  "Pasteurisation uses a specific temperature for a short time. What does this targeted heat treatment do to the milk?",
+  "Pasteurisation heats milk (and other drinks like juice) to around 72 degrees C for about 15 seconds, then cools it rapidly. This kills most harmful microorganisms such as bacteria, without cooking the milk or significantly changing its taste, smell, or nutritional value. Pasteurised milk lasts much longer than unpasteurised milk when refrigerated.",
+  "KEY: Pasteurisation = moderate heat for a short time, killing harmful microorganisms without cooking the food. Extends shelf life.");
 
 // ======================================
 // TOPIC 5: HABITATS AND ENVIRONMENT (30 Qs)
@@ -1120,27 +1144,27 @@ q(3,"Habitats","A water lily lives in a pond. It has large flat leaves that floa
   "The large, flat leaves of a water lily float on the water surface, maximising exposure to sunlight for photosynthesis. Unlike plants growing fully underwater, the floating leaves are directly exposed to sunlight. The large surface area increases light absorption. This is a structural adaptation to the aquatic habitat.",
   "KEY: Water lily's flat floating leaves maximise sunlight exposure for photosynthesis. Structural adaptation to the pond habitat.");
 
+q(1,"Habitats","Which of the following is a method of conserving the environment listed in the revision guide?",
+  ["Building more factories","Burning more fossil fuels","Planting trees and recycling","Increasing overfishing","Draining wetlands for farmland"],2,
+  "Conservation means protecting and managing the environment. The revision guide lists specific conservation methods. Which option fits?",
+  "The revision guide lists four conservation methods: recycling, planting trees, protecting endangered species, and reducing pollution. These actions help restore habitats, reduce waste, fight climate change, and prevent extinction. Conservation is the responsible use and protection of natural resources and environments.",
+  "KEY: Conservation methods: recycling, planting trees, protecting endangered species, reducing pollution. All from revision guide section 5.5.");
+
+q(1,"Habitats","Compared to non-renewable energy sources, what is one advantage of renewable energy sources?",
+  ["They produce more energy per unit","They are always cheaper to build","They can be replenished naturally and produce less pollution","They are easier to transport","They work better at night"],2,
+  "The revision guide compares renewable and non-renewable energy. What are the key differences listed?",
+  "According to the revision guide, renewable energy sources (solar, wind, hydroelectric) can be replaced naturally and produce less pollution. Non-renewable sources (coal, oil, natural gas) have a limited supply and produce more pollution. This makes renewables more sustainable for the long-term future of the planet.",
+  "KEY: Renewable = can be replaced + less pollution. Non-renewable = limited supply + more pollution. From revision guide section 5.6.");
+
 // ======================================
 // TOPIC 5 EXTRA QUESTIONS (10 more = 40 total)
 // ======================================
-
-q(2,"Habitats","What does it mean when an animal is warm-blooded?",
-  ["Its body temperature is always very high","It can regulate its own body temperature internally regardless of the external temperature","It lives in warm climates only","It gets all its heat from the sun","It eats warm food"],1,
-  "Warm-blooded animals stay at a constant temperature even when the environment gets cold or hot. How do they do this?",
-  "Warm-blooded (endothermic) animals such as mammals and birds can regulate their own body temperature internally through metabolic processes. They stay at a constant temperature regardless of the external environment. Cold-blooded (ectothermic) animals such as reptiles, fish, and amphibians rely on external heat sources and their body temperature varies with the environment.",
-  "KEY: Warm-blooded = regulates own body temperature internally. Mammals and birds. Cold-blooded = relies on external heat.");
 
 q(1,"Habitats","What is the arrow in a food chain used to represent?",
   ["The direction the organism moves","The flow of energy from one organism to the next","Which organism is larger","The number of organisms at each level","Which organism is a predator"],1,
   "In a food chain like Grass -> Rabbit -> Fox, what does the arrow between each organism mean?",
   "The arrow in a food chain represents the flow of energy from one organism to the next. It points FROM the organism being eaten TO the organism eating it. For example, Grass -> Rabbit -> Fox means energy flows from grass to rabbit to fox. The arrow shows the direction of energy transfer, not movement.",
   "KEY: Arrow in food chain = direction of energy flow (from eaten to eater).");
-
-q(2,"Habitats","What is meant by the term abiotic factor?",
-  ["A living component of an ecosystem","A non-living physical or chemical factor that affects organisms in an ecosystem","A type of food chain","A species that is endangered","A harmful microorganism"],1,
-  "Abiotic means non-living. What kinds of environmental factors are non-living?",
-  "Abiotic factors are non-living physical and chemical factors in an ecosystem that affect the organisms living there. Examples include temperature, light intensity, water availability, soil pH, oxygen levels, and salinity. These factors determine which organisms can survive in a particular habitat. Biotic factors are the living components (other organisms).",
-  "KEY: Abiotic factors = non-living environmental factors (e.g., temperature, light, water, soil). Affect all organisms.");
 
 q(3,"Habitats","A student notices that plants grow taller near a forest edge than deep inside the forest. Using knowledge of adaptations and abiotic factors, suggest why.",
   ["Plants compete for insects near the edge","More light is available near the forest edge, and plants grow taller to maximise light absorption","There is less water near the forest edge","The soil is poorer near the edge","More animals eat the plants deep in the forest"],1,
@@ -1290,12 +1314,6 @@ q(2,"Classifying","What are the two main causes of variation within a species?",
   "Variation is caused by genetic factors (differences in DNA inherited from parents, e.g., eye colour, blood type) and environmental factors (conditions experienced during life, e.g., diet affecting height, sunlight affecting skin colour). Most characteristics are influenced by both. Genetic variation is passed on to offspring; environmental variation is not.",
   "KEY: Variation caused by (1) genetics (inherited DNA) and (2) environment (conditions experienced during life).");
 
-q(1,"Classifying","What does the scientific name of an organism consist of?",
-  ["A common name and a country name","A genus name and a species name (binomial nomenclature)","A family name and an order name","A kingdom name and a phylum name","A colour name and a size name"],1,
-  "The scientific name of a human is Homo sapiens. What are the two parts of this name?",
-  "Scientific names use binomial nomenclature, a system with two parts: the genus name (capitalised) and the species name (lower case). For example, Homo sapiens (human), Panthera leo (lion), Canis lupus (wolf). This system was developed by Carl Linnaeus and is used universally across all languages.",
-  "KEY: Scientific name = genus (capitalised) + species (lower case). E.g., Homo sapiens. Developed by Linnaeus.");
-
 q(3,"Classifying","Two organisms can mate and produce offspring. However, the offspring are infertile. Do the two parents belong to the same species?",
   ["Yes, because they can mate successfully","No, because a species is defined by producing fertile offspring, not just any offspring","Yes, because they look similar","No, because they live in different habitats","Yes, because they share the same genus name"],1,
   "The definition of species requires fertile offspring. What does infertile offspring tell you about the parents?",
@@ -1326,39 +1344,27 @@ q(2,"Classifying","Why is it important to use scientific names rather than commo
   "Scientific names (binomial nomenclature) are universal, used by scientists worldwide regardless of language. Common names vary between languages and even regions within the same country. For example, the organism called a ladybird in the UK is called a ladybug in the US. The scientific name Coccinella septempunctata is the same everywhere.",
   "KEY: Scientific names are universal (same worldwide). Common names vary by language and region, causing confusion.");
 
-q(1,"Classifying","What is the correct order of classification from the largest group to the smallest?",
-  ["Species, Genus, Family, Order, Class, Phylum, Kingdom","Kingdom, Phylum, Class, Order, Family, Genus, Species","Phylum, Kingdom, Order, Class, Genus, Family, Species","Species, Family, Class, Order, Phylum, Genus, Kingdom","Kingdom, Class, Order, Phylum, Family, Genus, Species"],1,
-  "Think of the mnemonic: King Philip Came Over For Good Soup. What are the 7 levels of classification?",
-  "The correct order of classification (taxonomy) from largest to smallest is: Kingdom, Phylum, Class, Order, Family, Genus, Species. A useful mnemonic is King Philip Came Over For Good Soup. As you move toward species, the group becomes smaller and more specific. All humans belong to Kingdom Animalia, Phylum Chordata, Class Mammalia, and Species Homo sapiens.",
-  "KEY: Kingdom > Phylum > Class > Order > Family > Genus > Species. Mnemonic: King Philip Came Over For Good Soup.");
-
 q(3,"Classifying","Two animals look very similar but cannot interbreed. Are they the same species? Explain.",
   ["Yes, because they look similar and share most features","No, because the definition of a species requires the ability to interbreed and produce fertile offspring","Yes, because classification is based on appearance","No, because they probably live in different habitats","Yes, if they share the same scientific name"],1,
   "The definition of species is based on reproduction, not appearance. Can looking similar determine species?",
   "No, they are not the same species, even if they look similar. Species is defined by the ability to interbreed and produce fertile offspring, not by appearance. Convergent evolution can cause unrelated organisms to look very similar (e.g., dolphins and sharks). Only genetic compatibility for reproduction determines species membership.",
   "KEY: Species = ability to interbreed for fertile offspring. Similar appearance alone does NOT define a species.");
 
+q(1,"Classifying","Into which four main groups does the revision guide say all living things can be classified?",
+  ["Mammals, birds, fish, reptiles","Plants, animals, fungi, microorganisms","Vertebrates, invertebrates, producers, consumers","Bacteria, viruses, protoctists, algae","Herbivores, carnivores, omnivores, decomposers"],1,
+  "The revision guide section 6.1 lists four main groups. Think broadly — these cover all of life on Earth.",
+  "According to the revision guide, living things are classified into four main groups: Plants, Animals, Fungi, and Microorganisms. Within each group there are many subgroups. This broad classification helps scientists organise the enormous diversity of life on Earth into manageable categories.",
+  "KEY: Four main groups of living things: Plants, Animals, Fungi, Microorganisms. From revision guide section 6.1.");
+
+q(1,"Classifying","Which of the following is an example of variation caused by the environment rather than genetics?",
+  ["Blood type","Eye colour","A scar from an injury","Hair colour","Number of fingers"],2,
+  "Variation has two causes: genetics (inherited) and environment (experienced). Which of these options is caused by something that happened to the person, not something inherited?",
+  "A scar from an injury is an example of environmental variation — it is caused by an event in the environment, not inherited DNA. Examples of genetic variation include blood type, eye colour, and hair colour. Many characteristics such as height are influenced by both genetics and environment (e.g., nutrition affects how tall someone grows).",
+  "KEY: Environmental variation = caused by surroundings (e.g., scar, tan). Genetic variation = inherited (e.g., blood type, eye colour).");
+
 // ======================================
 // TOPIC 6 EXTRA QUESTIONS (10 more = 40 total)
 // ======================================
-
-q(1,"Classifying","Which invertebrate group has jointed legs and an exoskeleton, and includes insects, spiders, and crabs?",
-  ["Molluscs","Annelids","Arthropods","Echinoderms","Cnidarians"],2,
-  "This is the largest group of invertebrates. Its members all have jointed legs and a hard outer skeleton.",
-  "Arthropods are invertebrates with jointed legs and an exoskeleton (hard outer covering made of chitin). They are the most diverse animal group on Earth. Arthropods include insects (6 legs), arachnids (8 legs), crustaceans (e.g., crabs, woodlice), centipedes, and millipedes. The exoskeleton provides protection but must be shed as the animal grows.",
-  "KEY: Arthropods = jointed legs + exoskeleton. Includes insects, spiders, crabs, centipedes. Largest animal group.");
-
-q(2,"Classifying","What is the difference between a crustacean and an insect?",
-  ["Crustaceans have 6 legs; insects have 8","Crustaceans typically have 10 or more legs and live in water; insects have 6 legs and live mainly on land","Insects have an exoskeleton; crustaceans do not","Crustaceans are vertebrates; insects are invertebrates","They are the same type of organism"],1,
-  "Both crustaceans and insects are arthropods, but they differ in leg number and habitat. Think: crabs vs butterflies.",
-  "Crustaceans (e.g., crabs, shrimps, woodlice) typically have 10 or more legs, two pairs of antennae, and mostly live in aquatic habitats. Insects have 6 legs, one pair of antennae, three body sections (head, thorax, abdomen), and live mainly on land. Both groups are arthropods with jointed legs and an exoskeleton.",
-  "KEY: Crustaceans = 10+ legs, 2 pairs antennae, mostly aquatic. Insects = 6 legs, 1 pair antennae, 3 body sections, mainly terrestrial.");
-
-q(1,"Classifying","What is a mollusc?",
-  ["An invertebrate with jointed legs","An invertebrate with a soft unsegmented body, usually protected by a hard shell","A vertebrate that lives in water","A type of worm with segmented body","An arthropod with a shell"],1,
-  "Molluscs include snails, clams, and octopuses. What do most of these animals have in common?",
-  "Molluscs are invertebrates with soft, unsegmented bodies, usually (but not always) protected by a hard shell. Examples include snails (one shell), clams and mussels (two shells), and octopuses and squids (no external shell). Molluscs have organs and separate openings for the mouth and anus.",
-  "KEY: Molluscs = soft unsegmented body, usually with a shell. Examples: snails, clams, mussels, octopuses.");
 
 q(3,"Classifying","A student finds an organism in a rock pool. It has no backbone, a soft body, and a single coiled shell. What group does it belong to?",
   ["Arthropod","Echinoderm","Annelid","Mollusc","Cnidarian"],3,
@@ -1366,41 +1372,29 @@ q(3,"Classifying","A student finds an organism in a rock pool. It has no backbon
   "The organism is a mollusc (specifically a gastropod, like a snail or limpet). Molluscs have soft, unsegmented bodies typically protected by a shell. A single coiled shell is characteristic of gastropod molluscs. Echinoderms have spiny skin. Arthropods have jointed legs. Annelids are segmented worms.",
   "KEY: Soft body + single coiled shell = mollusc (gastropod). No backbone = invertebrate.");
 
-q(2,"Classifying","What are echinoderms, and give two examples.",
-  ["Soft-bodied invertebrates with shells, e.g., snails and clams","Spiny-skinned marine invertebrates, e.g., starfish and sea urchins","Jointed-legged invertebrates, e.g., crabs and insects","Segmented worms, e.g., earthworms","Invertebrates with stinging tentacles, e.g., jellyfish"],1,
-  "Echino- means spiny, derm means skin. Where do these spiny invertebrates live?",
-  "Echinoderms are spiny-skinned marine (sea) invertebrates. They have a unique water vascular system for movement. Examples include starfish (sea stars), sea urchins, sea cucumbers, and brittle stars. All echinoderms live in the sea and have five-fold (pentaradial) symmetry as adults.",
-  "KEY: Echinoderms = spiny-skinned marine invertebrates. Examples: starfish, sea urchins, sea cucumbers.");
-
-q(1,"Classifying","What is an annelid?",
-  ["An invertebrate with a hard shell","A segmented worm invertebrate","A vertebrate with moist skin","An arthropod with many legs","A microorganism that causes decay"],1,
-  "Annelids include earthworms and leeches. What is the distinctive feature of their body structure?",
-  "Annelids are segmented worms - invertebrates whose bodies are divided into repeated ring-like segments. They have organs and separate mouth and anus openings. Examples include earthworms (which enrich soil), leeches (which can be ectoparasites), and marine polychaete worms. The name annelid comes from the Latin annulus meaning little ring.",
-  "KEY: Annelids = segmented worms. Examples: earthworms, leeches. Body divided into ring-like segments.");
-
-q(2,"Classifying","Why is it useful to use a dichotomous key to classify organisms?",
-  ["It gives the common name of an organism","It is a series of yes/no questions based on observable features that leads to the identification of an organism","It provides the evolutionary history of an organism","It tells you the habitat of an organism","It lists all the organisms in a food chain"],1,
-  "A dichotomous key always offers two choices at each step. How does this help identify an unknown organism?",
-  "A dichotomous key is a tool for identifying organisms by working through a series of paired questions (dichotomous = two choices), each based on observable physical characteristics. At each step, choosing yes or no leads to the next question until the organism is identified. It is systematic, reliable, and usable by anyone with the key, regardless of prior knowledge.",
-  "KEY: Dichotomous key = series of yes/no questions based on features, leading to organism identification.");
-
 q(3,"Classifying","A student uses a key and reaches the question: Does the animal have feathers? The animal has scales and lays eggs on land. Which answer leads to the correct group?",
   ["Yes, because it lays eggs","No, because it has scales not feathers - leading to reptiles","Yes, because it is cold-blooded","No, leading to mammals","Yes, because it lives on land"],1,
   "Feathers are unique to birds. This animal has scales, not feathers. Which vertebrate group has scales and lays eggs on land?",
   "The correct answer is No (no feathers), which leads away from birds. Since the animal has dry scales and lays eggs on land, it is a reptile. In a dichotomous key, each feature leads systematically to the correct group. Reptiles: dry scales, cold-blooded, eggs laid on land. Birds: feathers, warm-blooded, hard-shelled eggs.",
   "KEY: Scales + eggs on land = reptile. No feathers = not a bird. Dichotomous keys use observable features step by step.");
 
-q(2,"Classifying","What is the difference between a centipede and a millipede?",
-  ["Centipedes have more legs than millipedes","Centipedes have one pair of legs per body segment; millipedes have two pairs per segment","Millipedes are insects; centipedes are arachnids","Both are the same type of organism","Centipedes are vertebrates; millipedes are invertebrates"],1,
-  "Both are arthropods with many legs. The key difference is in how many legs are on each body segment.",
-  "Centipedes have one pair of legs per body segment (and are generally carnivorous predators). Millipedes have two pairs of legs per body segment (and are generally detritivores, eating decaying plant matter). Both are arthropods but are classified in different classes. Despite their names, centipedes do not have exactly 100 legs, and millipedes do not have 1000.",
-  "KEY: Centipedes = 1 pair legs per segment (predator). Millipedes = 2 pairs per segment (detritivore).");
+q(1,"LivingThings","What does a nutritionist study?",
+  ["The movement of muscles and joints","Human diseases and their treatment","Diet, food, and how nutrition affects health","The classification of living things","The structure of cells under a microscope"],2,
+  "Think about what nutrition means. What does a nutritionist specialise in?",
+  "A nutritionist studies diet and nutrition, and advises people on how food and eating habits affect their health and wellbeing. A physiotherapist focuses on muscles and movement. A doctor studies and treats human health and disease broadly. These are the three body scientists listed in the revision guide.",
+  "KEY: Nutritionist = diet and nutrition. Physiotherapist = muscles and movement. Doctor = human health.");
 
-q(3,"Classifying","Who developed the modern system of biological classification, and what language did he use for scientific names?",
-  ["Charles Darwin, using English","Carl Linnaeus, using Latin","Louis Pasteur, using French","Gregor Mendel, using German","Aristotle, using Greek"],1,
-  "The binomial naming system was developed by an 18th-century Swedish scientist. Which language did he choose so that scientists worldwide could use the same names?",
-  "Carl Linnaeus (1707-1778), a Swedish botanist, developed the modern system of taxonomy and binomial nomenclature. He used Latin for scientific names because Latin was the universal language of educated people in his time and is no longer spoken as a native language, so it remains neutral and stable. His system is still used today.",
-  "KEY: Carl Linnaeus developed modern taxonomy and binomial nomenclature using Latin. Swedish botanist, 1707-1778.");
+q(1,"LivingThings","A doctor, a physiotherapist, and a nutritionist all study the human body. Which one specifically treats patients with muscle injuries or movement problems?",
+  ["Doctor","Nutritionist","Physiotherapist","Microbiologist","Neuroscientist"],2,
+  "Which of these three scientists deals specifically with muscles, joints, and helping people regain movement?",
+  "A physiotherapist specialises in muscles, joints, and movement. They help patients recover from sports injuries, strokes, operations, and conditions that affect mobility, using exercise, massage, and other physical therapies. A doctor diagnoses and treats illness generally. A nutritionist advises on diet. All three are examples of scientists who study the human body.",
+  "KEY: Physiotherapist = muscles and movement recovery. Doctor = general health. Nutritionist = diet and food.");
+
+q(2,"Classifying","A student finds a tall tree with needle-like leaves and hard brown cones containing seeds. There are no flowers or fruit. Which plant group does it belong to?",
+  ["Flowering plant","Moss","Fern","Conifer","Algae"],3,
+  "No flowers or fruit, but seeds in cones, and needle-like leaves. Which plant group fits all these features?",
+  "The tree is a conifer. Conifers have needle-like or scale-like leaves (adapted to reduce water loss), produce seeds in cones (not flowers), and do not produce fruit. Common examples include pine, spruce, fir, cedar, and cypress trees. Most conifers are evergreen, keeping their leaves year-round.",
+  "KEY: Needle leaves + cones + seeds + no flowers = CONIFER. Examples: pine, spruce, fir, cedar.");
 
 // ======================================
 //  SRS CONFIG
