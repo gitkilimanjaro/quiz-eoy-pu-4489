@@ -159,12 +159,12 @@ body.answered{padding-bottom:70px}
   </div>
   <div class="srs-info">
     <strong>How it works:</strong> Answer a question correctly twice in a row to master and retire it.
-    One wrong answer resets its streak back to zero. Work through all 190 questions to complete the course.
+    One wrong answer resets its streak back to zero. Work through all 200 questions to complete the course.
   </div>
   <button class="btn-continue" id="btn-continue" onclick="startRound()">&#9654; Continue Progress</button>
   <button class="btn-reset" onclick="confirmReset()">&#8635; Start All Over</button>
   <div class="all-done" id="all-done" style="display:none">
-    &#127881; You have mastered all 190 questions! Tap <em>Start All Over</em> to begin again.
+    &#127881; You have mastered all 200 questions! Tap <em>Start All Over</em> to begin again.
   </div>
 </div>
 
@@ -206,7 +206,7 @@ body.answered{padding-bottom:70px}
 <div id="modal-overlay" style="display:none" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title">&#9888; Reset all progress?</div>
-    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 190 questions will return to active rotation. This cannot be undone.</p>
+    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 200 questions will return to active rotation. This cannot be undone.</p>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-confirm" onclick="doReset()">Yes, start all over</button>
@@ -434,6 +434,36 @@ q(1,"IntroSci","What is a beaker used for in the laboratory?",
   "A beaker is used for holding and containing liquids during experiments. It is not suitable for precise volume measurement — a measuring cylinder is used for that. Other apparatus listed in the revision guide include: thermometer (temperature), balance (mass), stopwatch (time), microscope (viewing small objects), and test tube (small experiments).",
   "KEY: Beaker = holding liquids. NOT for precise measurement. Use a measuring cylinder for accurate volume.");
 
+q(1,"IntroSci","Which of the following is NOT one of the five hazard symbols named in the revision guide?",
+  ["Flammable","Toxic","Radioactive","Corrosive","Harmful"],2,
+  "The revision guide names exactly five hazard symbols. Which option in this list does NOT appear in that set of five?",
+  "The five hazard symbols named in the revision guide are: Flammable, Toxic, Corrosive, Explosive, and Harmful. Radioactive is a real hazard symbol used in nuclear contexts but is NOT one of the five listed in the Grade 7 revision guide. Knowing exactly which five are required for the exam is important.",
+  "KEY: The five guide-listed hazard symbols are Flammable, Toxic, Corrosive, Explosive, and Harmful. Radioactive is NOT on the list.");
+
+q(2,"IntroSci","A student picks up a bottle labelled as containing mercury. Which hazard symbol should they expect to see, and what does it tell them to do?",
+  ["Flammable - keep away from fire","Explosive - use in small amounts only","Toxic - do not eat, drink, or taste; handle with care","Corrosive - wash off immediately with water","Harmful - use in a fume chamber"],2,
+  "Mercury is a poisonous heavy metal. Which hazard symbol is used for substances that can cause serious harm or death if swallowed or inhaled?",
+  "Mercury carries the toxic (skull-and-crossbones) hazard symbol because it is poisonous. The safety instruction for toxic substances is: do not eat, drink, or taste them, and handle them strictly according to instructions. This connects the hazard symbol to real-world lab safety behaviour, which is what the revision guide expects students to understand.",
+  "KEY: Mercury = TOXIC (skull symbol). Do not eat, drink, or taste. Handle strictly according to instructions.");
+
+q(1,"IntroSci","Which piece of laboratory apparatus is used to view microorganisms and other objects too small to see with the naked eye?",
+  ["Beaker","Thermometer","Microscope","Stopwatch","Test tube"],2,
+  "The revision guide lists seven common pieces of apparatus and their uses. Which one allows you to see very small things?",
+  "A microscope is used for viewing small objects such as cells, microorganisms, and tiny structures that cannot be seen with the naked eye. The revision guide lists it alongside other common apparatus: beaker (holding liquids), measuring cylinder (volume), thermometer (temperature), balance (mass), stopwatch (time), and test tube (small experiments).",
+  "KEY: Microscope = viewing small objects. From the apparatus table in revision guide section 1.5.");
+
+q(1,"IntroSci","Which piece of laboratory apparatus would a student use to measure how long a chemical reaction takes?",
+  ["Measuring cylinder","Microscope","Beam balance","Stopwatch","Thermometer"],3,
+  "The revision guide lists seven apparatus. One of them specifically measures time. Which is it?",
+  "A stopwatch is used to measure time in laboratory experiments. It allows accurate timing of reactions, heating, or any time-dependent process. The revision guide lists it alongside: beaker (holding liquids), measuring cylinder (volume), thermometer (temperature), balance (mass), microscope (small objects), and test tube (small experiments).",
+  "KEY: Stopwatch = measuring time. One of the seven apparatus listed in revision guide section 1.5.");
+
+q(1,"IntroSci","A student wants to mix two small amounts of chemicals together safely. Which piece of apparatus from the revision guide is most suitable?",
+  ["Beaker","Measuring cylinder","Test tube","Microscope","Stopwatch"],2,
+  "The revision guide describes test tubes as being used for small experiments. Which option matches this description?",
+  "A test tube is the most suitable apparatus for small-scale experiments involving chemicals. It is small, easy to heat or mix, and minimises the amount of chemical used. Other apparatus serve different purposes: beakers hold larger volumes of liquid, measuring cylinders measure volume precisely, microscopes view tiny objects, and stopwatches measure time.",
+  "KEY: Test tube = small experiments. One of the seven apparatus in revision guide section 1.5.");
+
 // ======================================
 // TOPIC 2: MEASUREMENTS (30 Qs)
 // ======================================
@@ -611,6 +641,24 @@ q(3,"Measurements","A student says a piece of string is about 30 cm. The actual 
   "Accuracy means how close the measurement is to the true value. How far off is 30 cm from 31.5 cm?",
   "The measurement is inaccurate because the recorded value (30 cm) differs from the true value (31.5 cm) by 1.5 cm, which is a 4.8% error. In science, even small inaccuracies matter. Using instruments correctly and reading carefully improves accuracy. Note that estimation without instruments often leads to inaccurate results.",
   "KEY: Accuracy = closeness to the true value. 30 cm vs 31.5 cm is inaccurate (1.5 cm, or 4.8%, off).");
+
+q(1,"Measurements","What is the correct unit for measuring area?",
+  ["cm","cm cubed","cm squared","kg","seconds"],2,
+  "Area covers a two-dimensional surface. What kind of unit does a two-dimensional measurement require?",
+  "Area is measured in squared units such as cm squared (cm2) or m squared (m2). This is because area is calculated by multiplying two lengths together (length x width), so the unit is also multiplied: cm x cm = cm squared. Volume uses cubed units (three dimensions), and length uses plain units (one dimension).",
+  "KEY: Area = squared units (cm2, m2). Length x width, so the unit is also squared.");
+
+q(2,"Measurements","A student measures a leaf and finds it is 6 cm long and 4 cm wide. What is its area?",
+  ["10 cm squared","10 cm","24 cm","24 cm squared","48 cm squared"],3,
+  "Area = length x width. Multiply 6 by 4, and remember to use the correct unit for area.",
+  "Area = length x width = 6 cm x 4 cm = 24 cm squared. The unit is cm squared because two lengths are multiplied together. This is a key formula from revision guide section 2.3. Always include the unit in your answer, and always write it as cm squared, not just cm.",
+  "KEY: Area = length x width = 6 x 4 = 24 cm squared. Always use squared units for area.");
+
+q(2,"Measurements","Why is area always expressed in squared units such as cm squared rather than plain cm?",
+  ["Because area is always larger than length","Because area is calculated by multiplying two lengths together, so the unit is also multiplied","Because squared units sound more scientific","Because area and volume use the same units","Because the ruler has squared markings"],1,
+  "Think about the formula for area: length x width. What happens to the units when you multiply cm x cm?",
+  "Area = length x width. When you multiply cm x cm, the unit becomes cm squared. This is why area always uses squared units. Volume (length x width x height) uses cubed units (cm cubed) because three lengths are multiplied. Understanding units is important: the examiner will deduct marks if you write cm instead of cm squared for area.",
+  "KEY: cm x cm = cm squared. Multiplying two lengths gives a squared unit. Volume = cm cubed (three lengths multiplied).");
 
 // ======================================
 // TOPIC 3: LIVING THINGS (30 Qs)
@@ -1001,6 +1049,18 @@ q(1,"Microorganisms","Why does pasteurisation extend the shelf life of milk with
   "Pasteurisation uses a specific temperature for a short time. What does this targeted heat treatment do to the milk?",
   "Pasteurisation heats milk (and other drinks like juice) to around 72 degrees C for about 15 seconds, then cools it rapidly. This kills most harmful microorganisms such as bacteria, without cooking the milk or significantly changing its taste, smell, or nutritional value. Pasteurised milk lasts much longer than unpasteurised milk when refrigerated.",
   "KEY: Pasteurisation = moderate heat for a short time, killing harmful microorganisms without cooking the food. Extends shelf life.");
+
+q(1,"Microorganisms","According to the revision guide, which gas does yeast produce during fermentation that causes bread dough to rise?",
+  ["Oxygen","Nitrogen","Carbon dioxide","Hydrogen","Water vapour"],2,
+  "The revision guide states that yeast respires and produces a specific gas during fermentation. Which gas makes dough expand and become light and airy?",
+  "The revision guide states that yeast respires and produces carbon dioxide during fermentation. The carbon dioxide gas forms bubbles in the bread dough, causing it to rise and become light and airy. The alcohol produced also evaporates during baking. This is why yeast is added to bread dough before baking.",
+  "KEY: Yeast fermentation produces carbon dioxide. CO2 makes dough rise. Exact wording from revision guide section 4.3.");
+
+q(1,"Microorganisms","The revision guide includes a table matching foods to the microorganisms used to make them. Which row in that table is correct?",
+  ["Bread - Bacteria","Yoghurt - Yeast","Cheese - Virus","Bread - Yeast","Yoghurt - Fungi"],3,
+  "The guide lists three foods and their microorganisms: bread, yoghurt, and cheese. Which food-microorganism pair is correct?",
+  "The revision guide food production table states: Bread = Yeast, Yoghurt = Bacteria, Cheese = Bacteria and/or Fungi. Yeast carries out fermentation to make bread rise. Bacteria produce lactic acid to curdle milk into yoghurt. Bacteria and fungi are both used in different types of cheese production. This table is worth memorising for the exam.",
+  "KEY: Bread=Yeast, Yoghurt=Bacteria, Cheese=Bacteria/Fungi. From revision guide section 4.3 food production table.");
 
 // ======================================
 // TOPIC 5: HABITATS AND ENVIRONMENT (30 Qs)
