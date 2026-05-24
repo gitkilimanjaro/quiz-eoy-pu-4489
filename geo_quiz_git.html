@@ -31,7 +31,8 @@ body{font-family:Arial,sans-serif;background:var(--bg);min-height:100vh;padding:
 
 /* ── HOME SCREEN ── */
 #home{display:block}
-.home-header{text-align:center;padding:28px 0 20px}
+.home-header{text-align:center;padding:28px 0 20px;position:relative}
+.rev-badge{position:absolute;top:0;right:0;font-size:.68rem;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:3px 9px;font-weight:600;letter-spacing:.03em}
 .home-header h1{font-family:Arial,sans-serif;font-size:2rem;color:var(--text);line-height:1.2;margin-bottom:6px}
 .home-header p{font-size:.82rem;color:var(--muted)}
 .dash-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:14px}
@@ -135,7 +136,8 @@ body.answered{padding-bottom:72px}
 <!-- ═══════════ HOME SCREEN ═══════════ -->
 <div id="home">
   <div class="home-header">
-    <h1>&#127758; Geography<br>Revision <span style="font-size:.6rem;color:var(--muted);font-weight:normal;vertical-align:middle">v2</span></h1>
+    <div class="rev-badge">Rev.13</div>
+    <h1>&#127758; Geography<br>Revision</h1>
     <p>Grade 7 &middot; End of Year &middot; Spaced Repetition</p>
   </div>
 
@@ -265,7 +267,7 @@ q(2,"Human vs Physical","A forest fire destroys trees on a hillside. Which branc
 
 // ── CONTINENTS ──────────────────────────────────────────
 q(1,"Continents","How many continents are there on Earth?",
-  ["Five continents","Six continents","Seven","Eight continents","Nine continents"],2,
+  ["Five continents","Six continents","Seven continents","Eight continents","Nine continents"],2,
   "Count the continents listed in your revision material.",
   "There are seven continents: North America, South America, Europe, Africa, Asia, Australia, and Antarctica.",
   "Memory trick: NA SA E A A A A.");
@@ -370,7 +372,7 @@ q(3,"Push and Pull","A farmer leaves due to drought and moves to a city with fac
 
 q(2,"Population Growth","Which region had by far the largest population by the year 2000?",
   ["Europe","Africa","Latin America","Asia","Northern America"],3,
-  "Think about which region has the most countries and the highest population density.",
+  "Think about which region's line on the population graph shoots up most dramatically after 1950.",
   "Asia had by far the largest population by 2000, reaching around 3.5 to 4 billion - far above every other region. China and India each have populations over one billion.",
   "Asia = most populated region. China and India alone account for over 2.8 billion.");
 
@@ -455,7 +457,7 @@ q(2,"Map Skills","On a map, the town hall is above and to the left of the market
 
 // ── RIVERS ───────────────────────────────────────────────
 q(1,"Rivers","What is a drainage basin?",
-  ["A man-made water reservoir","The catchment area where rainfall drains into a river","The deepest section of a river channel","A type of steep waterfall","The area where two rivers meet"],1,
+  ["A man-made water reservoir","An area surrounding a river where any rainfall ends up in the river","The deepest section of a river channel","A type of steep waterfall","The area where two rivers meet"],1,
   "Think about what drains into a river and from what area.",
   "A drainage basin is an area surrounding a river where any rainfall will end up in the river. All rain falling inside the basin eventually flows into that river system.",
   "Everything inside the basin drains into the same river. The boundary is called the watershed.");
@@ -517,7 +519,7 @@ q(3,"Rivers","In which COURSE of a river would you most likely find a waterfall?
 // ── WATERFALL FORMATION ─────────────────────────────────
 q(2,"Waterfall","In waterfall formation, what is the FIRST step?",
   ["The overhang above collapses","A plunge pool develops","Undercutting of soft rock","The waterfall retreats upstream","A steep gorge-like valley forms"],2,
-  "Step 1 is labelled at the base of the waterfall in the diagram.",
+  "The first step happens at the base of the waterfall, where soft rock meets the water.",
   "Step 1 is undercutting. Water flowing over hard rock erodes the softer rock underneath, eventually creating an overhang above. Sequence: undercut, overhang collapses, plunge pool, retreat, gorge.",
   "Sequence: 1-Undercut, 2-Overhang collapses, 3-Plunge pool, 4-Retreat, 5-Gorge.");
 
@@ -529,7 +531,7 @@ q(1,"Waterfall","In a waterfall, which type of rock is found on TOP?",
 
 q(1,"Waterfall","What feature forms at the BASE of a waterfall?",
   ["Gorge","Plunge pool","Watershed","Confluence","Oxbow lake"],1,
-  "Step 3 in the waterfall formation diagram labels this feature.",
+  "Think about what forms directly below a waterfall where the falling water hits the rock.",
   "A plunge pool forms at the base of a waterfall. The force of the falling water hitting the rock below creates a deep, circular pool.",
   "Plunge pool = where the water plunges down. Deepens over time.");
 
@@ -571,7 +573,7 @@ q(2,"Erosion","Which TWO types of erosion involve a PHYSICAL rather than chemica
   "Physical = hydraulic action (pressure) and abrasion (grinding). Chemical = solution.");
 
 q(3,"Erosion","A river slows in its lower course. Which sediment transport method STOPS FIRST?",
-  ["Suspension","Solution","Saltation","Traction","Abrasion"],3,
+  ["Suspension","Solution","Saltation","Traction","Deposition"],3,
   "Which transport method moves the heaviest material and needs the most energy?",
   "Traction moves the largest, heaviest rocks by rolling. These need the most energy and are deposited first when the river slows. Suspension keeps fine particles moving the longest.",
   "Most energy needed = deposited first. Traction stops first; suspension stops last.");
@@ -616,7 +618,7 @@ q(2,"Rivers","Which describes SOLUTION as a river TRANSPORT method?",
   "Solution transport = dissolved material carried invisibly.");
 
 q(2,"Rivers","Which river transport method involves material INVISIBLE because it has dissolved?",
-  ["Traction","Saltation","Suspension","Solution","Abrasion"],3,
+  ["Traction","Saltation","Suspension","Solution","Deposition"],3,
   "Which method involves a chemical change rather than visible particles moving?",
   "Solution is when minerals dissolve into the water and travel invisibly. Suspension makes rivers cloudy because particles are still visible. Abrasion is erosion, not transport.",
   "Solution = invisible transport. The water looks clear but carries dissolved minerals.");
@@ -704,7 +706,7 @@ q(2,"Urbanisation","Bangkok's PM2.5 concentration has reached 95 micrograms per 
   "95 = nearly double the safe limit of 50. Air pollution is a major problem in Bangkok.");
 
 q(2,"Urbanisation","Over the past 25 years, average temperatures in Bangkok have risen by 5.26°C. What health problems can this cause?",
-  ["Respiratory illnesses such as asthma","Flooding and sea level rise","Fatigue and heatstroke","Overpopulation and traffic congestion","Lower agricultural yields"],2,
+  ["Respiratory illnesses such as asthma","Flooding and sea level rise","Fatigue and heatstroke","Skin diseases and sunburn","Lower agricultural yields"],2,
   "Think about what happens to the human body in extreme heat.",
   "Rising temperatures in Bangkok can lead to fatigue and heatstroke. High temperatures are a direct health risk, especially in a densely populated urban area with little shade or green space.",
   "Rising urban temperatures → fatigue and heatstroke.");
