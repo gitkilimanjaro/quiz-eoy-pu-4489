@@ -98,6 +98,15 @@ body.answered{padding-bottom:70px}
 .btn-reset:hover{background:#ffebee}
 .all-done{background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:14px;
   font-size:.88rem;color:#1b5e20;text-align:center;margin-top:8px;line-height:1.5}
+.trow{margin-bottom:11px}
+.trow-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-wrap:wrap;gap:4px}
+.trow-counts{font-size:.68rem;color:#999;display:flex;gap:8px}
+.trow-bar{height:8px;border-radius:4px;background:#e8e8e8;overflow:hidden;display:flex}
+.tseg-m{background:#1a7f37;height:100%;border-radius:4px 0 0 4px;transition:width .5s}
+.tseg-o{background:#f59e0b;height:100%;transition:width .5s}
+.tlegend{display:flex;gap:14px;margin-top:10px;padding-top:8px;border-top:1px solid #f0f0f0}
+.tleg-item{display:flex;align-items:center;gap:4px;font-size:.68rem;color:#888}
+.tleg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 .streak-badge{font-size:.68rem;padding:2px 8px;border-radius:10px;font-weight:bold;
   background:#fff8e1;color:#f57f17;border:1px solid #ffe082}
 .mastery-delta{background:#e8f5e9;border:1.5px solid #43a047;border-radius:10px;
@@ -166,6 +175,15 @@ body.answered{padding-bottom:70px}
   <div class="srs-info">
     <strong>How it works:</strong> Answer a question correctly twice in a row to master and retire it.
     One wrong answer resets its streak back to zero. Work through all 200 questions to complete the course.
+  </div>
+  <div class="card dash-card" style="margin-bottom:14px">
+    <div class="dash-title">&#128218; Topic Breakdown</div>
+    <div id="topic-rows"></div>
+    <div class="tlegend">
+      <div class="tleg-item"><div class="tleg-dot" style="background:#1a7f37"></div>Mastered</div>
+      <div class="tleg-item"><div class="tleg-dot" style="background:#f59e0b"></div>Halfway</div>
+      <div class="tleg-item"><div class="tleg-dot" style="background:#e8e8e8;border:1px solid #ccc"></div>Active</div>
+    </div>
   </div>
   <button class="btn-continue" id="btn-continue" onclick="startRound()">&#9654; Continue Progress</button>
   <button class="btn-reset" onclick="confirmReset()">&#8635; Start All Over</button>
@@ -1499,12 +1517,21 @@ function getRecord(ledger, id){
 // ------ METRICS ---------------------------------------------------------------------------------------
 function calcMetrics(ledger){
   var mastered=0, once=0;
+  var TLIST=['IntroSci','Measurements','LivingThings','Microorganisms','Habitats','Classifying'];
+  var ts={};
+  TLIST.forEach(function(t){ts[t]={total:0,mastered:0,once:0};});
   POOL.forEach(function(q){
+    if(ts[q.type]) ts[q.type].total++;
     var r=ledger[q.id];
-    if(r && r.status==='mastered') mastered++;
-    else if(r && r.streak===1) once++;
+    if(r && r.status==='mastered'){
+      mastered++;
+      if(ts[q.type]) ts[q.type].mastered++;
+    } else if(r && r.streak===1){
+      once++;
+      if(ts[q.type]) ts[q.type].once++;
+    }
   });
-  return {mastered:mastered, once:once, active:POOL.length-mastered, total:POOL.length};
+  return {mastered:mastered, once:once, active:POOL.length-mastered, total:POOL.length, ts:ts};
 }
 function hasProgress(ledger){
   return Object.keys(ledger).length>0;
@@ -1544,6 +1571,33 @@ function updateDashboard(){
   } else {
     btn.disabled=false; btn.style.opacity='1'; allDone.style.display='none';
   }
+  // Topic breakdown
+  var TLIST=['IntroSci','Measurements','LivingThings','Microorganisms','Habitats','Classifying'];
+  var TLABELS={'IntroSci':'Introducing Science','Measurements':'Measurements',
+    'LivingThings':'Living Things','Microorganisms':'Microorganisms',
+    'Habitats':'Habitats','Classifying':'Classifying'};
+  var html='';
+  TLIST.forEach(function(t){
+    var s=m.ts[t]||{total:0,mastered:0,once:0};
+    var active=s.total-s.mastered-s.once;
+    var mp=s.total?Math.round(s.mastered/s.total*100):0;
+    var op=s.total?Math.round(s.once/s.total*100):0;
+    var donePct=s.total?Math.round((s.mastered+s.once)/s.total*100):0;
+    html+='<div class="trow">';
+    html+='<div class="trow-hdr">';
+    html+='<span class="tbadge '+t+'">'+TLABELS[t]+'</span>';
+    html+='<span class="trow-counts">';
+    html+='<span style="color:#1a7f37">'+s.mastered+' \u2713</span>';
+    html+='<span style="color:#f59e0b">'+s.once+' \u2605</span>';
+    html+='<span>'+active+' left</span>';
+    html+='<span style="color:#555;font-weight:bold">'+donePct+'%</span>';
+    html+='</span></div>';
+    html+='<div class="trow-bar">';
+    html+='<div class="tseg-m" style="width:'+mp+'%"></div>';
+    html+='<div class="tseg-o" style="width:'+op+'%"></div>';
+    html+='</div></div>';
+  });
+  document.getElementById('topic-rows').innerHTML=html;
 }
 function confirmReset(){
   document.getElementById('modal-overlay').style.display='flex';
