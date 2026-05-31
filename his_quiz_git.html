@@ -7,6 +7,15 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;background:#f5f6fa;min-height:100vh;color:#1a1a2e}
+
+/* ── DESKTOP CENTERED COLUMN ── */
+.screen{max-width:880px;margin-left:auto;margin-right:auto}
+@media(min-width:920px){
+  body{background:#eef1f6}
+  .screen{background:#f5f6fa;min-height:auto;margin-top:1.5rem;margin-bottom:2rem;border-radius:16px;padding-bottom:1rem;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+  .quiz-topbar{border-radius:16px 16px 0 0}
+}
+
 .screen{display:none;min-height:100vh}.screen.active{display:block}
 
 /* ── HOME HEADER ── */
@@ -107,9 +116,9 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-
 <body>
 <div id="homeScreen" class="screen active">
   <div class="home-header">
-    <span class="version-tag">ver3.00</span>
+    <span class="version-tag">ver4.00</span>
     <h1>History Exam Prep</h1>
-    <div class="home-meta">135 Questions &middot; 6 Topics &middot; 16 per session &middot; v3.00</div>
+    <div class="home-meta">135 Questions &middot; 6 Topics &middot; 16 per session &middot; v4.00</div>
     <div class="topic-pills" id="topicPills"></div>
   </div>
   <div class="progress-card">
