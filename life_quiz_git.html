@@ -138,7 +138,7 @@ body.answered{padding-bottom:70px}
 <div class="wrap" id="homescreen">
   <div class="home-header">
   <h1>&#127807; Grade 7 Life Science</h1>
-  <span class="ver-badge">Rev.1</span>
+  <span class="ver-badge">Rev.3</span>
 </div>
   <div class="topic-bar">
     <span class="tbadge IntroSci">Introducing Science</span>
@@ -178,7 +178,7 @@ body.answered{padding-bottom:70px}
   </div>
   <div class="srs-info">
     <strong>How it works:</strong> Answer a question correctly twice in a row to master and retire it.
-    One wrong answer resets its streak back to zero. Work through all 200 questions to complete the course.
+    One wrong answer resets its streak back to zero. Work through all 204 questions to complete the course.
   </div>
   <div class="card dash-card" style="margin-bottom:14px">
     <div class="dash-title">&#128218; Topic Breakdown</div>
@@ -192,7 +192,7 @@ body.answered{padding-bottom:70px}
   <button class="btn-continue" id="btn-continue" onclick="startRound()">&#9654; Continue Progress</button>
   <button class="btn-reset" onclick="confirmReset()">&#8635; Start All Over</button>
   <div class="all-done" id="all-done" style="display:none">
-    &#127881; You have mastered all 200 questions! Tap <em>Start All Over</em> to begin again.
+    &#127881; You have mastered all 204 questions! Tap <em>Start All Over</em> to begin again.
   </div>
 </div>
 
@@ -234,7 +234,7 @@ body.answered{padding-bottom:70px}
 <div id="modal-overlay" style="display:none" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title">&#9888; Reset all progress?</div>
-    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 200 questions will return to active rotation. This cannot be undone.</p>
+    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 204 questions will return to active rotation. This cannot be undone.</p>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-confirm" onclick="doReset()">Yes, start all over</button>
@@ -715,6 +715,18 @@ q(1,"LivingThings","What is the function of the nucleus in a cell?",
   "The nucleus is the control centre of the cell. What important information does it contain?",
   "The nucleus controls the activities of the cell and contains the genetic information (DNA) that determines the characteristics of the organism and is passed on during reproduction. The nucleus is found in both plant and animal cells. Cells without a nucleus (like red blood cells) cannot reproduce.",
   "KEY: Nucleus = control centre of the cell. Contains DNA (genetic information).");
+
+q(1,"LivingThings","What is the function of the mitochondria in a cell?",
+  ["To carry out photosynthesis and produce glucose","To produce energy for the cell through respiration","To control what enters and exits the cell","To provide rigid structural support","To store water and maintain cell pressure"],1,
+  "Mitochondria are found in both plant and animal cells. They are often called the powerhouses of the cell. What process happens inside them?",
+  "Mitochondria are the sites of cellular respiration — the process that releases energy from glucose. This energy powers all life processes including movement, growth, and chemical reactions. Mitochondria are found in both plant and animal cells. Cells with high energy demands, such as muscle cells, contain more mitochondria.",
+  "KEY: Mitochondria = site of respiration. Releases energy from glucose. Found in BOTH plant and animal cells.");
+
+q(1,"LivingThings","What is the difference between tendons and ligaments?",
+  ["Tendons connect bone to bone; ligaments connect muscle to bone","Tendons connect muscle to bone; ligaments connect bone to bone","Tendons produce red blood cells; ligaments store calcium","Tendons protect joints from impact; ligaments transmit nerve signals","Tendons and ligaments are the same structure with different names"],1,
+  "Both tendons and ligaments are tough connective tissues found near joints. One connects muscle to bone, the other connects bone to bone.",
+  "Tendons are tough cords that connect muscles to bones. When a muscle contracts, the tendon pulls the bone to produce movement. Ligaments connect bone to bone at joints, holding the skeleton together and preventing dislocation. Both are made of tough fibrous connective tissue but serve different purposes.",
+  "KEY: Tendons = muscle to bone. Ligaments = bone to bone. Easy memory: Tendons Transmit muscle force; Ligaments Link bones.");
 
 q(1,"LivingThings","What is the function of the cell wall in plant cells?",
   ["To carry out photosynthesis","To store DNA","To provide strength and support to the plant cell","To control what enters the cell","To produce energy"],2,
@@ -1452,6 +1464,18 @@ q(1,"Classifying","Which of the following is an example of variation caused by t
 
 // ======================================
 // TOPIC 6 EXTRA QUESTIONS (10 more = 40 total)
+
+q(1,"Classifying","What is the correct order of biological classification from the largest group to the smallest?",
+  ["Species, Genus, Family, Order, Class, Phylum, Kingdom","Kingdom, Class, Family, Order, Phylum, Genus, Species","Kingdom, Phylum, Class, Order, Family, Genus, Species","Phylum, Kingdom, Order, Class, Family, Genus, Species","Kingdom, Phylum, Order, Class, Genus, Family, Species"],2,
+  "Use the mnemonic: King Philip Came Over For Good Soup — each first letter matches one level of classification.",
+  "The seven levels of classification from largest to smallest are: Kingdom, Phylum, Class, Order, Family, Genus, Species. Mnemonic: King Philip Came Over For Good Soup. As you move toward Species, the group becomes smaller and more specific. For example, humans belong to Kingdom Animalia, Phylum Chordata, Class Mammalia, and Species Homo sapiens.",
+  "KEY: Kingdom → Phylum → Class → Order → Family → Genus → Species. Mnemonic: King Philip Came Over For Good Soup.");
+
+q(1,"Classifying","What does the scientific name of an organism consist of?",
+  ["A common name and the country where it was discovered","A kingdom name followed by a phylum name","A genus name (capitalised) followed by a species name (lower case)","A family name followed by an order name","A class name followed by a genus name"],2,
+  "The scientific naming system uses two parts. Think of Homo sapiens — Homo is one part, sapiens is the other. How are they written?",
+  "Scientific names use binomial nomenclature — a two-part system with the genus name (written with a capital letter) followed by the species name (written in lower case). Both are written in italics. For example: Homo sapiens (human), Panthera leo (lion), Canis lupus (wolf). This system, developed by Carl Linnaeus, is used universally across all languages.",
+  "KEY: Scientific name = Genus (Capital) + species (lower case). e.g. Homo sapiens. Two parts = binomial nomenclature.");
 // ======================================
 
 q(3,"Classifying","A student finds an organism in a rock pool. It has no backbone, a soft body, and a single coiled shell. What group does it belong to?",
