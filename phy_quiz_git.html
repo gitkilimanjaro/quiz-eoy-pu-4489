@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade 7 Physical Science — Combined Quiz v12</title>
+<title>Grade 7 Physical Science — Combined Quiz v13</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f0f4f8;padding:20px}
@@ -64,6 +64,15 @@ h1{font-size:1.45rem;margin-bottom:3px;color:#1a237e}
   border:1.5px solid #1a237e;border-radius:10px;font-size:.9rem;font-weight:bold;
   cursor:pointer;font-family:Arial,sans-serif;margin-bottom:10px;text-align:center}
 .btn-secondary:hover{background:#e8eaf6}
+.btn-rote{display:block;width:100%;padding:13px;background:#fff;color:#6a1b9a;
+  border:1.5px solid #6a1b9a;border-radius:10px;font-size:.92rem;font-weight:bold;
+  cursor:pointer;font-family:Arial,sans-serif;margin-top:8px}
+.btn-rote:hover{background:#f5f0fa}
+.btn-rote-back{display:block;width:100%;padding:13px;background:#6a1b9a;color:#fff;
+  border:none;border-radius:10px;font-size:.92rem;font-weight:bold;
+  cursor:pointer;font-family:Arial,sans-serif;margin-top:8px}
+.mode-banner{background:#f3e5f5;border:1.5px solid #6a1b9a;border-radius:10px;
+  padding:10px 14px;margin-bottom:10px;color:#6a1b9a;font-size:.85rem;font-weight:bold;text-align:center}
 .btn-danger{display:block;width:100%;padding:12px;background:#fff;color:#c0392b;
   border:1.5px solid #c0392b;border-radius:10px;font-size:.88rem;font-weight:bold;
   cursor:pointer;font-family:Arial,sans-serif;margin-bottom:8px;text-align:center}
@@ -194,7 +203,8 @@ body.answered{padding-bottom:70px}
 <!-- ═══════════════ HOME SCREEN ═══════════════ -->
 <div class="wrap" id="homescreen">
   <h1>&#9883; Grade 7 Physical Science</h1>
-  <p class="sub">257 Questions &middot; 11 Topics &middot; 16 per session &middot; v12</p>
+  <p class="sub">257 Questions &middot; 11 Topics &middot; 16 per session &middot; v13</p>
+  <div class="mode-banner" id="mode-banner" style="display:none">&#129504; MEMORIZATION DRILL &mdash; 32 must-know facts (units, names, orders, pH, rock types). Separate progress from the main quiz.</div>
 
   <div class="topic-bar">
     <span class="tbadge tb-som">States of Matter</span>
@@ -246,6 +256,10 @@ body.answered{padding-bottom:70px}
   <button class="btn-primary" id="btn-continue" onclick="startRound()">&#9654; Continue Progress</button>
   <button class="btn-danger" onclick="confirmReset()">&#8635; Start All Over</button>
 
+  <!-- Mode toggle buttons -->
+  <button class="btn-rote" id="btn-enter-rote" onclick="enterRoteMode()">&#129504; Memorization Drill &nbsp;(32 must-know facts)</button>
+  <button class="btn-rote-back" id="btn-exit-rote" onclick="exitRoteMode()" style="display:none">&#8592; Back to Full Quiz</button>
+
   <!-- Subject mastery card -->
   <div class="card" style="margin-top:4px">
     <div class="subject-section-title">Subject Mastery</div>
@@ -254,7 +268,7 @@ body.answered{padding-bottom:70px}
 
   <!-- All mastered banner -->
   <div class="all-done" id="all-done" style="display:none">
-    &#127881; You have mastered all 241 questions! Tap <em>Start All Over</em> to begin again.
+    &#127881; You have mastered all the questions in this set! Tap <em>Start All Over</em> to begin again.
   </div>
 </div>
 
@@ -313,7 +327,17 @@ body.answered{padding-bottom:70px}
 // ═══════════════════════════════════════════════════════
 //  CONFIG
 // ═══════════════════════════════════════════════════════
-var LS_KEY         = 'physci_combined_v4';
+var LS_KEY_MAIN    = 'physci_combined_v4';
+var LS_KEY_ROTE    = 'physci_rote_v1';
+var LS_KEY         = LS_KEY_MAIN;
+var MODE           = 'main';   // 'main' | 'rote'
+// Rote = arbitrary facts/conventions/names/orders/units that must be memorised
+var ROTE_IDS       = [5,6,7,8,87,88,89,91,92,93,94,95,96,100,101,104,139,142,143,147,149,160,161,165,168,171,180,187,198,202,204,243];
+function curKey(){ return MODE==='rote' ? LS_KEY_ROTE : LS_KEY_MAIN; }
+function curBank(){
+  if(MODE==='rote'){ return BANK.filter(function(q){ return ROTE_IDS.indexOf(q.id)!==-1; }); }
+  return BANK;
+}
 var QS_PER_ROUND   = 16;
 var STREAK_TO_MASTER = 2;
 
@@ -669,14 +693,14 @@ BANK.forEach(function(q, i){ q.id = i; });
 //  LOCALSTORAGE LEDGER
 // ═══════════════════════════════════════════════════════
 function loadLedger(){
-  try{ var r=localStorage.getItem(LS_KEY); return r?JSON.parse(r):{} }
+  try{ var r=localStorage.getItem(curKey()); return r?JSON.parse(r):{} }
   catch(e){ return {} }
 }
 function saveLedger(l){
-  try{ localStorage.setItem(LS_KEY,JSON.stringify(l)) }catch(e){}
+  try{ localStorage.setItem(curKey(),JSON.stringify(l)) }catch(e){}
 }
 function resetLedger(){
-  try{ localStorage.removeItem(LS_KEY) }catch(e){}
+  try{ localStorage.removeItem(curKey()) }catch(e){}
 }
 function getRecord(l, id){
   if(!l[id]) l[id]={ streak:0, status:'active' };
@@ -687,18 +711,18 @@ function getRecord(l, id){
 //  METRICS
 // ═══════════════════════════════════════════════════════
 function calcMetrics(ledger){
-  var mastered=0;
-  BANK.forEach(function(q){
+  var bank=curBank(), mastered=0;
+  bank.forEach(function(q){
     var r=ledger[q.id];
     if(r && r.status==='mastered') mastered++;
   });
-  var total=BANK.length, active=total-mastered;
-  return { total:total, mastered:mastered, active:active, pct:Math.round(mastered/total*100) };
+  var total=bank.length, active=total-mastered;
+  return { total:total, mastered:mastered, active:active, pct:total?Math.round(mastered/total*100):0 };
 }
 
 function calcTopicMetrics(ledger){
   var totals={}, mastered={}, halfway={};
-  BANK.forEach(function(q){
+  curBank().forEach(function(q){
     totals[q.t]=(totals[q.t]||0)+1;
     var r=ledger[q.id];
     if(r && r.status==='mastered') mastered[q.t]=(mastered[q.t]||0)+1;
@@ -708,7 +732,7 @@ function calcTopicMetrics(ledger){
 }
 
 function getActivePool(ledger){
-  return BANK.filter(function(q){
+  return curBank().filter(function(q){
     var r=ledger[q.id];
     return !r || r.status!=='mastered';
   });
@@ -736,6 +760,15 @@ function showHome(){
   document.getElementById('fixednext').style.display='none';
   document.body.className='';
 
+  // Mode-aware UI
+  var roteMode = (MODE==='rote');
+  document.getElementById('mode-banner').style.display = roteMode ? 'block' : 'none';
+  document.getElementById('btn-enter-rote').style.display = roteMode ? 'none' : 'block';
+  document.getElementById('btn-exit-rote').style.display = roteMode ? 'block' : 'none';
+  // Hide the main topic bar + subject mastery card in rote mode (subset only)
+  var tbar = document.querySelector('.topic-bar');
+  if(tbar) tbar.style.display = roteMode ? 'none' : '';
+
   var ledger=loadLedger();
   var m=calcMetrics(ledger);
   var pool=getActivePool(ledger);
@@ -744,6 +777,7 @@ function showHome(){
   document.getElementById('dash-mastered').textContent = m.mastered;
   document.getElementById('dash-bar').style.width      = m.pct+'%';
   document.getElementById('dash-pct').textContent      = m.pct+'% complete';
+  // Mode-aware continue button label handled below
 
   var hasProgress = Object.keys(ledger).length > 0;
   var btn=document.getElementById('btn-continue');
@@ -1033,6 +1067,8 @@ function doReset(){
   resetLedger();
   showHome();
 }
+function enterRoteMode(){ MODE='rote'; window.scrollTo(0,0); showHome(); }
+function exitRoteMode(){ MODE='main'; window.scrollTo(0,0); showHome(); }
 
 // ═══════════════════════════════════════════════════════
 //  HTML ESCAPE
