@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P5 English Practice</title>
+<style>
+  :root{
+    --bg:#fdf6e3;
+    --bg2:#f3ead0;
+    --card:#fffdf7;
+    --ink:#5a4a36;
+    --ink-soft:#9a8a72;
+    --leaf:#7bc47f;
+    --leaf-dk:#5aa860;
+    --sky:#8ed0e8;
+    --sky-dk:#56b4d3;
+    --sun:#ffd166;
+    --peach:#ffb38a;
+    --coral:#ff8a7a;
+    --berry:#e87aa8;
+    --navy:#5aa860;
+    --green:#5aa860;
+    --red:#ef6f6c;
+    --orange:#f4a259;
+    --shadow:0 4px 0 rgba(146,120,80,.18), 0 8px 18px rgba(146,120,80,.15);
+    --shadow-sm:0 3px 0 rgba(146,120,80,.16);
+    --t0:#5aa860; --t1:#56b4d3; --t2:#f4a259; --t3:#b07cc6;
+    --t4:#4caf9d; --t5:#ef6f6c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Chalkboard SE",system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(255,209,102,.18), transparent 38%),
+      radial-gradient(circle at 88% 12%, rgba(142,208,232,.18), transparent 36%),
+      radial-gradient(circle at 50% 100%, rgba(123,196,127,.20), transparent 50%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--ink); line-height:1.5; -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .wrap{max-width:560px; margin:0 auto; padding:18px 16px 70px;}
+  .screen{display:none; animation:pop .35s cubic-bezier(.34,1.56,.64,1);}
+  .screen.active{display:block;}
+  @keyframes pop{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes bobble{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+  .topbar{position:relative; min-height:26px;}
+  .ver{position:absolute; top:6px; right:6px; font-size:11px; font-weight:700; color:#fff;
+    background:var(--peach); padding:3px 10px; border-radius:999px; box-shadow:var(--shadow-sm);}
+
+  h1{font-size:28px; font-weight:800; letter-spacing:-.01em; margin:10px 0 4px; color:var(--ink);
+     text-shadow:0 2px 0 #fff;}
+  .leaf-emoji{display:inline-block; animation:bobble 2.6s ease-in-out infinite; transform-origin:bottom;}
+  .subtitle{font-size:13px; color:var(--ink-soft); margin-bottom:16px; font-weight:600;}
+
+  .pills{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:18px;}
+  .pill{font-size:11px; font-weight:700; padding:5px 11px; border-radius:999px;
+    background:#fff; border:2px solid; box-shadow:var(--shadow-sm); white-space:nowrap;}
+
+  .card{background:var(--card); border:2.5px solid #fff; border-radius:22px; box-shadow:var(--shadow);
+    padding:20px; margin-bottom:18px;}
+  .stats{display:flex; gap:14px; margin-bottom:14px;}
+  .stat{flex:1; text-align:center; background:var(--bg2); border-radius:18px; padding:12px 6px;}
+  .stat .num{font-size:32px; font-weight:800; line-height:1;}
+  .stat .lbl{font-size:11px; color:var(--ink-soft); margin-top:5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;}
+  .bar{height:14px; background:#ece2c8; border-radius:99px; overflow:hidden; margin:8px 0 14px;
+    border:2px solid #fff; box-shadow:inset 0 1px 3px rgba(146,120,80,.15);}
+  .bar>span{display:block; height:100%; width:0; border-radius:99px; transition:width .7s cubic-bezier(.34,1.56,.64,1);
+    background:linear-gradient(90deg,var(--leaf),var(--leaf-dk));}
+  .howto{font-size:13px; color:var(--ink-soft); font-weight:600;}
+  .howto b{color:var(--leaf-dk);}
+
+  .btn{display:block; width:100%; border:none; border-radius:18px; padding:15px;
+    font-size:16px; font-weight:800; cursor:pointer; font-family:inherit;
+    transition:transform .08s, box-shadow .08s, filter .15s;}
+  .btn:active{transform:translateY(3px);}
+  .btn-primary{background:var(--leaf); color:#fff; margin-bottom:12px;
+    box-shadow:0 5px 0 var(--leaf-dk), 0 9px 16px rgba(90,168,96,.3); text-shadow:0 1px 0 rgba(0,0,0,.12);}
+  .btn-primary:active{box-shadow:0 2px 0 var(--leaf-dk);}
+  .btn-ghost{background:#fff; color:var(--coral); border:2.5px solid var(--coral);
+    box-shadow:0 4px 0 rgba(255,138,122,.35);}
+  .btn-ghost:active{box-shadow:0 1px 0 rgba(255,138,122,.35);}
+  .btn-row{margin-bottom:20px;}
+
+  .topics{display:grid; grid-template-columns:1fr; gap:12px;}
+  .topics.two{grid-template-columns:1fr 1fr;}
+  .topic{background:var(--card); border:2.5px solid #fff; border-radius:18px; box-shadow:var(--shadow-sm);
+    padding:14px; transition:transform .12s;}
+  .topic:hover{transform:translateY(-3px);}
+  .topic .tname{font-size:13px; font-weight:800; margin-bottom:8px; line-height:1.25; display:flex; gap:6px; align-items:center;}
+  .topic .ic{font-size:16px;}
+  .topic .meta{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--ink-soft);
+    margin-bottom:8px; flex-wrap:wrap; font-weight:700;}
+  .half{color:var(--orange); font-weight:800;}
+  .tbar{height:10px; background:#ece2c8; border-radius:99px; overflow:hidden; border:1.5px solid #fff;}
+  .tbar>span{display:block; height:100%; width:0; transition:width .7s cubic-bezier(.34,1.56,.64,1);}
+
+  /* QUIZ */
+  .qhead{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:10px;}
+  .qbadge{font-size:12px; font-weight:800; padding:6px 13px; border-radius:999px; background:#fff; border:2.5px solid;
+    box-shadow:var(--shadow-sm); display:flex; gap:5px; align-items:center;}
+  .qcount{font-size:13px; color:var(--ink-soft); font-weight:800; background:var(--bg2); padding:6px 12px; border-radius:999px;}
+  .qcard{background:var(--card); border:2.5px solid #fff; border-radius:24px; box-shadow:var(--shadow); padding:20px;}
+  .qtext{font-size:19px; font-weight:800; text-align:center; margin:6px 0 16px; line-height:1.4; color:var(--ink);}
+  .hintwrap{margin-bottom:14px; text-align:center;}
+  .hintbtn{background:var(--sun); border:none; color:#7a5d12; font-size:13px; font-weight:800;
+    padding:9px 16px; border-radius:14px; cursor:pointer; font-family:inherit; box-shadow:0 3px 0 #e0ab3a;}
+  .hintbtn:active{transform:translateY(2px); box-shadow:0 1px 0 #e0ab3a;}
+  .hintbox{display:none; margin-top:11px; font-size:13px; color:#7a5d12; background:#fff6db;
+    border:2px dashed var(--sun); border-radius:14px; padding:11px 13px; text-align:left; font-weight:600;}
+  .hintbox.show{display:block; animation:pop .3s ease;}
+  .opts{display:flex; flex-direction:column; gap:11px;}
+  .opt{background:#fff; border:2.5px solid #ece2c8; border-radius:16px; padding:14px 15px; font-size:15px;
+    text-align:left; cursor:pointer; font-family:inherit; color:var(--ink); font-weight:700;
+    box-shadow:0 3px 0 #ece2c8; transition:all .12s;}
+  .opt:hover:not(:disabled){border-color:var(--sky-dk); box-shadow:0 3px 0 var(--sky);}
+  .opt:active:not(:disabled){transform:translateY(2px); box-shadow:0 1px 0 var(--sky);}
+  .opt:disabled{cursor:default;}
+  .opt.correct{background:#e7f6e8; border-color:var(--leaf-dk); color:var(--leaf-dk); box-shadow:0 3px 0 var(--leaf);}
+  .opt.wrong{background:#fdeceb; border-color:var(--red); color:var(--red); box-shadow:0 3px 0 #f3a9a6;}
+  .feedback{margin-top:18px;}
+  .explbox{background:#eef7fb; border:2px solid var(--sky); border-radius:16px; padding:13px 15px; font-size:14px; margin-bottom:11px; font-weight:600;}
+  .explbox b{color:var(--sky-dk);}
+  .insightbox{background:#fff6db; border:2px solid var(--sun); border-radius:16px; padding:13px 15px; font-size:14px; font-weight:600;}
+  .insightbox b{color:#d99413;}
+  .next{margin-top:18px;}
+
+  /* RESULTS */
+  .score{font-size:46px; font-weight:800; text-align:center; margin:8px 0 2px; color:var(--leaf-dk);}
+  .scorelbl{text-align:center; color:var(--ink-soft); margin-bottom:16px; font-weight:700;}
+  .badge{text-align:center; background:#e7f6e8; color:var(--leaf-dk); font-weight:800; border:2px solid var(--leaf);
+    border-radius:16px; padding:12px; margin-bottom:16px; font-size:14px;}
+  .cheer{text-align:center; font-size:40px; margin-bottom:6px; animation:floaty 2.4s ease-in-out infinite;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{text-align:left; padding:9px 6px; border-bottom:2px solid #f3ead0;}
+  th{color:var(--ink-soft); font-weight:800;}
+  td.n,th.n{text-align:center;}
+
+  /* MODAL */
+  .overlay{display:none; position:fixed; inset:0; background:rgba(90,74,54,.5); z-index:50;
+    align-items:center; justify-content:center; padding:24px; backdrop-filter:blur(2px);}
+  .overlay.show{display:flex; animation:pop .25s ease;}
+  .modal{background:var(--card); border:3px solid #fff; border-radius:24px; padding:26px; max-width:340px; text-align:center; box-shadow:var(--shadow);}
+  .modal .face{font-size:38px; margin-bottom:8px;}
+  .modal p{margin-bottom:20px; font-size:15px; font-weight:700;}
+  .modal .row{display:flex; gap:10px;}
+  .modal .row .btn{margin:0;}
+  .btn-cancel{background:var(--bg2); color:var(--ink); box-shadow:0 4px 0 #ddd0b0;}
+  .btn-cancel:active{box-shadow:0 1px 0 #ddd0b0;}
+  .btn-confirm{background:var(--coral); color:#fff; box-shadow:0 4px 0 #e0705f;}
+  .btn-confirm:active{box-shadow:0 1px 0 #e0705f;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HOME -->
+  <section id="home" class="screen active">
+    <div class="topbar"><span class="ver" id="verTag">ver2.01</span></div>
+    <h1><span class="leaf-emoji">✏️</span> P5 English Practice</h1>
+    <p class="subtitle">Your cozy little study island — answer questions, master your English! 🐾</p>
+    <div class="pills" id="pills"></div>
+
+    <div class="card">
+      <div class="stats">
+        <div class="stat"><div class="num" id="activeN" style="color:var(--sky-dk)">0</div><div class="lbl">Active Questions</div></div>
+        <div class="stat"><div class="num" id="doneN" style="color:var(--leaf-dk)">0</div><div class="lbl">Completed</div></div>
+      </div>
+      <div class="bar"><span id="homeBar"></span></div>
+      <p class="howto" id="howto"></p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="continueBtn">🌟 Continue Progress</button>
+      <button class="btn btn-ghost" id="resetBtn">🔄 Start All Over</button>
+    </div>
+
+    <div class="topics" id="topicList"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="qhead">
+      <span class="qbadge" id="qBadge"></span>
+      <span class="qcount" id="qCount"></span>
+    </div>
+    <div class="qcard">
+      <div class="qtext" id="qText"></div>
+      <div class="hintwrap">
+        <button class="hintbtn" id="hintBtn">💡 Show hint</button>
+        <div class="hintbox" id="hintBox"></div>
+      </div>
+      <div class="opts" id="opts"></div>
+      <div class="feedback" id="feedback" style="display:none">
+        <div class="explbox" id="explBox"></div>
+        <div class="insightbox" id="insightBox"></div>
+        <button class="btn btn-primary next" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="topbar"></div>
+    <div class="cheer" id="cheer">🎉</div>
+    <h1 style="text-align:center">Round Complete!</h1>
+    <div class="card">
+      <div class="score" id="rScore">0 / 0</div>
+      <div class="scorelbl">correct this round</div>
+      <div class="badge" id="rBadge" style="display:none"></div>
+      <table>
+        <thead><tr><th>Topic</th><th class="n">Correct</th><th class="n">Seen</th></tr></thead>
+        <tbody id="rTable"></tbody>
+      </table>
+    </div>
+    <button class="btn btn-primary" id="continueStudy">🏡 Back to Island</button>
+  </section>
+
+</div>
+
+<!-- RESET MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="face">😺</div>
+    <p>This will erase all your progress. Tom Nook can't undo this! Are you sure?</p>
+    <div class="row">
+      <button class="btn btn-cancel" id="mCancel">Cancel</button>
+      <button class="btn btn-confirm" id="mConfirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const BANK = [
+
+// ══════════════════════════════════════════════
+// GRAMMAR (28 questions)
+// ══════════════════════════════════════════════
+{t:"Grammar",
+q:"Read a variety of books ______ improve your general knowledge.",
+o:["if","when","so as","in order to"],a:3,
+h:"Which phrase expresses the purpose or goal of an action?",
+expl:"'In order to' expresses purpose — why you do something. 'So as' also works but needs 'to' after it; 'if/when' express conditions or time.",
+insight:"Use 'in order to' + base verb to show purpose: 'She studied hard in order to pass.'"},
+
+{t:"Grammar",
+q:"______ a pencil to mark each spot accurately,' said the teacher.",
+o:["Use","Uses","Used","Using"],a:0,
+h:"This is a command or instruction. What verb form is used for commands?",
+expl:"Imperative sentences (commands) use the base form of the verb. The teacher is giving an instruction, so 'Use' is correct.",
+insight:"Commands and instructions use the base verb form (imperative mood): 'Use', 'Sit', 'Write', 'Open'."},
+
+{t:"Grammar",
+q:"Astronomers have powerful telescopes to ______ them ______ more about the solar system.",
+o:["help … learn","helped … learn","help … learning","helping … learn"],a:0,
+h:"After 'to', what verb form follows? And after 'help someone', what comes next?",
+expl:"'Help + object + base verb' is the correct structure. Both 'to' (infinitive) and the verb after 'help' need the base form.",
+insight:"'Help + object + base verb' — never 'helping learn' or 'help learning'. E.g. 'help her understand'."},
+
+{t:"Grammar",
+q:"Henry never wakes up before 8 am on weekends, ______?",
+o:["did he","does he","didn't he","doesn't he"],a:3,
+h:"'Never' makes the sentence negative. Tag questions have the opposite polarity.",
+expl:"'Never' creates a negative meaning, so the tag must be positive. The main verb is present simple ('wakes'), so the tag is 'doesn't he?'",
+insight:"Tag rules: negative statement → positive tag. 'Never/seldom/hardly' make sentences negative even without 'not'."},
+
+{t:"Grammar",
+q:"My grandfather took my sister and ______ for a swim last week.",
+o:["I","me","my","myself"],a:1,
+h:"Is this pronoun the subject or the object of 'took'?",
+expl:"Remove 'my sister and' — would you say 'took I' or 'took me'? Verbs take object pronouns: me, him, her, us, them.",
+insight:"After a verb, use object pronouns (me/him/her/us/them), NOT subject pronouns (I/he/she/we/they)."},
+
+{t:"Grammar",
+q:"The surface of the leaves remains dry as they are ______ with wax.",
+o:["cover","covers","covered","covering"],a:2,
+h:"The leaves don't do the action — they receive it. What verb form shows this?",
+expl:"Passive voice: 'are covered with wax.' The leaves receive the action (someone covers them with wax). Passive = be + past participle.",
+insight:"Passive voice = 'to be + past participle'. Use it when the subject receives the action."},
+
+{t:"Grammar",
+q:"We ______ have attended the party if we had known you were there too.",
+o:["will","must","would","should"],a:2,
+h:"This imagines a different past — what never actually happened.",
+expl:"Third conditional (unreal past): 'If + past perfect, would have + past participle.' We didn't actually attend because we didn't know.",
+insight:"Third conditional: If + had + past participle, would/could have + past participle. Describes unreal past situations."},
+
+{t:"Grammar",
+q:"Everyone watched him ______ his 12th bowl of noodles in amazement.",
+o:["eat","ate","eats","eaten"],a:0,
+h:"After verbs like 'watch', 'see', 'hear' + object, what verb form follows?",
+expl:"Perception verbs (watch, see, hear, feel) + object are followed by the base verb: 'watched him eat'.",
+insight:"Perception verbs + object + base verb: 'saw her cry', 'heard them sing', 'watched him eat'."},
+
+{t:"Grammar",
+q:"I met many relatives, ______ names I could not even remember, at the dinner.",
+o:["who","when","which","whose"],a:3,
+h:"The blank shows that the names belong to the relatives.",
+expl:"'Whose' is the possessive relative pronoun — 'relatives whose names'. 'Who' is subject, 'whom' is object, 'which' is for things.",
+insight:"Use 'whose' in relative clauses to show possession: 'the boy whose bag was stolen'."},
+
+{t:"Grammar",
+q:"The collector bought all the pictures that ______ by the artist.",
+o:["draw","drew","was drawn","were drawn"],a:3,
+h:"The pictures received the drawing. 'Pictures' is plural — how does the passive change?",
+expl:"Passive voice with plural subject 'pictures' → 'were drawn'. 'Was drawn' is singular. 'Draw/drew' are active forms that don't fit.",
+insight:"Passive voice must match the subject in number: singular = 'was + past participle', plural = 'were + past participle'."},
+
+{t:"Grammar",
+q:"Several students ______ for their group presentations since snack time.",
+o:["had practiced","was practicing","were practiced","have been practicing"],a:3,
+h:"'Since snack time' signals an ongoing action from the past until now.",
+expl:"Present perfect continuous (have/has been + -ing) is used with 'since/for' to show an action that started in the past and continues now.",
+insight:"Present perfect continuous with 'since': have/has been + -ing. 'They have been practicing since morning.'"},
+
+{t:"Grammar",
+q:"George did not know how to operate the telescope as he ______ its manual.",
+o:["misplace","misplaced","had misplaced","was misplacing"],a:2,
+h:"Two past events — which happened first, losing the manual or not knowing how to operate?",
+expl:"Past perfect ('had misplaced') shows the earlier of two past events. He lost the manual first, then found he couldn't operate the telescope.",
+insight:"Past perfect (had + past participle) shows the action that happened first among two past events."},
+
+{t:"Grammar",
+q:"______ difficult the situation may be, remember that your parents will be there for you.",
+o:["However","Whoever","Wherever","Whenever"],a:0,
+h:"The sentence means 'no matter how difficult'. Which word fits this meaning?",
+expl:"'However' + adjective means 'no matter how'. 'Whoever' = no matter who, 'wherever' = no matter where, 'whenever' = no matter when.",
+insight:"'However + adjective/adverb' = 'no matter how': 'However cold it is, we will go.'"},
+
+{t:"Grammar",
+q:"Either Victor or Pete ______ a suspect over last week's writing on the school wall.",
+o:["is","are","was","were"],a:0,
+h:"With 'either…or', the verb agrees with the nearest subject noun. Which noun is closest?",
+expl:"'Either…or': verb agrees with the nearest subject. 'Pete' (singular) is closest to the verb, and the context is present tense, so 'is'.",
+insight:"Either/or + neither/nor: verb agrees with the subject CLOSEST to it."},
+
+{t:"Grammar",
+q:"Leo was nervous ______ his speech.",
+o:["on","onto","during","across"],a:2,
+h:"He was nervous at some point within the speech event. Which preposition shows 'within a time period'?",
+expl:"'During' is used for something happening within a time period or event: 'nervous during his speech'. 'On' and 'onto' imply surface or contact.",
+insight:"'During + noun (event/period)': 'during the game', 'during the holiday', 'during class'."},
+
+{t:"Grammar",
+q:"There is ______ honey in the pot.",
+o:["any","many","a few","a lot of"],a:3,
+h:"Honey is uncountable. Which quantifier works with uncountable nouns in positive sentences?",
+expl:"'A lot of' works with both countable and uncountable nouns in positive sentences. 'Many' and 'a few' are only for countable nouns.",
+insight:"Uncountable nouns (water, honey, advice, information): use 'much/a lot of/some' — NOT 'many' or 'a few'."},
+
+{t:"Grammar",
+q:"My nephew was crying and needed ______ diaper changed.",
+o:["my","his","her","their"],a:1,
+h:"The pronoun must match the gender and refer back to the nephew.",
+expl:"'Nephew' is male → 'his'. 'My' would incorrectly refer to the speaker's diaper. Pronouns must agree with their antecedent.",
+insight:"Pronouns must agree in gender and number with the noun they refer back to (the antecedent)."},
+
+{t:"Grammar",
+q:"Leo managed to ______ the project within an hour.",
+o:["finish","finishes","finished","finishing"],a:0,
+h:"What always comes after 'to' in an infinitive phrase?",
+expl:"After 'to' (infinitive), always use the base verb form. 'Managed to finish' is the correct structure.",
+insight:"After 'to' (infinitive marker), always use the BASE verb: 'want to go', 'managed to finish', 'tried to call'."},
+
+{t:"Grammar",
+q:"______ they were having dinner, Thomas walked in.",
+o:["Who","When","Which","Whose"],a:1,
+h:"The blank introduces a time clause — it tells us when Thomas walked in.",
+expl:"'When' introduces a time clause showing two events at the same time or in quick sequence. 'Who/Whose' refer to people; 'Which' to things.",
+insight:"Use 'when' to introduce a time clause: 'When I arrived, she was sleeping.'"},
+
+{t:"Grammar",
+q:"She ______ her homework by the time her mother came home.",
+o:["finishes","finished","had finished","was finishing"],a:2,
+h:"Two past events — which one happened first and was already complete?",
+expl:"Past perfect 'had finished' shows the homework was completed BEFORE the mother arrived (the second past event).",
+insight:"Past perfect (had + past participle) = action completed BEFORE another past moment."},
+
+{t:"Grammar",
+q:"Neither the students nor the teacher ______ aware of the fire drill schedule.",
+o:["are","is","were","have been"],a:1,
+h:"'Neither…nor': the verb agrees with the noun CLOSEST to it. Which noun is closest to the blank?",
+expl:"'Neither…nor' rule: the verb agrees with the subject nearest to it. 'The teacher' is singular and closest to the verb, so 'is' is correct. The sentence describes a present state of unawareness.",
+insight:"Either/or + Neither/nor: verb always agrees with the subject CLOSEST to it. E.g. 'Neither Tom nor his friends ARE coming' (friends is plural and closest)."},
+
+{t:"Grammar",
+q:"The cake that ______ in the oven smells wonderful.",
+o:["bakes","baked","is baking","has baked"],a:2,
+h:"The cake is in the oven right now — it's an ongoing present action.",
+expl:"'Is baking' = present continuous, showing an action happening right now. The cake is currently in the oven.",
+insight:"Present continuous (is/are + -ing) describes actions happening at the current moment."},
+
+{t:"Grammar",
+q:"You ______ have told me earlier — I would have helped you!",
+o:["can","could","should","would"],a:2,
+h:"The speaker thinks it was a mistake not to tell them. Which modal expresses that?",
+expl:"'Should have + past participle' expresses regret or criticism about a past action that didn't happen. 'You should have told me' = it was wrong not to.",
+insight:"'Should have + past participle' = criticism or regret about a past action: 'You should have studied more.'"},
+
+{t:"Grammar",
+q:"The teacher asked the students ______ their phones away.",
+o:["put","puts","to put","putting"],a:2,
+h:"After 'asked someone', what structure follows?",
+expl:"'Ask someone to do something' uses the to-infinitive. 'Asked the students to put' is correct. Never 'asked them put'.",
+insight:"Reporting requests: ask/tell/order/remind + object + to + base verb."},
+
+{t:"Grammar",
+q:"By next year, she ______ at this school for ten years.",
+o:["will study","is studying","will have studied","has studied"],a:2,
+h:"The time reference is 'by next year' — a future point by which something will be complete.",
+expl:"Future perfect 'will have studied' shows an action that will be completed by a specific future point.",
+insight:"Future perfect (will have + past participle) = completed before a future point: 'By June, I will have finished.'"},
+
+{t:"Grammar",
+q:"I wish I ______ harder for the exam last week.",
+o:["study","studied","had studied","have studied"],a:2,
+h:"'Wish' about a past event uses which tense?",
+expl:"'Wish + past perfect' expresses regret about a past event. 'I wish I had studied' = I didn't study but I regret it.",
+insight:"Wish + past perfect (had + past participle) = regret about a past situation."},
+
+{t:"Grammar",
+q:"The instructions were so complicated that nobody ______ understand them.",
+o:["can","could","would","should"],a:1,
+h:"'So complicated that nobody...' — which modal fits a past ability?",
+expl:"'Could' is the past form of 'can' (ability). The instructions were past-tense complicated, so 'could' is correct.",
+insight:"'Could' = past ability. 'Can' = present ability. 'Would' = willingness/habit. 'Should' = obligation."},
+
+{t:"Grammar",
+q:"They have lived in Bangkok ______ 2015.",
+o:["for","since","during","until"],a:1,
+h:"A specific year is given as the starting point. Which word shows 'starting from a point in time'?",
+expl:"'Since' + a specific point in time (2015). 'For' + a duration (five years). 'During' introduces a period, not a start point.",
+insight:"Since + specific point in time (since 2015, since Monday). For + duration (for five years, for a week)."},
+
+// ══════════════════════════════════════════════
+// VOCABULARY (22 questions)
+// ══════════════════════════════════════════════
+{t:"Vocabulary",
+q:"After the dispute in class, the teacher tried to ______ the students.",
+o:["restore","resolve","reconcile","reconnect"],a:2,
+h:"Think about making peace between two people who have argued.",
+expl:"'Reconcile' means to restore friendly relations between people who have disagreed. 'Resolve' = solve a problem; 'restore' = return to a previous state; 'reconnect' = link again.",
+insight:"'Reconcile' = bring two conflicting parties back to a peaceful relationship."},
+
+{t:"Vocabulary",
+q:"I had to read the ______ to find out how the phone works.",
+o:["menu","recipe","manual","compass"],a:2,
+h:"This document gives step-by-step instructions for using a device.",
+expl:"A 'manual' is an instruction booklet for a device. A 'menu' lists options/food; a 'recipe' gives cooking instructions; a 'compass' is a navigation tool.",
+insight:"'Manual' = instruction guide for a product or machine."},
+
+{t:"Vocabulary",
+q:"My friend invited me to his house to ______ the Mathematics assignment.",
+o:["talk off","talk out","talk down","talk about"],a:3,
+h:"Which phrasal verb simply means 'to discuss'?",
+expl:"'Talk about' = to discuss a topic. 'Talk out' = resolve by discussion; 'talk down' = to speak condescendingly; 'talk off' = not standard.",
+insight:"'Talk about something' = discuss it. Don't confuse with 'talk out' (resolve by talking through)."},
+
+{t:"Vocabulary",
+q:"The boy let out an ______ wail when his mother left him with the teacher.",
+o:["amusing","adorable","admirable","anguished"],a:3,
+h:"He was crying pitifully — the wail shows extreme pain or distress.",
+expl:"'Anguished' means showing severe mental or physical distress. 'Amusing' = funny; 'adorable' = cute; 'admirable' = worthy of admiration.",
+insight:"'Anguished' = in or showing great pain or distress. Used for someone suffering deeply."},
+
+{t:"Vocabulary",
+q:"The courageous boy stood in front of his sister to protect her. Which adverb best replaces 'courageous'?",
+o:["finally","bravely","hesitantly","awkwardly"],a:1,
+h:"'Courageous' means brave — which adverb matches this quality?",
+expl:"'Bravely' is the adverb form of 'brave'. 'Hesitantly' = uncertainly; 'awkwardly' = clumsily; 'finally' = at last.",
+insight:"Match adverbs to adjectives: courageous → bravely, careful → carefully, graceful → gracefully."},
+
+{t:"Vocabulary",
+q:"She is alert to every sound and movement. The underlined word means ______.",
+o:["watchful","energetic","intelligent","observant"],a:0,
+h:"'Alert' means ready and paying close attention, especially to danger.",
+expl:"'Watchful' is the closest synonym — both mean paying close attention and being ready to react. 'Observant' also means noticing things but lacks the sense of readiness.",
+insight:"'Alert' = watchful and ready to respond quickly. Closest synonym: watchful."},
+
+{t:"Vocabulary",
+q:"His dad asked him to aim at the black circle. The underlined word means ______.",
+o:["cut","draw","colour","target"],a:3,
+h:"'Aim at' means to direct something toward a specific point.",
+expl:"'Aim' as a verb means to point or direct toward a target — 'target' as a verb has the same meaning.",
+insight:"'Aim at' = 'target' — to direct toward a specific point. 'Target' can be used as both a noun and a verb."},
+
+{t:"Vocabulary",
+q:"The company will compensate the workers if they get hurt. The underlined word means ______.",
+o:["make it","make after","make it up to","make away with"],a:2,
+h:"'Compensate' means to give something to offset a loss or injury.",
+expl:"'Make it up to someone' = to compensate, to give something to make amends. 'Make away with' means to steal.",
+insight:"'Compensate' = 'make it up to' — to give payment or something of value for a loss or harm."},
+
+{t:"Vocabulary",
+q:"There is a massive statue in the park. The underlined word means ______.",
+o:["little","huge","petite","strong"],a:1,
+h:"'Massive' refers to very great size.",
+expl:"'Massive' = very large. 'Huge' is the correct synonym. 'Little' and 'petite' are opposites. 'Strong' describes power, not size.",
+insight:"'Massive' = extremely large. Synonyms: huge, enormous, gigantic, colossal."},
+
+{t:"Vocabulary",
+q:"While you are in town, please pick up my suit from the dry cleaner. The underlined phrase means ______.",
+o:["drop","throw","collect","remove"],a:2,
+h:"'Pick up' from a shop means to go there and get something that's ready for you.",
+expl:"'Pick up' = to collect something from a place. 'Collect' is the correct synonym here.",
+insight:"'Pick up' (from a place) = collect. E.g. 'Pick up the parcel from the post office.'"},
+
+{t:"Vocabulary",
+q:"Gary visited a ______ to get proper treatment for his acne.",
+o:["dentist","dietitian","surgeon","dermatologist"],a:3,
+h:"Acne is a skin condition — which specialist treats skin?",
+expl:"A dermatologist specialises in skin conditions including acne. Dentist = teeth; dietitian = diet and nutrition; surgeon = operations.",
+insight:"Dermatologist = skin specialist. 'Derma' is Greek for skin."},
+
+{t:"Vocabulary",
+q:"Bacteria feed on sweat and ______ it ______, releasing chemicals that cause a smell.",
+o:["break … in","break … on","break … up","break … down"],a:3,
+h:"Which phrasal verb means to decompose or process into smaller parts?",
+expl:"'Break down' = to decompose or process something into simpler components. Common in science contexts.",
+insight:"'Break down' = decompose or process into smaller parts. 'Break up' = separate into pieces or end a relationship."},
+
+{t:"Vocabulary",
+q:"All the crew in the submarine ______ in the disaster. None of them escaped.",
+o:["loomed","rescued","perished","emerged"],a:2,
+h:"None escaped — so what happened to all of them?",
+expl:"'Perished' = died. 'None escaped' confirms this. 'Loomed' = appeared threateningly; 'rescued' = saved; 'emerged' = came out.",
+insight:"'Perish' = to die, especially suddenly or in a disaster. It is a formal, literary word."},
+
+{t:"Vocabulary",
+q:"I will send an ______ mail to the organiser to get details on the art competition.",
+o:["electric","electricity","electronic","electrifying"],a:2,
+h:"Which adjective relates to digital/computer systems rather than physical electricity?",
+expl:"'Electronic mail' is the full form of 'email'. 'Electric' = powered by electricity; 'electricity' is a noun; 'electrifying' = thrilling.",
+insight:"'Electronic' = relating to digital/computing systems. 'Electric' = powered by electricity. These are often confused."},
+
+{t:"Vocabulary",
+q:"Niko could not complete his assignment ______. His teacher did not accept his reason for turning in his work late.",
+o:["on time","by the time","behind time","all in good time"],a:0,
+h:"He was late — which phrase means punctually or by the deadline?",
+expl:"'On time' = punctually, by the deadline. 'Behind time' = late but less common. 'By the time' is a conjunction. 'All in good time' = eventually.",
+insight:"'On time' = punctually. Don't confuse with 'in time' (with enough time to spare before a deadline)."},
+
+{t:"Vocabulary",
+q:"The craftsman skillfully embellished the blue silk with golden prints. The underlined word means ______.",
+o:["designed","destroyed","decorated","decreased"],a:2,
+h:"'Embellish' means to add decorative details to something.",
+expl:"'Embellish' = to make more attractive by adding decorative details. 'Decorated' is the closest synonym. 'Designed' = to plan/create; 'destroyed' = to ruin.",
+insight:"'Embellish' = to decorate or adorn. It can also mean to exaggerate a story."},
+
+{t:"Vocabulary",
+q:"Not only is the Sun extremely hot but it also ______ light and heat that make life on Earth possible.",
+o:["emits","omits","admits","permits"],a:0,
+h:"Which verb means to send out or give off energy like light or heat?",
+expl:"'Emit' = to send out energy such as light, heat or sound. 'Omit' = to leave out; 'admit' = to confess or allow in; 'permit' = to allow.",
+insight:"'Emit' = to give off or send out (light, heat, radiation). Frequently used in science."},
+
+{t:"Vocabulary",
+q:"King Power Mahanakhon, a ______ in Bangkok, is a skyscraper that stands at 320 metres.",
+o:["idol","figure","statue","landmark"],a:3,
+h:"A famous building that defines or identifies a city — what is this called?",
+expl:"A 'landmark' is a famous building or feature that identifies a place. 'Idol' = a revered person/object; 'figure' = a shape or person; 'statue' = a sculpted object.",
+insight:"'Landmark' = a famous or easily recognised building, place, or feature that identifies a location."},
+
+{t:"Vocabulary",
+q:"Stars come in a variety of sizes and colours, ______ into different groups.",
+o:["banded","clustered","categorised","combined"],a:2,
+h:"Being sorted or classified into groups — which word fits?",
+expl:"'Categorised' = sorted or classified into categories. 'Clustered' = physically grouped together; 'banded' = striped; 'combined' = joined.",
+insight:"'Categorise' = to sort or classify into groups or types."},
+
+{t:"Vocabulary",
+q:"A dog had died in the house the previous week and the stink was unbearable. The underlined word means ______.",
+o:["whiff","scent","breath","stench"],a:3,
+h:"'Stink' is a very strong, unpleasant smell. Which synonym matches that intensity?",
+expl:"'Stench' = an extremely unpleasant, strong smell — closest to 'stink'. A 'whiff' is a brief, mild smell. 'Scent' = a pleasant smell.",
+insight:"Smell intensity: scent/aroma (pleasant) → whiff (brief/mild) → odour (neutral/negative) → stench/stink (very strong and unpleasant)."},
+
+{t:"Vocabulary",
+q:"The cyberbully said the punishment ______ be even worse than what's coming.",
+o:["will","would","should","could"],a:1,
+h:"This is reported speech about something said in the past. Which modal is the past form of 'will'?",
+expl:"In reported speech, 'will' shifts to 'would'. The cyberbully originally said 'will', so in the reported/past context it becomes 'would'.",
+insight:"In reported speech, 'will' → 'would', 'can' → 'could', 'may' → 'might'."},
+
+{t:"Vocabulary",
+q:"After the drought, the trees ______ away and thousands of animals died.",
+o:["blossomed","flourished","withered","scattered"],a:2,
+h:"A drought means no water — what happens to plants without water?",
+expl:"'Withered' means to dry up and shrink, especially due to lack of water. 'Blossomed/flourished' = grew well (opposite); 'scattered' = spread around.",
+insight:"'Wither' = to shrink and dry up due to heat or lack of water. Often used for plants or skin."},
+
+// ══════════════════════════════════════════════
+// SYNTHESIS & TRANSFORMATION (20 questions)
+// ══════════════════════════════════════════════
+{t:"Synthesis & Transformation",
+q:"Michael likes action movies. He likes comedies more. → Michael ______ comedies ______ action movies.",
+o:["prefers … to — comedies are his stronger preference over action","enjoys … over — comedies are his stronger preference over action","favours … than — comedies are his stronger preference over action","chooses … instead — comedies are his stronger preference over action"],a:0,
+h:"The key structure is 'prefer A __ B'. Which preposition follows?",
+expl:"'Prefer A to B' is the fixed structure — NEVER 'prefer A than B'. 'Prefers comedies to action movies' is correct.",
+insight:"Prefer structure: ALWAYS 'prefer A to B' — NEVER 'prefer A than B'."},
+
+{t:"Synthesis & Transformation",
+q:"The children unwrapped their presents quickly. → The presents ______",
+o:["were unwrapped quickly by the children — passive, plural subject, completed past","was unwrapped quickly by the children — passive, plural subject, completed past","had unwrapped quickly by the children — passive, plural subject, completed past","are unwrapped quickly by the children — passive, plural subject, completed past"],a:0,
+h:"Change to passive. 'Presents' is plural, action is past. What form of 'be' + past participle?",
+expl:"Passive: 'The presents were unwrapped quickly by the children.' Plural past = 'were + past participle'.",
+insight:"Active → Passive: Object becomes subject + was/were + past participle + by + agent."},
+
+{t:"Synthesis & Transformation",
+q:"I would like to watch that movie soon. It is in theatres for a limited time only. → Combine using 'because'.",
+o:["I would like to watch that movie soon because it is in theatres for a limited time — reason stated","I would like to watch that movie soon although it is in theatres for a limited time — reason stated","I would like to watch that movie soon whenever it is in theatres for a limited time — reason stated","I would like to watch that movie soon unless it is in theatres for a limited time — reason stated"],a:0,
+h:"The second sentence explains WHY. Which connector shows reason or cause?",
+expl:"'Because' introduces the reason. 'Although' shows contrast; 'whenever' shows time; 'unless' shows negative condition.",
+insight:"'Because' = introduces the reason/cause. Always followed by subject + verb clause."},
+
+{t:"Synthesis & Transformation",
+q:"It was a cold day. Michelle did not wear a jacket. → Although ______",
+o:["it was a cold day, Michelle did not wear a jacket — contrasting condition before surprising result","Michelle did not wear a jacket, the day was extremely cold and uncomfortable — contrasting condition","it was cold outside, Michelle made the wise choice not to wear her jacket — contrasting condition","Michelle forgot her jacket on an unexpectedly cold day she had not prepared for — contrasting condition"],a:0,
+h:"'Although' introduces the surprising or contrasting fact. Which clause is that here?",
+expl:"'Although + unexpected/contrasting condition, main clause.' The cold day is unexpected given she wore no jacket.",
+insight:"Although/even though + contrasting clause, main clause. The 'although' clause contains the surprising part."},
+
+{t:"Synthesis & Transformation",
+q:"'I went to the zoo yesterday,' said Mr John. → Mr John said that ______",
+o:["he had gone to the zoo the day before — all three reported speech shifts applied correctly","he went to the zoo yesterday — all three reported speech shifts applied correctly","he has gone to the zoo the previous day — all three reported speech shifts applied correctly","I had gone to the zoo yesterday — all three reported speech shifts applied correctly"],a:0,
+h:"Three things shift in reported speech: the tense, the pronoun, and the time word.",
+expl:"'Went' → 'had gone'; 'I' → 'he'; 'yesterday' → 'the day before'. All three changes must be made.",
+insight:"Reported speech shifts: I → he/she; went → had gone; yesterday → the day before; will → would."},
+
+{t:"Synthesis & Transformation",
+q:"I was able to do well in my test. I had revised carefully for it. → Combine using 'because'.",
+o:["I was able to do well in my test because I had revised carefully for it — cause linked to result","I was able to do well in my test although I had revised carefully for it — cause linked to result","I was able to do well in my test therefore I had revised carefully for it — cause linked to result","I was able to do well in my test however I had revised carefully for it — cause linked to result"],a:0,
+h:"The revision is the reason for doing well. Which connector links cause to effect?",
+expl:"'Because' joins a result with its reason: 'I did well because I revised.' 'Although/however' show contrast; 'therefore' introduces result, not cause.",
+insight:"'Because' → reason/cause. 'Therefore' → result/effect. Don't confuse the two."},
+
+{t:"Synthesis & Transformation",
+q:"Joe lost the library book. Joe had to pay a fine. → ______ Joe lost the library book, he had to pay a fine.",
+o:["Since — losing the book caused or led directly to the fine being imposed","Although — losing the book caused or led directly to the fine being imposed","Unless — losing the book caused or led directly to the fine being imposed","Before — losing the book caused or led directly to the fine being imposed"],a:0,
+h:"'Since' can mean 'because' — losing the book is the reason he had to pay.",
+expl:"'Since' here means 'because'. It introduces the cause. 'Since Joe lost the book, he had to pay a fine.'",
+insight:"'Since' can mean 'because' when it introduces a reason: 'Since she was late, she missed the bus.'"},
+
+{t:"Synthesis & Transformation",
+q:"You cannot open the door. You do not have the passcode. → ______ you had the passcode, you could open the door.",
+o:["If — introduces the unreal condition that would make opening the door possible","Since — introduces the unreal condition that would make opening the door possible","When — introduces the unreal condition that would make opening the door possible","Unless — introduces the unreal condition that would make opening the door possible"],a:0,
+h:"This imagines a different reality using a conditional. Which word starts it?",
+expl:"Second conditional (unreal present): 'If + past simple, would/could + base verb.' → 'If you had the passcode, you could open the door.'",
+insight:"Second conditional (unreal present): If + past simple, would/could + base verb."},
+
+{t:"Synthesis & Transformation",
+q:"Jitter moulded the clay model. Jitter painted the clay model too. → The clay model ______",
+o:["was both moulded and painted by Jitter — passive voice combining two actions with both…and","was moulded but also painted well by Jitter — passive voice combining two actions with both…and","had been moulded and also been painted by Jitter — passive voice combining two actions with both…and","is moulded and also painted nicely by Jitter — passive voice combining two actions with both…and"],a:0,
+h:"Combine into one passive sentence using 'both…and'.",
+expl:"'The clay model was both moulded and painted by Jitter.' Passive past + 'both…and' to link the two actions.",
+insight:"Combining actions in passive: 'was both [verb 1] and [verb 2] by [agent]'."},
+
+{t:"Synthesis & Transformation",
+q:"'I received this award last year,' explained the actor. → The actor explained that ______",
+o:["he had received that award the previous year — pronoun, tense, and time word all correctly shifted","he received this award last year — pronoun, tense, and time word all correctly shifted","I had received that award the year before — pronoun, tense, and time word all correctly shifted","he has received this award the previous year — pronoun, tense, and time word all correctly shifted"],a:0,
+h:"Three shifts needed: pronoun, tense, and time reference.",
+expl:"'I' → 'he'; 'received' → 'had received'; 'this' → 'that'; 'last year' → 'the previous year'. All four shifts applied.",
+insight:"Reported speech: past simple → past perfect; this → that; last year → the previous year; I → he/she."},
+
+{t:"Synthesis & Transformation",
+q:"Sam is very short. Sam cannot reach the top shelf. → Sam is too ______",
+o:["short to reach the top shelf — using 'too…to' to show the problem prevents the action","short for reaching the top shelf — using 'too…to' to show the problem prevents the action","short that he cannot reach the top shelf — using 'too…to' to show the problem prevents the action","short so he does not reach the top shelf — using 'too…to' to show the problem prevents the action"],a:0,
+h:"'Too…to' means the adjective is excessive enough to prevent something.",
+expl:"'Too + adjective + to + base verb': 'Sam is too short to reach the top shelf.' The excessive quality makes the action impossible.",
+insight:"'Too + adjective + to + verb' = the quality is excessive enough to prevent the action."},
+
+{t:"Synthesis & Transformation",
+q:"The soup was very hot. We could not drink it immediately. → The soup was so ______",
+o:["hot that we could not drink it immediately — 'so…that' links degree to the consequence","hot we could not drink it immediately — 'so…that' links degree to the consequence","hot for us to drink it immediately — 'so…that' links degree to the consequence","hot as we could not drink it immediately — 'so…that' links degree to the consequence"],a:0,
+h:"'So…that' links an extreme degree to its consequence. Don't omit 'that'.",
+expl:"'So + adjective + that + clause': 'The soup was so hot that we could not drink it.' The 'that' must not be omitted in formal writing.",
+insight:"'So + adjective/adverb + that + clause' = shows the extreme degree causes a consequence."},
+
+{t:"Synthesis & Transformation",
+q:"Tom did not study. Tom failed his test. → Tom failed his test ______ he did not study.",
+o:["because — the lack of studying directly caused the test failure","although — the lack of studying directly caused the test failure","despite — the lack of studying directly caused the test failure","however — the lack of studying directly caused the test failure"],a:0,
+h:"The failure happened as a direct result of not studying. Which connector shows cause?",
+expl:"'Because' introduces the cause. Tom failed because he didn't study — the not studying caused the failure.",
+insight:"'Because' = the reason/cause. 'Although' = contrast. 'Despite' = contrast with a noun/gerund."},
+
+{t:"Synthesis & Transformation",
+q:"She was tired. She still finished all her homework. → Despite ______",
+o:["being tired, she still finished all her homework — despite + gerund shows contrast","her tiredness, she was not able to finish her homework — despite + gerund shows contrast","being tired, yet she still finished all her homework — despite + gerund shows contrast","the fact she finished her homework, she was very tired — despite + gerund shows contrast"],a:0,
+h:"'Despite' is followed by a noun or gerund (-ing form), not 'that + clause'.",
+expl:"'Despite + gerund/noun, main clause.' → 'Despite being tired, she still finished all her homework.' Never 'despite that she was tired'.",
+insight:"Despite/In spite of + noun/gerund: 'Despite the rain, we went out.' 'In spite of being tired, she worked.'"},
+
+{t:"Synthesis & Transformation",
+q:"'We will leave early tomorrow,' said Mum. → Mum said that ______",
+o:["they would leave early the next day — pronoun, modal, and time word all correctly shifted in reported speech","they will leave early tomorrow — pronoun, modal, and time word all correctly shifted in reported speech","we would leave early the next day — pronoun, modal, and time word all correctly shifted in reported speech","they would leave early tomorrow — pronoun, modal, and time word all correctly shifted in reported speech"],a:0,
+h:"Three shifts: 'we' → 'they', 'will' → 'would', 'tomorrow' → 'the next day'.",
+expl:"Reported speech: 'we' → 'they'; 'will' → 'would'; 'tomorrow' → 'the next day'. All three shifts are needed.",
+insight:"Reported speech time shifts: tomorrow → the next day; yesterday → the day before; now → then."},
+
+{t:"Synthesis & Transformation",
+q:"'Can you help me with this?' she asked me. → She asked me ______",
+o:["if I could help her with that — reported question with tense shift and pronoun change","if I can help her with that — reported question with tense shift and pronoun change","whether I could help me with this — reported question with tense shift and pronoun change","that I could help her with that — reported question with tense shift and pronoun change"],a:0,
+h:"Yes/no questions in reported speech use 'if' or 'whether'. Tense and pronouns shift.",
+expl:"Reported yes/no question: 'can' → 'could'; 'you' → 'I'; 'me' → 'her'; 'this' → 'that'. Use 'if/whether', not 'that'.",
+insight:"Reported yes/no questions: use 'if/whether' + subject + verb (no inversion). Tenses shift back."},
+
+{t:"Synthesis & Transformation",
+q:"The puppy is very cute. Everyone loves it. → The puppy is ______",
+o:["so cute that everyone loves it — 'so…that' links the degree to the universal love for the puppy","such cute that everyone loves it — 'so…that' links the degree to the universal love for the puppy","too cute so that everyone loves it — 'so…that' links the degree to the universal love for the puppy","very cute so everyone loves it — 'so…that' links the degree to the universal love for the puppy"],a:0,
+h:"'So + adjective + that' links the degree to its result.",
+expl:"'So cute that everyone loves it.' 'Such' goes before a noun phrase ('such a cute puppy'), not a bare adjective.",
+insight:"'So' + adjective + that. 'Such' + (a/an) + adjective + noun + that. E.g. 'such a cute puppy that everyone loves it'."},
+
+{t:"Synthesis & Transformation",
+q:"The match was cancelled. It rained heavily. → The match was cancelled ______ it rained heavily.",
+o:["because — heavy rain is the reason the match was cancelled and not held","although — heavy rain is the reason the match was cancelled and not held","whenever — heavy rain is the reason the match was cancelled and not held","despite — heavy rain is the reason the match was cancelled and not held"],a:0,
+h:"Rain caused the cancellation — which connector introduces a reason?",
+expl:"'Because' introduces the cause (heavy rain → cancellation). 'Although' shows contrast; 'despite' needs a noun/gerund; 'whenever' shows time.",
+insight:"'Because' + clause (subject + verb) introduces the cause or reason."},
+
+{t:"Synthesis & Transformation",
+q:"She finished her work. She went home immediately after. → As soon as ______",
+o:["she finished her work, she went home — 'as soon as' means immediately after the first action","she went home, she finished her work — 'as soon as' means immediately after the first action","she finished her work she had gone home — 'as soon as' means immediately after the first action","finishing her work, she went home immediately — 'as soon as' means immediately after the first action"],a:0,
+h:"'As soon as' means 'immediately after'. Which event happened first?",
+expl:"'As soon as + first action, second action.' She finished first, then immediately went home. The order matters.",
+insight:"'As soon as' = immediately after. The clause after 'as soon as' is the trigger for the second action."},
+
+{t:"Synthesis & Transformation",
+q:"I wish I ______ to the party last Saturday. I missed all the fun!",
+o:["went","had gone","would go","could go"],a:1,
+h:"'Wish' about a past event that didn't happen uses which tense?",
+expl:"'Wish + past perfect (had gone)' expresses regret about a past event. I didn't go to the party, and I regret it.",
+insight:"'I wish I had + past participle' = regret about a past situation that cannot be changed."},
+
+// ══════════════════════════════════════════════
+// EDITING (15 questions)
+// ══════════════════════════════════════════════
+{t:"Editing",
+q:"Elephants are the bigger land animals in the world. What should 'bigger' be changed to?",
+o:["big","most big","biggest","more bigger"],a:2,
+h:"We're comparing elephants to ALL other land animals — this needs the superlative form.",
+expl:"Superlative 'biggest' is used when comparing one thing against all others. 'Bigger' is comparative (only two things). 'Most big' is not standard English.",
+insight:"Superlative = the ____est (short adjectives) or 'the most ___' (long adjectives). Used when comparing against all others."},
+
+{t:"Editing",
+q:"There are two main typs of elephants. What is the correct spelling of 'typs'?",
+o:["tipes","tipez","types","typez"],a:2,
+h:"The plural of 'type'. The 'e' is kept and '-s' is added directly.",
+expl:"'Types' is the correct plural of 'type'. Simply add '-s' — the 'e' is retained.",
+insight:"Plural of words ending in '-pe': just add '-s' → type → types, pipe → pipes, rope → ropes."},
+
+{t:"Editing",
+q:"Elephants is considered very intelligent. What should 'is' be changed to?",
+o:["am","was","are","were"],a:2,
+h:"'Elephants' is plural. What present tense form of 'to be' goes with plural nouns?",
+expl:"'Elephants' is plural → 'are'. 'Is' and 'was' are singular forms. This is a general fact about elephants, so present tense is needed.",
+insight:"Subject-verb agreement: plural subjects take plural verbs. Elephants ARE, not elephants IS."},
+
+{t:"Editing",
+q:"They had very sophisticated social structures. What should 'had' be changed to?",
+o:["has","have","having","are having"],a:1,
+h:"This is a general fact about elephants that is true now, not in the past.",
+expl:"General facts and permanent truths use present tense. 'Have' is correct for a plural noun in the present. 'Had' wrongly implies they no longer have these structures.",
+insight:"General facts and current states use present tense: 'Elephants have complex social structures.'"},
+
+{t:"Editing",
+q:"Elephants are truly jigantic animals. What is the correct spelling of 'jigantic'?",
+o:["gaigantic","gigantic","jiagantic","jigantic"],a:1,
+h:"Sound it out: gi-GAN-tic. Where does the stress fall?",
+expl:"'Gigantic' is the correct spelling: g-i-g-a-n-t-i-c. The 'gi' at the start makes a soft 'g' sound (like 'jee').",
+insight:"Gigantic: g-i-g-a-n-t-i-c. Means extremely large. Related to 'giant'."},
+
+{t:"Editing",
+q:"They can grow up to 3.5 meters tall, and waigh up to 6000kg. What is the correct spelling of 'waigh'?",
+o:["wheigh","weigh","waigh","weegh"],a:1,
+h:"Think of the word 'weight' — the verb form is similar.",
+expl:"'Weigh' is correct: w-e-i-g-h. The 'ei' combination with silent 'gh' is a common English spelling pattern.",
+insight:"Weigh: w-e-i-g-h. Related: weight, weighing, weighed. Silent 'gh' pattern: eight, freight, sleigh."},
+
+{t:"Editing",
+q:"Chat App is my favourite applikachen. What is the correct spelling?",
+o:["aplication","applycation","applicashon","application"],a:3,
+h:"This is the noun form of 'apply'. Think of the suffix '-tion'.",
+expl:"'Application' is correct: a-p-p-l-i-c-a-t-i-o-n. Note the double 'p' and the standard '-tion' ending.",
+insight:"Application: a-p-p-l-i-c-a-t-i-o-n. Note: double 'p', and '-tion' (not '-chen' or '-shon')."},
+
+{t:"Editing",
+q:"Messages automatically save to your photo album at your phone. What should 'at' be changed to?",
+o:["in","on","by","of"],a:1,
+h:"Which preposition do we use with digital devices like phones and computers?",
+expl:"'On your phone' is the correct collocation. Content is stored 'on' a device. 'At' is used for locations and addresses.",
+insight:"Prepositions with devices: 'on your phone/computer/tablet'. 'On' is used for device surfaces and platforms."},
+
+{t:"Editing",
+q:"I didn't even know you could message someone on Chat App anonnymusly. What is the correct spelling?",
+o:["anonimously","anonymously","anonimusly","annonymously"],a:1,
+h:"The word 'anonymous' + the adverb suffix '-ly'. Think of 'anon'.",
+expl:"'Anonymously' is correct: a-n-o-n-y-m-o-u-s-l-y. Based on 'anonymous' + '-ly'.",
+insight:"Anonymously: from 'anonymous' (without a known name). Remember: one 'n' at the start, 'y' in the middle."},
+
+{t:"Editing",
+q:"He conveensed me to tell our parents. What is the correct spelling of 'conveensed'?",
+o:["convinsed","convinced","convenced","convenssed"],a:1,
+h:"The root word is 'convince'. Just add '-d' to make it past tense.",
+expl:"'Convinced' is correct: c-o-n-v-i-n-c-e-d. Past tense of 'convince'. No extra vowels are added.",
+insight:"Convinced: c-o-n-v-i-n-c-e-d. Root: convince → convinced (add '-d', don't change internal vowels)."},
+
+{t:"Editing",
+q:"They were able to track up the IP address. What should 'track up' be changed to?",
+o:["track on","track in","track out","track down"],a:3,
+h:"Which phrasal verb means to find someone or something after a search?",
+expl:"'Track down' means to find something or someone after searching or investigating. 'Track up' is not a standard phrasal verb.",
+insight:"'Track down' = to find after a search. 'Track up' does not exist in standard English."},
+
+{t:"Editing",
+q:"She was sending harressing messages. What is the correct spelling of 'harressing'?",
+o:["harrassing","harassing","harasssing","harrssing"],a:1,
+h:"The root is 'harass'. How many 'r's and 's's does it have?",
+expl:"'Harassing' = h-a-r-a-s-s-i-n-g. One 'r', double 's'. The base word 'harass' has one 'r' and two 's'es.",
+insight:"Harass: h-a-r-a-s-s. One 'r', double 's'. 'Harassing' = harass + -ing."},
+
+{t:"Editing",
+q:"The punishment woud be even worst than what's coming. Two errors — what are the corrections?",
+o:["would / worse","wood / bad","will / most bad","should / worser"],a:0,
+h:"'Woud' is a spelling error. 'Worst' should be comparative, not superlative — which form?",
+expl:"'Would' is the correct spelling (not 'woud'). 'Worse' is the comparative of 'bad' — 'worst' is superlative (for 3+ comparisons); 'than' signals comparative.",
+insight:"Comparative: good→better, bad→worse, far→further. Superlative: best, worst, furthest. 'Than' always signals comparative."},
+
+{t:"Editing",
+q:"She is trained for all sorts of tasks, includes painting. What should 'includes' be changed to?",
+o:["included","include","including","to include"],a:2,
+h:"This is part of a list of activities — which form makes it parallel?",
+expl:"'Including' is needed as a preposition/participle introducing examples. 'Includes' is a verb that doesn't fit grammatically here.",
+insight:"'Including' = preposition introducing examples: 'trained for tasks, including painting, lifting, and carrying.'"},
+
+{t:"Editing",
+q:"I was scared. I didn't want to tell anyone in case the cyberbully did something horrible with me. What should 'with' be changed to?",
+o:["by","at","to","for"],a:2,
+h:"'Did something horrible __ me' — which preposition shows something negative directed at a person?",
+expl:"'To' is correct: 'did something horrible to me'. 'With' implies doing something alongside someone, not against them.",
+insight:"'Do something to someone' = perform an action that affects them. 'Do something with someone' = together."},
+
+// ══════════════════════════════════════════════
+// GRAMMAR CLOZE (15 questions)
+// ══════════════════════════════════════════════
+{t:"Grammar Cloze",
+q:"Everyone is good ______ something. (Choose the correct preposition.)",
+o:["in","at","for","with"],a:1,
+h:"Think of the fixed phrase 'to be good ___ something' — which preposition shows skill?",
+expl:"'Good at' is the correct collocation for skill or ability: 'good at maths', 'good at cooking'. 'Good for' = beneficial; 'good with' = able to handle people/animals.",
+insight:"Fixed collocation: 'good at something' — always 'at' when talking about skills and abilities."},
+
+{t:"Grammar Cloze",
+q:"He was strong and smart, ______ he would have no problem passing all the tests.",
+o:["but","so","yet","nor"],a:1,
+h:"The second clause is a result or consequence of the first. Which connector shows this?",
+expl:"'So' shows a result or consequence: he was smart, so he'd pass. 'But/yet' show contrast; 'nor' is for negative addition.",
+insight:"'So' = therefore/as a result. Connects cause and effect: 'She was tired, so she slept.'"},
+
+{t:"Grammar Cloze",
+q:"Jake began ______ read cookbooks after visiting Uncle Mike.",
+o:["to read","read","reads","had read"],a:0,
+h:"'Began' needs a specific structure here because 'read' follows immediately. What links 'began' to 'read'?",
+expl:"'Began to read' is correct — the 'to' infinitive connects 'began' to 'read'. Without 'to', 'began read' is not grammatical. 'Began reading' would also be correct but '-ing' is not offered here.",
+insight:"'Begin/start' + to-infinitive OR -ing: 'began to read' = 'began reading'. Both correct. When 'to' is given as a gap, fill it with the base verb."},
+
+{t:"Grammar Cloze",
+q:"Instead ______ peaches, let's try pears in this cake.",
+o:["of","for","to","by"],a:0,
+h:"'Instead of' is a fixed phrase. Which preposition completes it?",
+expl:"'Instead of' is a fixed prepositional phrase meaning 'in place of'. 'Instead for/to/by' are all incorrect.",
+insight:"Fixed phrase: 'instead of' (never 'instead for/to'). Means 'in place of / as a substitute for'."},
+
+{t:"Grammar Cloze",
+q:"One ______ one, some of his friends decided to try it.",
+o:["by","at","after","per"],a:0,
+h:"This idiom means 'gradually' or 'individually'. What is the fixed word?",
+expl:"'One by one' is the fixed idiom meaning one at a time, gradually. 'One after one' is less standard.",
+insight:"Fixed idiom: 'one by one' = individually in sequence. Also: 'little by little', 'step by step'."},
+
+{t:"Grammar Cloze",
+q:"Gabi's relationship with the crows started when she was four years old. One morning, she dropped food ______ getting out of her car.",
+o:["while","after","by","since"],a:0,
+h:"She was in the middle of getting out — which word shows a simultaneous action?",
+expl:"'While + gerund/clause' shows two actions happening at the same time. 'While getting out of her car, she dropped food.'",
+insight:"'While + -ing' or 'while + subject + verb' shows two simultaneous actions."},
+
+{t:"Grammar Cloze",
+q:"The crows began ______ up in the afternoon to greet Gabi's bus.",
+o:["lines","lining","lined","to lining"],a:1,
+h:"'Began' can be followed by -ing or to-infinitive. Which form is correct here?",
+expl:"'Began lining up' is correct — 'begin + -ing'. 'To lining' is grammatically impossible as a form.",
+insight:"'Begin/start' + -ing OR 'begin/start' + to-infinitive are both correct: 'began lining' or 'began to line'."},
+
+{t:"Grammar Cloze",
+q:"When Gabi ______ eight, she started providing a daily snack of peanuts.",
+o:["is","was","has been","would be"],a:1,
+h:"This is a past event in a story. What simple past form of 'be' fits?",
+expl:"'Was eight' — simple past, because this is narrating a past event in a story. 'Is' is present; 'has been' is present perfect.",
+insight:"In past-tense narratives, use simple past throughout: 'When she was eight, she started…'"},
+
+{t:"Grammar Cloze",
+q:"But ______ her surprise, the crows began bringing back gifts for Gabi.",
+o:["at","to","in","for"],a:1,
+h:"This is a fixed phrase meaning 'unexpectedly'. Think: '__ her surprise'.",
+expl:"'To her surprise' is the fixed phrase meaning something was unexpected. 'At her surprise' and 'in her surprise' are not standard.",
+insight:"Fixed phrase: 'to + possessive pronoun + surprise': 'To her surprise', 'To his amazement', 'To their delight'."},
+
+{t:"Grammar Cloze",
+q:"The crows showed their appreciation ______ bringing back gifts.",
+o:["by","for","with","to"],a:0,
+h:"Which preposition shows the method or means of doing something?",
+expl:"'By + gerund' shows the method: 'showed appreciation by bringing gifts.' 'For' shows reason; 'with' shows accompaniment.",
+insight:"'By + -ing' = the method or way something is done: 'He thanked her by baking a cake.'"},
+
+{t:"Grammar Cloze",
+q:"Jessie is already dressed and running out the door to her uncle's ______ before sunrise.",
+o:["building","bakery","school","hospital"],a:1,
+h:"Hundreds of bread buns are baking — what kind of place would this be?",
+expl:"A bakery is where bread and baked goods are made. The clue is 'hundreds of bread buns in the oven'.",
+insight:"Use context clues in the passage to identify the best word. 'Bread buns in the oven' → bakery."},
+
+{t:"Grammar Cloze",
+q:"Saving a little ______ of money every day can add up to something big!",
+o:["much","amount","number","piece"],a:1,
+h:"'______ of money' — which word works with uncountable nouns like money?",
+expl:"'Amount' is used with uncountable nouns: 'an amount of money/water/time'. 'Number' is for countable nouns. 'Much' doesn't fit 'little ___ of'.",
+insight:"Amount + uncountable noun: 'an amount of water/money'. Number + countable noun: 'a number of students'."},
+
+{t:"Grammar Cloze",
+q:"They showed her and the other kids how to set up a group to learn about ______ money.",
+o:["saving","to save","save","saved"],a:0,
+h:"After 'about', which verb form is used?",
+expl:"'About + gerund (-ing)': 'learn about saving money'. After prepositions, always use the -ing form, not the base verb.",
+insight:"After prepositions (about, for, in, of, by, without), always use the gerund (-ing form): 'think about going', 'good at swimming'."},
+
+{t:"Grammar Cloze",
+q:"Every week, she and her friends would put the money they'd saved in a locked box for safe ______.",
+o:["keeping","storage","deposit","custody"],a:0,
+h:"'For safe ______' — what noun phrase completes this idiom meaning to keep something secure?",
+expl:"'For safe keeping' is the standard idiom meaning storing something carefully and securely. 'Storage' is less idiomatic here; 'deposit' and 'custody' don't fit this phrase.",
+insight:"Fixed idiom: 'for safe keeping' = to keep something in a secure place. Very common in everyday English."},
+
+{t:"Grammar Cloze",
+q:"Her family's home was made mostly of bamboo, ______ meant the wind and rain could easily get in.",
+o:["as","so","which","meaning"],a:2,
+h:"The blank introduces a relative clause that gives a consequence of the bamboo construction. Which relative pronoun refers back to the whole previous clause?",
+expl:"'Which' is correct here as a relative pronoun referring back to the whole clause ('made of bamboo'). 'Which meant the wind could get in' is the standard structure. 'So' would need a comma and changes the clause type. 'Meaning' is a participle that also works, but 'which' is the most grammatically precise choice for a formal relative clause.",
+insight:"'Which' as a relative pronoun can refer back to an entire preceding clause: 'She was late, which made everyone worried.'"}
+
+]
+BANK.forEach((q,i)=>q.id=i);
+
+// ---------- CONFIG ----------
+var QUIZ_NAME = "P5 English Practice";
+var QS_PER_ROUND = 12;
+var STREAK_TO_MASTER = 2;
+var FINAL_PASS_SPACING_MS = 30 * 60 * 1000;
+var LS_KEY = "p5-english-practice_v2";
+var VERSION = "ver2.01";
+
+var TOPIC_ICON = {
+  "Grammar":"📖",
+  "Vocabulary":"💬",
+  "Synthesis & Transformation":"✏️",
+  "Editing":"🔍",
+  "Grammar Cloze":"🧩"
+};
+
+var TOPIC_ORDER = [];
+BANK.forEach(function(q){ if(TOPIC_ORDER.indexOf(q.t)<0) TOPIC_ORDER.push(q.t); });
+var TOPIC_COLOR = {};
+TOPIC_ORDER.forEach(function(t,i){ TOPIC_COLOR[t] = "var(--t"+(i%6)+")"; });
+
+// ---------- STATE ----------
+function freshState(){
+  var s = { ledger:{} };
+  BANK.forEach(function(q){ s.ledger[q.id] = { streak:0, status:"active", lastCorrect:0 }; });
+  return s;
+}
+function loadState(){
+  try{
+    var raw = localStorage.getItem(LS_KEY);
+    if(!raw) return freshState();
+    var s = JSON.parse(raw);
+    if(!s || typeof s!=="object" || !s.ledger) return freshState();
+    BANK.forEach(function(q){ if(!s.ledger[q.id]) s.ledger[q.id]={streak:0,status:"active",lastCorrect:0}; });
+    return s;
+  }catch(e){ return freshState(); }
+}
+function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(STATE)); }catch(e){} }
+var STATE = loadState();
+
+// ---------- HELPERS ----------
+function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+function byTopic(){
+  var m={}; TOPIC_ORDER.forEach(function(t){m[t]={total:0,mastered:0,half:0};});
+  BANK.forEach(function(q){
+    var L=STATE.ledger[q.id]; var g=m[q.t]; g.total++;
+    if(L.status==="mastered") g.mastered++;
+    else if(L.streak>0) g.half++;
+  });
+  return m;
+}
+function counts(){
+  var active=0,mastered=0;
+  BANK.forEach(function(q){ if(STATE.ledger[q.id].status==="mastered") mastered++; else active++; });
+  return {active:active, mastered:mastered, total:BANK.length};
+}
+
+// ---------- HOME ----------
+function renderHome(){
+  document.getElementById("verTag").textContent = VERSION;
+  var c = counts();
+  document.getElementById("activeN").textContent = c.active;
+  document.getElementById("doneN").textContent = c.mastered;
+  var pct = c.total ? Math.round(c.mastered/c.total*100) : 0;
+  setTimeout(function(){ document.getElementById("homeBar").style.width = pct+"%"; }, 60);
+  document.getElementById("howto").innerHTML =
+    "Answer correctly <b>"+STREAK_TO_MASTER+"</b> times in a row to complete a question! 🌟 A wrong answer resets that question. Work through all <b>"+c.total+"</b> questions to finish your island!";
+
+  var pills = document.getElementById("pills"); pills.innerHTML="";
+  TOPIC_ORDER.forEach(function(t){
+    var col=TOPIC_COLOR[t];
+    var el=document.createElement("span"); el.className="pill";
+    el.style.color=col; el.style.borderColor=col;
+    el.textContent=(TOPIC_ICON[t]||"")+" "+t;
+    pills.appendChild(el);
+  });
+
+  var m = byTopic();
+  var list = document.getElementById("topicList");
+  list.className = "topics" + (TOPIC_ORDER.length>=4 ? " two" : "");
+  list.innerHTML="";
+  TOPIC_ORDER.forEach(function(t){
+    var g=m[t], col=TOPIC_COLOR[t];
+    var tp = g.total ? Math.round(g.mastered/g.total*100) : 0;
+    var card=document.createElement("div"); card.className="topic";
+    var half = g.half>0 ? '<span class="half" title="One more correct answer to complete these">&#9654;'+g.half+'</span>' : '';
+    card.innerHTML =
+      '<div class="tname" style="color:'+col+'"><span class="ic">'+(TOPIC_ICON[t]||"")+'</span>'+t+'</div>'+
+      '<div class="meta">'+half+'<span>'+g.mastered+' / '+g.total+'</span></div>'+
+      '<div class="tbar"><span style="background:'+col+'"></span></div>';
+    list.appendChild(card);
+    var bar=card.querySelector(".tbar>span");
+    setTimeout(function(){ bar.style.width=tp+"%"; },60);
+  });
+}
+
+// ---------- SESSION ----------
+var session=null;
+function eligible(){
+  var now=Date.now(), out=[];
+  BANK.forEach(function(q){
+    var L=STATE.ledger[q.id];
+    if(L.status!=="active") return;
+    if(L.streak===STREAK_TO_MASTER-1 && FINAL_PASS_SPACING_MS>0){
+      if(now - L.lastCorrect < FINAL_PASS_SPACING_MS) return;
+    }
+    out.push(q.id);
+  });
+  return out;
+}
+function startSession(){
+  var pool = eligible();
+  if(pool.length===0){
+    BANK.forEach(function(q){ if(STATE.ledger[q.id].status==="active") pool.push(q.id); });
+  }
+  if(pool.length===0){
+    alert("🎉 You've completed every question! Tap 'Start All Over' to play again.");
+    return;
+  }
+  pool = shuffle(pool);
+  var ids = pool.slice(0, Math.min(QS_PER_ROUND, pool.length));
+  session = { ids:ids, i:0, correct:0, drawn:{}, completed:0, scoreByTopic:{} };
+  show("quiz"); renderQuestion();
+}
+function renderQuestion(){
+  var id = session.ids[session.i];
+  var q = BANK[id];
+  document.getElementById("feedback").style.display="none";
+  var badge=document.getElementById("qBadge");
+  badge.innerHTML='<span>'+(TOPIC_ICON[q.t]||"")+'</span>'+q.t;
+  badge.style.color=TOPIC_COLOR[q.t]; badge.style.borderColor=TOPIC_COLOR[q.t];
+  document.getElementById("qCount").textContent="Q "+(session.i+1)+" of "+session.ids.length;
+  document.getElementById("qText").textContent=q.q;
+  var hb=document.getElementById("hintBox"); hb.textContent=q.h; hb.className="hintbox";
+  document.getElementById("hintBtn").style.display="inline-block";
+
+  var order = shuffle([0,1,2,3]);
+  var opts=document.getElementById("opts"); opts.innerHTML="";
+  order.forEach(function(oi){
+    var b=document.createElement("button"); b.className="opt"; b.textContent=q.o[oi];
+    b.onclick=function(){ answer(oi, b, opts, q); };
+    opts.appendChild(b);
+  });
+}
+function answer(chosen, btn, opts, q){
+  var L=STATE.ledger[q.id];
+  var buttons=opts.querySelectorAll(".opt");
+  buttons.forEach(function(b){ b.disabled=true; });
+  var t=q.t;
+  session.drawn[t]=(session.drawn[t]||0)+1;
+  if(chosen===q.a){
+    btn.classList.add("correct");
+    session.correct++;
+    session.scoreByTopic[t]=(session.scoreByTopic[t]||0)+1;
+    L.streak++; L.lastCorrect=Date.now();
+    if(L.streak>=STREAK_TO_MASTER && L.status!=="mastered"){ L.status="mastered"; session.completed++; }
+  }else{
+    buttons.forEach(function(b){ if(b.textContent===q.o[q.a]) b.classList.add("correct"); });
+    btn.classList.add("wrong");
+    L.streak=0;
+  }
+  saveState();
+  document.getElementById("explBox").innerHTML="<b>Why:</b> "+q.expl;
+  document.getElementById("insightBox").innerHTML="<b>⭐ Examiner insight:</b> "+q.insight;
+  document.getElementById("feedback").style.display="block";
+  document.getElementById("nextBtn").focus();
+}
+function nextQuestion(){
+  session.i++;
+  if(session.i>=session.ids.length) renderResults();
+  else renderQuestion();
+}
+
+// ---------- RESULTS ----------
+function renderResults(){
+  document.getElementById("rScore").textContent=session.correct+" / "+session.ids.length;
+  var ratio = session.ids.length ? session.correct/session.ids.length : 0;
+  document.getElementById("cheer").textContent = ratio>=0.8 ? "🏆" : ratio>=0.5 ? "🎉" : "🌱";
+  var badge=document.getElementById("rBadge");
+  if(session.completed>0){ badge.style.display="block"; badge.textContent="🌟 "+session.completed+" question"+(session.completed>1?"s":"")+" completed this round!"; }
+  else badge.style.display="none";
+  var tb=document.getElementById("rTable"); tb.innerHTML="";
+  var sbt=session.scoreByTopic||{};
+  Object.keys(session.drawn).forEach(function(t){
+    var tr=document.createElement("tr");
+    tr.innerHTML='<td style="color:'+TOPIC_COLOR[t]+';font-weight:800">'+(TOPIC_ICON[t]||"")+' '+t+'</td>'+
+      '<td class="n">'+(sbt[t]||0)+'</td><td class="n">'+session.drawn[t]+'</td>';
+    tb.appendChild(tr);
+  });
+  show("results");
+}
+
+// ---------- NAV ----------
+function show(id){
+  ["home","quiz","results"].forEach(function(s){ document.getElementById(s).classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+  if(id==="home") renderHome();
+  window.scrollTo(0,0);
+}
+
+// ---------- EVENTS ----------
+document.getElementById("continueBtn").onclick=startSession;
+document.getElementById("continueStudy").onclick=function(){ show("home"); };
+document.getElementById("nextBtn").onclick=nextQuestion;
+document.getElementById("hintBtn").onclick=function(){
+  document.getElementById("hintBox").classList.add("show"); this.style.display="none";
+};
+document.getElementById("resetBtn").onclick=function(){ document.getElementById("overlay").classList.add("show"); };
+document.getElementById("mCancel").onclick=function(){ document.getElementById("overlay").classList.remove("show"); };
+document.getElementById("mConfirm").onclick=function(){
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  STATE=freshState(); saveState();
+  document.getElementById("overlay").classList.remove("show");
+  show("home");
+};
+
+renderHome();
+</script>
+</body>
+</html>
