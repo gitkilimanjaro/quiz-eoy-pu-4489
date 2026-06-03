@@ -159,7 +159,7 @@
 
   <!-- HOME -->
   <section id="home" class="screen active">
-    <div class="topbar"><span class="ver" id="verTag">ver2.01</span></div>
+    <div class="topbar"><span class="ver" id="verTag">ver2.03</span></div>
     <h1><span class="leaf-emoji">✏️</span> P5 English Practice</h1>
     <p class="subtitle">Your cozy little study island — answer questions, master your English! 🐾</p>
     <div class="pills" id="pills"></div>
@@ -474,35 +474,35 @@ expl:"'Bravely' is the adverb form of 'brave'. 'Hesitantly' = uncertainly; 'awkw
 insight:"Match adverbs to adjectives: courageous → bravely, careful → carefully, graceful → gracefully."},
 
 {t:"Vocabulary",
-q:"She is alert to every sound and movement. The underlined word means ______.",
+q:"She is <u>alert</u> to every sound and movement. What does the underlined word mean?.",
 o:["watchful","energetic","intelligent","observant"],a:0,
 h:"'Alert' means ready and paying close attention, especially to danger.",
 expl:"'Watchful' is the closest synonym — both mean paying close attention and being ready to react. 'Observant' also means noticing things but lacks the sense of readiness.",
 insight:"'Alert' = watchful and ready to respond quickly. Closest synonym: watchful."},
 
 {t:"Vocabulary",
-q:"His dad asked him to aim at the black circle. The underlined word means ______.",
+q:"His dad asked him to <u>aim</u> at the black circle. What does the underlined word mean?.",
 o:["cut","draw","colour","target"],a:3,
 h:"'Aim at' means to direct something toward a specific point.",
 expl:"'Aim' as a verb means to point or direct toward a target — 'target' as a verb has the same meaning.",
 insight:"'Aim at' = 'target' — to direct toward a specific point. 'Target' can be used as both a noun and a verb."},
 
 {t:"Vocabulary",
-q:"The company will compensate the workers if they get hurt. The underlined word means ______.",
+q:"The company will <u>compensate</u> the workers if they get hurt. What does the underlined word mean?.",
 o:["make it","make after","make it up to","make away with"],a:2,
 h:"'Compensate' means to give something to offset a loss or injury.",
 expl:"'Make it up to someone' = to compensate, to give something to make amends. 'Make away with' means to steal.",
 insight:"'Compensate' = 'make it up to' — to give payment or something of value for a loss or harm."},
 
 {t:"Vocabulary",
-q:"There is a massive statue in the park. The underlined word means ______.",
+q:"There is a <u>massive</u> statue in the park. What does the underlined word mean?.",
 o:["little","huge","petite","strong"],a:1,
 h:"'Massive' refers to very great size.",
 expl:"'Massive' = very large. 'Huge' is the correct synonym. 'Little' and 'petite' are opposites. 'Strong' describes power, not size.",
 insight:"'Massive' = extremely large. Synonyms: huge, enormous, gigantic, colossal."},
 
 {t:"Vocabulary",
-q:"While you are in town, please pick up my suit from the dry cleaner. The underlined phrase means ______.",
+q:"While you are in town, please <u>pick up</u> my suit from the dry cleaner. What does the underlined phrase mean?",
 o:["drop","throw","collect","remove"],a:2,
 h:"'Pick up' from a shop means to go there and get something that's ready for you.",
 expl:"'Pick up' = to collect something from a place. 'Collect' is the correct synonym here.",
@@ -544,7 +544,7 @@ expl:"'On time' = punctually, by the deadline. 'Behind time' = late but less com
 insight:"'On time' = punctually. Don't confuse with 'in time' (with enough time to spare before a deadline)."},
 
 {t:"Vocabulary",
-q:"The craftsman skillfully embellished the blue silk with golden prints. The underlined word means ______.",
+q:"The craftsman skillfully <u>embellished</u> the blue silk with golden prints. What does the underlined word mean?.",
 o:["designed","destroyed","decorated","decreased"],a:2,
 h:"'Embellish' means to add decorative details to something.",
 expl:"'Embellish' = to make more attractive by adding decorative details. 'Decorated' is the closest synonym. 'Designed' = to plan/create; 'destroyed' = to ruin.",
@@ -572,7 +572,7 @@ expl:"'Categorised' = sorted or classified into categories. 'Clustered' = physic
 insight:"'Categorise' = to sort or classify into groups or types."},
 
 {t:"Vocabulary",
-q:"A dog had died in the house the previous week and the stink was unbearable. The underlined word means ______.",
+q:"A dog had died in the house the previous week and the <u>stink</u> was unbearable. What does the underlined word mean?.",
 o:["whiff","scent","breath","stench"],a:3,
 h:"'Stink' is a very strong, unpleasant smell. Which synonym matches that intensity?",
 expl:"'Stench' = an extremely unpleasant, strong smell — closest to 'stink'. A 'whiff' is a brief, mild smell. 'Scent' = a pleasant smell.",
@@ -960,7 +960,7 @@ var QS_PER_ROUND = 12;
 var STREAK_TO_MASTER = 2;
 var FINAL_PASS_SPACING_MS = 30 * 60 * 1000;
 var LS_KEY = "p5-english-practice_v2";
-var VERSION = "ver2.01";
+var VERSION = "ver2.03";
 
 var TOPIC_ICON = {
   "Grammar":"📖",
@@ -1086,7 +1086,7 @@ function renderQuestion(){
   badge.innerHTML='<span>'+(TOPIC_ICON[q.t]||"")+'</span>'+q.t;
   badge.style.color=TOPIC_COLOR[q.t]; badge.style.borderColor=TOPIC_COLOR[q.t];
   document.getElementById("qCount").textContent="Q "+(session.i+1)+" of "+session.ids.length;
-  document.getElementById("qText").textContent=q.q;
+  document.getElementById("qText").innerHTML=q.q;
   var hb=document.getElementById("hintBox"); hb.textContent=q.h; hb.className="hintbox";
   document.getElementById("hintBtn").style.display="inline-block";
 
