@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thai P5 Revisions Super Quiz</title>
+<style>
+  :root{
+    --navy:#1a1a2e;
+    --green:#2e7d32;
+    --red:#c62828;
+    --orange:#f57c00;
+    --page:#f5f6fa;
+    --card:#ffffff;
+    --text:#1a1a2e;
+    --muted:#6b6b7b;
+    --shadow:0 2px 8px rgba(0,0,0,.08);
+    /* topic colors */
+    --t0:#2563eb; --t1:#0891b2; --t2:#7c3aed; --t3:#be185d;
+    --t4:#ea580c; --t5:#0d9488; --t6:#a16207;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    background:var(--page); color:var(--text);
+    line-height:1.5; -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:16px;min-height:100vh;}
+  .hidden{display:none!important;}
+
+  /* ---------- HOME ---------- */
+  .topbar{display:flex;justify-content:flex-end;}
+  .ver{font-size:.72rem;color:var(--muted);font-weight:600;}
+  h1.title{font-size:1.7rem;font-weight:800;margin:.2rem 0 .8rem;color:var(--text);line-height:1.2;}
+  .pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+  .pill{
+    background:#fff;border:1.5px solid;border-radius:999px;
+    padding:3px 10px;font-size:.72rem;font-weight:600;white-space:nowrap;
+  }
+  .card{
+    background:var(--card);border-radius:12px;box-shadow:var(--shadow);
+    padding:18px;margin-bottom:16px;
+  }
+  .stats{display:flex;gap:12px;text-align:center;margin-bottom:14px;}
+  .stat{flex:1;}
+  .stat .num{font-size:2rem;font-weight:800;line-height:1;}
+  .stat .lbl{font-size:.72rem;color:var(--muted);margin-top:4px;}
+  .stat.active .num{color:var(--orange);}
+  .stat.done .num{color:var(--green);}
+  .bar{height:10px;background:#e7e8ef;border-radius:6px;overflow:hidden;margin:6px 0 12px;}
+  .bar>span{display:block;height:100%;background:var(--green);width:0;border-radius:6px;
+    transition:width 1s cubic-bezier(.4,0,.2,1);}
+  .howto{font-size:.82rem;color:var(--muted);}
+  .btns{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:10px;font-weight:700;}
+  .btn-primary{background:var(--navy);color:#fff;padding:15px;font-size:1.05rem;width:100%;
+    transition:transform .12s,opacity .12s;}
+  .btn-primary:active{transform:scale(.98);}
+  .btn-primary:disabled{opacity:.45;cursor:not-allowed;}
+  .btn-secondary{background:transparent;color:var(--red);border:1.5px solid var(--red);
+    padding:11px;font-size:.92rem;width:100%;}
+  .topics{display:grid;grid-template-columns:1fr;gap:10px;}
+  .topics.two{grid-template-columns:1fr 1fr;}
+  .topic{background:var(--card);border-radius:10px;box-shadow:var(--shadow);padding:12px;}
+  .topic .tn{font-weight:700;font-size:.9rem;margin-bottom:2px;}
+  .topic .half{font-size:.72rem;color:var(--orange);font-weight:700;margin-bottom:4px;}
+  .topic .cnt{font-size:.74rem;color:var(--muted);margin-bottom:6px;}
+  .tbar{height:7px;background:#e7e8ef;border-radius:5px;overflow:hidden;}
+  .tbar>span{display:block;height:100%;width:0;border-radius:5px;transition:width .9s ease;}
+
+  /* ---------- QUIZ ---------- */
+  .qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+  .badge{font-size:.74rem;font-weight:700;padding:4px 10px;border-radius:999px;color:#fff;}
+  .qcount{font-size:.82rem;color:var(--muted);font-weight:600;}
+  .qtext{font-size:1.25rem;font-weight:700;text-align:center;margin:10px 0 16px;line-height:1.4;}
+  .hintwrap{margin-bottom:14px;text-align:center;}
+  .hintbtn{background:#eef0f7;color:var(--navy);padding:8px 14px;font-size:.82rem;border-radius:8px;}
+  .hintbox{margin-top:10px;background:#fff8ec;border:1px solid #f5d9a8;
+    border-radius:8px;padding:10px 12px;font-size:.85rem;color:#8a5a00;text-align:left;}
+  .opts{display:flex;flex-direction:column;gap:10px;}
+  .opt{
+    background:var(--card);border:1.5px solid #dfe1ea;border-radius:10px;
+    padding:14px;font-size:.98rem;text-align:left;width:100%;color:var(--text);
+    transition:background .15s,border-color .15s,transform .12s;
+  }
+  .opt:active{transform:scale(.99);}
+  .opt:disabled{cursor:default;}
+  .opt.correct{background:#e7f4e8;border-color:var(--green);color:#1b4d1f;font-weight:700;}
+  .opt.wrong{background:#fbe9e9;border-color:var(--red);color:#7d1c1c;}
+  .feedback{margin-top:16px;}
+  .expl{background:#f0f4ff;border-radius:8px;padding:12px;font-size:.88rem;margin-bottom:10px;}
+  .insight{border:1.5px solid var(--navy);background:#f7f8fc;border-radius:8px;
+    padding:12px;font-size:.86rem;}
+  .insight b{color:var(--navy);}
+  .nextbar{position:sticky;bottom:0;padding:14px 0 4px;background:linear-gradient(to top,var(--page) 70%,transparent);}
+
+  /* ---------- RESULTS ---------- */
+  .score{font-size:2.6rem;font-weight:800;text-align:center;color:var(--navy);}
+  .scorelbl{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:14px;}
+  .completebadge{background:#e7f4e8;color:var(--green);font-weight:700;text-align:center;
+    padding:10px;border-radius:8px;margin-bottom:14px;font-size:.9rem;}
+  table{width:100%;border-collapse:collapse;font-size:.84rem;}
+  th,td{padding:8px 6px;text-align:left;border-bottom:1px solid #ececf2;}
+  th{color:var(--muted);font-weight:600;font-size:.76rem;}
+  td.c{text-align:center;}
+
+  /* ---------- MODAL ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(20,20,35,.6);display:flex;
+    align-items:center;justify-content:center;padding:24px;z-index:50;}
+  .modal{background:#fff;border-radius:14px;padding:24px;max-width:340px;width:100%;text-align:center;}
+  .modal p{margin-bottom:18px;font-size:.95rem;}
+  .modal .row{display:flex;gap:10px;}
+  .modal button{flex:1;padding:12px;font-size:.9rem;border-radius:9px;}
+  .m-cancel{background:#eceef4;color:var(--text);}
+  .m-confirm{background:var(--red);color:#fff;}
+  @media(max-width:380px){
+    .topics.two .tn{font-size:.82rem;}
+    .topics.two .topic{padding:10px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* =========================================================
+   Thai P5 Revisions Super Quiz
+   ========================================================= */
+const QUIZ_NAME = "Thai P5 Revisions Super Quiz";
+const APP_VERSION = "ver1.00";
+const LS_KEY = "thai-p5-revisions-super-quiz_v1";
+const QS_PER_ROUND = 12;
+const STREAK_TO_MASTER = 2;
+const FINAL_PASS_SPACING_MS = 0;
+
+const TOPICS = [
+  "โครงสร้างประโยค","คำยืมต่างประเทศ","คำเชื่อม",
+  "คำราชาศัพท์","อักษรย่อ","ภาษาพูด/ภาษาเขียน","สำนวนไทย"
+];
+const TOPIC_COLORS = ["var(--t0)","var(--t1)","var(--t2)","var(--t3)","var(--t4)","var(--t5)","var(--t6)"];
+
+const BANK = [
+  /* ---- 1. โครงสร้างประโยค ---- */
+  {t:"โครงสร้างประโยค",q:"ข้อใดเป็นส่วนสำคัญของประโยค",
+   o:["ประธานและกริยา","กรรมและส่วนขยาย","ประธานและกรรม","ส่วนขยายและกริยา"],a:0,
+   h:"คิดถึงสิ่งที่ขาดไม่ได้ — ใครทำ และทำอะไร",
+   expl:"ประโยคจะสมบูรณ์ต้องมีประธาน (ผู้ทำ) และกริยา (อาการ) เป็นอย่างน้อย",
+   insight:"ส่วนสำคัญของประโยคคือ ประธาน และ กริยา ส่วนกรรมและส่วนขยายเป็นส่วนเสริม"},
+  {t:"โครงสร้างประโยค",q:"ข้อใดเป็นประโยค 2 ส่วน",
+   o:["คุณยายพักผ่อน","แม่ล้างจานในครัว","เด็กอ่านหนังสือทุกวัน","พ่อซื้อปลาที่ตลาด"],a:0,
+   h:"ประโยค 2 ส่วน = ประธาน + กริยา เท่านั้น ไม่มีกรรมหรือส่วนขยาย",
+   expl:"\"คุณยายพักผ่อน\" มีเพียงประธาน (คุณยาย) + กริยา (พักผ่อน) จึงเป็นประโยค 2 ส่วน",
+   insight:"ประโยค 2 ส่วน ประกอบด้วยภาคประธานและภาคแสดง (กริยา) โดยไม่มีกรรม"},
+  {t:"โครงสร้างประโยค",q:"ข้อใดมีโครงสร้าง ประธาน + กริยา + กรรม",
+   o:["แม่ซื้อผลไม้","นกบินสูง","ฝนตกหนัก","เด็กวิ่งเร็ว"],a:0,
+   h:"ต้องมีผู้ถูกกระทำ (กรรม) ต่อท้ายกริยา",
+   expl:"\"แม่ (ประธาน) ซื้อ (กริยา) ผลไม้ (กรรม)\" ครบสามส่วน",
+   insight:"ประโยคที่มีกรรมต้องมีคำที่ถูกกระทำต่อจากกริยา เช่น แม่ซื้อผลไม้"},
+  {t:"โครงสร้างประโยค",q:"ข้อใดมีส่วนขยายประธาน",
+   o:["เด็กหญิงผมหยิกวาดภาพ","พ่อกินข้าว","น้องวิ่งเร็ว","ครูยิ้ม"],a:0,
+   h:"หาคำที่ขยายตัวประธานให้ชัดขึ้น",
+   expl:"\"ผมหยิก\" ขยายประธาน \"เด็กหญิง\" ให้ทราบลักษณะ",
+   insight:"ส่วนขยายประธานคือคำที่ตามหลังประธานเพื่อบอกลักษณะของประธาน"},
+  {t:"โครงสร้างประโยค",q:"ข้อใดมีส่วนขยายกริยา",
+   o:["น้องตอบคำถามอย่างมั่นใจ","พี่ชายตัวสูงอ่านหนังสือ","แมวดำหลับ","แม่บ้านใจดี"],a:0,
+   h:"หาคำที่บอกว่ากริยานั้นทำอย่างไร",
+   expl:"\"อย่างมั่นใจ\" ขยายกริยา \"ตอบ\" ให้รู้ลักษณะการกระทำ",
+   insight:"ส่วนขยายกริยาบอกอาการหรือลักษณะของการกระทำ มักขึ้นต้นด้วย อย่าง..."},
+  {t:"โครงสร้างประโยค",q:"ข้อใดมีส่วนขยายกรรม",
+   o:["พ่อปลูกต้นไม้ใหญ่","เด็กหัวเราะเสียงดัง","ครูเดินเร็ว","นกเกาะกิ่งไม้"],a:0,
+   h:"หาคำที่ขยายตัวกรรม (สิ่งที่ถูกกระทำ)",
+   expl:"\"ใหญ่\" ขยายกรรม \"ต้นไม้\" ในประโยค พ่อปลูกต้นไม้ใหญ่",
+   insight:"ส่วนขยายกรรมคือคำที่ตามหลังกรรมเพื่อบอกลักษณะของกรรมนั้น"},
+  {t:"โครงสร้างประโยค",q:"ข้อใดเป็นประโยคที่ไม่มีกรรม",
+   o:["คุณตาหัวเราะ","แม่ซื้อขนม","พี่เขียนรายงาน","ครูตรวจงาน"],a:0,
+   h:"ประโยคที่กริยาไม่ต้องการผู้ถูกกระทำ",
+   expl:"\"คุณตาหัวเราะ\" กริยา \"หัวเราะ\" เป็นอกรรมกริยา ไม่ต้องมีกรรม",
+   insight:"ประโยคไม่มีกรรมใช้อกรรมกริยา การกระทำจบในตัวเอง ไม่มีผู้ถูกกระทำ"},
+  {t:"โครงสร้างประโยค",q:"ข้อใดเป็นประโยคสมบูรณ์ที่สุด",
+   o:["คุณครูสอนภาษาไทยอย่างสนุกสนาน","วิ่งเร็ว","เด็กเล่น","หนังสือเล่มใหญ่"],a:0,
+   h:"ประโยคสมบูรณ์ต้องมีองค์ประกอบครบและได้ใจความ",
+   expl:"ข้อนี้มีครบทั้งประธาน กริยา กรรม และส่วนขยาย จึงสมบูรณ์ที่สุด",
+   insight:"ประโยคสมบูรณ์ต้องมีประธานและกริยาที่ได้ใจความครบถ้วน"},
+  {t:"โครงสร้างประโยค",q:"\"คุณลุงบ้านสีเขียวปลูกผักหลังบ้าน\" คำว่า \"บ้านสีเขียว\" ทำหน้าที่ใด",
+   o:["ส่วนขยายประธาน","กรรม","กริยา","ส่วนขยายกรรม"],a:0,
+   h:"คำนี้ขยายส่วนใดของประโยค — ใครเป็นผู้ทำ?",
+   expl:"\"บ้านสีเขียว\" ขยายประธาน \"คุณลุง\" บอกว่าเป็นคุณลุงคนไหน",
+   insight:"คำที่ตามหลังประธานเพื่อระบุลักษณะประธาน ทำหน้าที่เป็นส่วนขยายประธาน"},
+
+  /* ---- 2. คำยืมต่างประเทศ ---- */
+  {t:"คำยืมต่างประเทศ",q:"คำใดเป็นคำยืมจากภาษาอังกฤษ",
+   o:["ฟุตบอล","เต้าหู้","ก๋วยเตี๋ยว","ซาลาเปา"],a:0,
+   h:"คำกีฬาชนิดหนึ่งที่ทับศัพท์มาจากตะวันตก",
+   expl:"\"ฟุตบอล\" มาจาก football ในภาษาอังกฤษ ส่วนอีกสามคำมาจากภาษาจีน",
+   insight:"ฟุตบอล เป็นคำยืมจากภาษาอังกฤษ (football)"},
+  {t:"คำยืมต่างประเทศ",q:"ข้อใดเป็นคำที่มาจากภาษาจีน",
+   o:["พะโล้","อินเทอร์เน็ต","แซนด์วิช","แบตเตอรี่"],a:0,
+   h:"ชื่ออาหารที่มีต้นกำเนิดจากจีน",
+   expl:"\"พะโล้\" เป็นคำยืมจากภาษาจีน ส่วนอีกสามคำมาจากภาษาอังกฤษ",
+   insight:"พะโล้ เป็นคำยืมจากภาษาจีน มักเป็นชื่ออาหาร"},
+  {t:"คำยืมต่างประเทศ",q:"ข้อใดเป็นสาเหตุของการนำคำภาษาต่างประเทศมาใช้ในภาษาไทย",
+   o:["การติดต่อค้าขายและวัฒนธรรม","ทำให้ภาษาไทยยากขึ้น","ลดจำนวนคำไทย","เปลี่ยนภาษาไทยให้เป็นภาษาอื่น"],a:0,
+   h:"นึกถึงการพบปะแลกเปลี่ยนระหว่างผู้คนต่างชาติ",
+   expl:"การติดต่อค้าขายและแลกเปลี่ยนวัฒนธรรมทำให้เกิดการยืมคำเข้ามาใช้",
+   insight:"สาเหตุหลักของการยืมคำคือการติดต่อค้าขายและการรับวัฒนธรรมจากชาติอื่น"},
+  {t:"คำยืมต่างประเทศ",q:"ข้อใดจับคู่คำกับที่มาของภาษาได้ถูกต้อง",
+   o:["คอมพิวเตอร์ – ภาษาอังกฤษ","ก๋วยเตี๋ยว – ภาษาญี่ปุ่น","ซาลาเปา – ภาษาอังกฤษ","ฟุตบอล – ภาษาจีน"],a:0,
+   h:"คำเทคโนโลยีคำนี้มาจากภาษาตะวันตก",
+   expl:"คอมพิวเตอร์มาจากอังกฤษ ส่วนก๋วยเตี๋ยว/ซาลาเปามาจากจีน ฟุตบอลมาจากอังกฤษ",
+   insight:"คอมพิวเตอร์ เป็นคำยืมจากภาษาอังกฤษ จับคู่ที่มาได้ถูกต้อง"},
+  {t:"คำยืมต่างประเทศ",q:"\"พ่อเปิดคอมพิวเตอร์เช็กอีเมล\" มีคำยืมจากภาษาอังกฤษกี่คำ",
+   o:["1 คำ","2 คำ","3 คำ","4 คำ"],a:2,
+   h:"ลองชี้คำที่ทับศัพท์มาจากอังกฤษทีละคำ",
+   expl:"คำยืมคือ คอมพิวเตอร์ เช็ก และ อีเมล รวม 3 คำ",
+   insight:"ประโยคนี้มีคำยืมภาษาอังกฤษ 3 คำ ได้แก่ คอมพิวเตอร์ เช็ก อีเมล"},
+  {t:"คำยืมต่างประเทศ",q:"ข้อใดเป็นคำภาษาต่างประเทศทั้งหมด",
+   o:["ฟุตบอล คอมพิวเตอร์ อินเทอร์เน็ต","แมว สุนัข โต๊ะ","ดินสอ ปากกา สมุด","บ้าน รถ ถนน"],a:0,
+   h:"หาชุดที่ทุกคำทับศัพท์มาจากภาษาอื่น",
+   expl:"ทั้งสามคำเป็นคำยืมจากอังกฤษ ส่วนข้ออื่นมีคำไทยแท้ปน",
+   insight:"ฟุตบอล คอมพิวเตอร์ อินเทอร์เน็ต ล้วนเป็นคำยืมจากภาษาอังกฤษ"},
+  {t:"คำยืมต่างประเทศ",q:"ข้อใดมีคำยืมจากภาษาต่างประเทศมากที่สุด",
+   o:["พ่อซื้อเค้กและเปิดโทรทัศน์","ฉันกินข้าวกับไข่ต้ม","เด็กอ่านหนังสือในห้องเรียน","แม่ปลูกดอกไม้หน้าบ้าน"],a:0,
+   h:"หาประโยคที่มีคำทับศัพท์หลายคำ",
+   expl:"\"เค้ก\" และ \"โทรทัศน์\" เป็นคำยืม ข้ออื่นเป็นคำไทยแท้ทั้งหมด",
+   insight:"ประโยคที่มีคำยืมมากที่สุดคือข้อที่มี เค้ก และ โทรทัศน์"},
+
+  /* ---- 3. คำเชื่อม ---- */
+  {t:"คำเชื่อม",q:"ข้อใดคือความหมายของคำเชื่อม",
+   o:["คำที่ใช้เชื่อมคำหรือข้อความ","คำที่ใช้แทนชื่อคนหรือสิ่งของ","คำที่ใช้บอกจำนวน","คำที่ใช้แสดงอาการ"],a:0,
+   h:"หน้าที่ของมันคือร้อยถ้อยคำเข้าด้วยกัน",
+   expl:"คำเชื่อมทำหน้าที่เชื่อมคำ ข้อความ หรือประโยคให้ต่อเนื่องกัน",
+   insight:"คำเชื่อมคือคำที่ใช้เชื่อมคำ ข้อความ หรือประโยคเข้าด้วยกัน"},
+  {t:"คำเชื่อม",q:"ข้อใดใช้คำเชื่อมแสดงเหตุและผล",
+   o:["เขาขยันเรียนจึงสอบได้คะแนนดี","ทั้งครูและนักเรียนร่วมกิจกรรม","ฉันชอบแมวแต่น้องชอบสุนัข","พ่อกับแม่ไปทำงาน"],a:0,
+   h:"หาประโยคที่มีเหตุนำไปสู่ผล",
+   expl:"\"ขยันเรียน\" (เหตุ) \"จึง\" \"สอบได้คะแนนดี\" (ผล) — คำว่า จึง แสดงเหตุผล",
+   insight:"คำว่า จึง เป็นคำเชื่อมแสดงความเป็นเหตุเป็นผล"},
+  {t:"คำเชื่อม",q:"ข้อใดใช้คำเชื่อมแสดงการเลือก",
+   o:["หรือ","และ","เพราะ","จึง"],a:0,
+   h:"คำที่ให้เลือกอย่างใดอย่างหนึ่ง",
+   expl:"คำว่า \"หรือ\" ใช้เชื่อมเพื่อแสดงทางเลือก",
+   insight:"หรือ เป็นคำเชื่อมแสดงการเลือกอย่างใดอย่างหนึ่ง"},
+  {t:"คำเชื่อม",q:"\"___เธอตั้งใจฝึกซ้อม เธอ___ชนะการแข่งขัน\" ควรเติมคำเชื่อมใด",
+   o:["เพราะ...จึง","ถ้า...ก็","แม้ว่า...แต่","ทั้ง...และ"],a:0,
+   h:"ความสัมพันธ์เป็นเหตุ (ฝึกซ้อม) นำไปสู่ผล (ชนะ)",
+   expl:"การฝึกซ้อมเป็นเหตุให้ชนะ จึงใช้คู่คำเชื่อม เพราะ...จึง",
+   insight:"คู่คำเชื่อม เพราะ...จึง ใช้แสดงความเป็นเหตุเป็นผล"},
+  {t:"คำเชื่อม",q:"\"___ฝนจะตกหนัก___นักเรียนยังมาเรียนตรงเวลา\" ควรเติมคำเชื่อมใด",
+   o:["แม้ว่า...แต่","เพราะ...จึง","ถ้า...ก็","และ...หรือ"],a:0,
+   h:"สองข้อความขัดแย้งกัน — ฝนตกแต่ก็ยังมาเรียน",
+   expl:"ความหมายขัดแย้งกัน จึงใช้คู่คำเชื่อม แม้ว่า...แต่",
+   insight:"คู่คำเชื่อม แม้ว่า...แต่ ใช้เชื่อมข้อความที่มีเนื้อความขัดแย้งกัน"},
+  {t:"คำเชื่อม",q:"ข้อใดใช้คำเชื่อมไม่เหมาะสม",
+   o:["น้องทำการบ้านหรืออยากสอบได้คะแนนดี","ฉันและพี่ชายชอบว่ายน้ำ","เพราะเขาขยันจึงสอบได้คะแนนดี","ถึงอากาศร้อนแต่เขายังออกกำลังกาย"],a:0,
+   h:"หาข้อที่คำเชื่อมทำให้ความหมายไม่สมเหตุสมผล",
+   expl:"\"หรือ\" แสดงการเลือก แต่เนื้อความควรเป็นเหตุผล จึงใช้ไม่เหมาะสม",
+   insight:"การเลือกคำเชื่อมต้องสอดคล้องกับความสัมพันธ์ของข้อความ มิฉะนั้นความหมายจะผิดเพี้ยน"},
+
+  /* ---- 4. คำราชาศัพท์ ---- */
+  {t:"คำราชาศัพท์",q:"คำราชาศัพท์ข้อใดมีความหมายว่า \"หู\"",
+   o:["พระกรรณ","พระศอ","พระบาท","พระพักตร์"],a:0,
+   h:"อวัยวะที่ใช้ฟังเสียง",
+   expl:"\"พระกรรณ\" คือคำราชาศัพท์ที่หมายถึง หู",
+   insight:"พระกรรณ เป็นคำราชาศัพท์ หมายถึง หู"},
+  {t:"คำราชาศัพท์",q:"คำราชาศัพท์ข้อใดหมายถึง \"คอ\"",
+   o:["พระศอ","พระเนตร","พระกร","พระโอษฐ์"],a:0,
+   h:"ส่วนที่เชื่อมศีรษะกับลำตัว",
+   expl:"\"พระศอ\" คือคำราชาศัพท์ที่หมายถึง คอ",
+   insight:"พระศอ เป็นคำราชาศัพท์ หมายถึง คอ"},
+  {t:"คำราชาศัพท์",q:"คำราชาศัพท์ข้อใดมีความหมายว่า \"มือ\"",
+   o:["พระหัตถ์","พระนาสิก","พระเนตร","พระโอษฐ์"],a:0,
+   h:"อวัยวะที่ใช้หยิบจับ",
+   expl:"\"พระหัตถ์\" คือคำราชาศัพท์ที่หมายถึง มือ",
+   insight:"พระหัตถ์ เป็นคำราชาศัพท์ หมายถึง มือ"},
+  {t:"คำราชาศัพท์",q:"\"พระบาทสมเด็จพระเจ้าอยู่หัว___สิ่งของแก่ประชาชน\" ควรเติมคำใด",
+   o:["พระราชทาน","ให้","มอบ","แจก"],a:0,
+   h:"กริยาราชาศัพท์สำหรับการให้ของพระมหากษัตริย์",
+   expl:"\"พระราชทาน\" เป็นคำราชาศัพท์ที่แปลว่า ให้ ใช้กับพระมหากษัตริย์",
+   insight:"พระราชทาน เป็นคำราชาศัพท์ที่ใช้แทนคำว่า ให้ สำหรับพระมหากษัตริย์"},
+  {t:"คำราชาศัพท์",q:"ข้อใดใช้คำราชาศัพท์ได้เหมาะสมที่สุด",
+   o:["สมเด็จพระราชินีเสด็จพระราชดำเนินไปทรงเปิดงาน","พระราชินีเดินทางไปจังหวัดเชียงใหม่","พระเจ้าอยู่หัวเสด็จไปเยี่ยมราษฎรในต่างจังหวัด","พระราชินีให้ของแก่เด็กนักเรียน"],a:0,
+   h:"หาข้อที่ใช้คำราชาศัพท์ครบถ้วนถูกต้อง",
+   expl:"ข้อนี้ใช้ \"เสด็จพระราชดำเนิน\" และ \"ทรง\" ได้ถูกต้องครบถ้วน",
+   insight:"การใช้ราชาศัพท์ที่ถูกต้องต้องใช้คำกริยาราชาศัพท์ เช่น เสด็จพระราชดำเนิน และ ทรง ให้ครบ"},
+  {t:"คำราชาศัพท์",q:"\"พระเนตร\" หมายถึงอวัยวะใด",
+   o:["ตา","หู","จมูก","ปาก"],a:0,
+   h:"อวัยวะที่ใช้มองเห็น",
+   expl:"\"พระเนตร\" คือคำราชาศัพท์ที่หมายถึง ตา",
+   insight:"พระเนตร เป็นคำราชาศัพท์ หมายถึง ตา"},
+
+  /* ---- 5. อักษรย่อ ---- */
+  {t:"อักษรย่อ",q:"การเขียนอักษรย่อควรใช้เครื่องหมายวรรคตอนชนิดใด",
+   o:["มหัพภาค","อัญประกาศ","จุลภาค","อัศเจรีย์"],a:0,
+   h:"เครื่องหมายจุดเล็ก ๆ ที่ใส่ท้ายคำย่อ",
+   expl:"อักษรย่อใช้เครื่องหมายมหัพภาค ( . ) กำกับท้ายตัวอักษร",
+   insight:"การเขียนอักษรย่อใช้เครื่องหมายมหัพภาค ( . ) กำกับ"},
+  {t:"อักษรย่อ",q:"ข้อใดใช้อักษรย่อถูกต้อง",
+   o:["รร. = โรงเรียน","นร. = นครราชสีมา","ชม. = เชียงราย","จ. = จาน"],a:0,
+   h:"ตรวจว่าตัวย่อตรงกับคำเต็มจริงหรือไม่",
+   expl:"\"รร.\" ย่อมาจาก โรงเรียน ส่วนข้ออื่นจับคู่ผิด",
+   insight:"รร. เป็นอักษรย่อของคำว่า โรงเรียน"},
+  {t:"อักษรย่อ",q:"\"คุณแม่พาคุณตาไปตรวจสุขภาพที่___\" ควรเติมอักษรย่อใดจึงเหมาะสมที่สุด",
+   o:["รพ.","รร.","อบจ.","กทม."],a:0,
+   h:"สถานที่สำหรับตรวจสุขภาพ",
+   expl:"ตรวจสุขภาพต้องไปโรงพยาบาล ย่อว่า รพ.",
+   insight:"รพ. เป็นอักษรย่อของคำว่า โรงพยาบาล"},
+  {t:"อักษรย่อ",q:"ข้อใดใช้อักษรย่อไม่ถูกต้อง",
+   o:["พ.ศ. = พยาบาลศูนย์","ด.ญ. = เด็กหญิง","ก.พ. = กุมภาพันธ์","จ. = จังหวัด"],a:0,
+   h:"หาคู่ที่ตัวย่อไม่ตรงกับคำเต็มที่แท้จริง",
+   expl:"\"พ.ศ.\" ย่อมาจาก พุทธศักราช ไม่ใช่ พยาบาลศูนย์ จึงไม่ถูกต้อง",
+   insight:"พ.ศ. เป็นอักษรย่อของคำว่า พุทธศักราช ไม่ใช่ พยาบาลศูนย์"},
+  {t:"อักษรย่อ",q:"\"พ่อเดินทางไปประชุมที่___\" ควรเติมอักษรย่อใด",
+   o:["กทม.","ถ.","มิ.ย.","น."],a:0,
+   h:"สถานที่ที่เป็นเมืองหลวงสำหรับการประชุม",
+   expl:"\"กทม.\" ย่อมาจาก กรุงเทพมหานคร เหมาะกับการเป็นสถานที่ประชุม",
+   insight:"กทม. เป็นอักษรย่อของคำว่า กรุงเทพมหานคร"},
+
+  /* ---- 6. ภาษาพูด/ภาษาเขียน ---- */
+  {t:"ภาษาพูด/ภาษาเขียน",q:"ข้อใดเป็นภาษาพูด",
+   o:["หมอ","แพทย์","ภาพยนตร์","โรงพยาบาล"],a:0,
+   h:"คำที่ใช้ในชีวิตประจำวันแบบไม่เป็นทางการ",
+   expl:"\"หมอ\" เป็นภาษาพูด ส่วนภาษาเขียนคือ แพทย์",
+   insight:"หมอ เป็นภาษาพูด ภาษาเขียนคือ แพทย์"},
+  {t:"ภาษาพูด/ภาษาเขียน",q:"ข้อใดเป็นภาษาเขียนของคำว่า \"เจอ\"",
+   o:["พบ","ดู","มอง","เห็น"],a:0,
+   h:"คำทางการที่มีความหมายว่าได้ประสบกัน",
+   expl:"\"เจอ\" เป็นภาษาพูด ภาษาเขียนที่ตรงความหมายคือ พบ",
+   insight:"ภาษาเขียนของคำว่า เจอ คือ พบ"},
+  {t:"ภาษาพูด/ภาษาเขียน",q:"ข้อใดเป็นภาษาเขียนของคำว่า \"หนัง\"",
+   o:["ภาพยนตร์","เรื่องราว","โรงหนัง","การแสดง"],a:0,
+   h:"คำทางการสำหรับสื่อบันเทิงที่ฉายในโรง",
+   expl:"\"หนัง\" เป็นภาษาพูด ภาษาเขียนคือ ภาพยนตร์",
+   insight:"ภาษาเขียนของคำว่า หนัง คือ ภาพยนตร์"},
+  {t:"ภาษาพูด/ภาษาเขียน",q:"ข้อใดใช้ภาษาเขียนเหมาะสมที่สุด",
+   o:["นักเรียนถูกตำหนิเพราะส่งงานล่าช้า","ฉันโดนครูว่าเรื่องการบ้าน","ผมหิวมากเลย","เขาเจอเพื่อนที่ตลาด"],a:0,
+   h:"หาประโยคที่ใช้คำทางการทั้งประโยค",
+   expl:"ข้อนี้ใช้ \"ถูกตำหนิ\" และ \"ล่าช้า\" ซึ่งเป็นภาษาเขียนทั้งหมด",
+   insight:"ภาษาเขียนใช้คำทางการ เช่น ถูกตำหนิ ล่าช้า แทนคำพูดอย่าง โดนว่า ช้ามาก"},
+  {t:"ภาษาพูด/ภาษาเขียน",q:"ข้อใดใช้ภาษาพูด",
+   o:["วันนี้อากาศร้อนมากเลย","ดิฉันมีอาการปวดศีรษะ","ข้าพเจ้าจะเดินทางกลับภูมิลำเนา","กระผมขอขอบพระคุณ"],a:0,
+   h:"หาประโยคที่ฟังดูเป็นกันเองในชีวิตประจำวัน",
+   expl:"\"ร้อนมากเลย\" เป็นภาษาพูด ส่วนข้ออื่นใช้คำทางการ",
+   insight:"คำลงท้ายอย่าง มากเลย เป็นลักษณะของภาษาพูดที่ไม่เป็นทางการ"},
+
+  /* ---- 7. สำนวนไทย ---- */
+  {t:"สำนวนไทย",q:"สำนวน \"น้ำขึ้นให้รีบตัก\" มีความหมายตรงกับข้อใด",
+   o:["เมื่อมีโอกาสดีควรรีบคว้าไว้","ควรช่วยเหลือผู้อื่นเสมอ","ควรรู้จักออมเงินไว้ใช้ยามจำเป็น","ควรพูดจาอย่างสุภาพ"],a:0,
+   h:"นึกถึงการฉวยจังหวะที่เอื้ออำนวย",
+   expl:"สำนวนนี้สอนให้รีบใช้โอกาสเมื่อมีจังหวะดี เพราะอาจไม่กลับมาอีก",
+   insight:"น้ำขึ้นให้รีบตัก หมายถึง เมื่อมีโอกาสดีควรรีบคว้าไว้"},
+  {t:"สำนวนไทย",q:"การรับงานหลายอย่างพร้อมกันจนทำไม่สำเร็จสักอย่าง ตรงกับสำนวนใด",
+   o:["จับปลาสองมือ","น้ำขึ้นให้รีบตัก","ขมิ้นกับปูน","นกน้อยทำรังแต่พอตัว"],a:0,
+   h:"นึกถึงการคว้าหลายอย่างพร้อมกันแล้วหลุดมือ",
+   expl:"\"จับปลาสองมือ\" หมายถึงทำหลายอย่างพร้อมกันจนเสียทั้งหมด",
+   insight:"จับปลาสองมือ หมายถึง มุ่งหวังหลายอย่างพร้อมกันจนไม่สำเร็จสักอย่าง"},
+  {t:"สำนวนไทย",q:"คนสองคนที่ทะเลาะกันตลอด เข้ากันไม่ได้ ตรงกับสำนวนใด",
+   o:["ขมิ้นกับปูน","จับปลาสองมือ","ตนเป็นที่พึ่งแห่งตน","น้ำขึ้นให้รีบตัก"],a:0,
+   h:"ของสองสิ่งที่อยู่ด้วยกันแล้วเกิดปฏิกิริยา",
+   expl:"\"ขมิ้นกับปูน\" หมายถึงคนที่ไม่ถูกกัน พบกันเมื่อใดก็มีเรื่อง",
+   insight:"ขมิ้นกับปูน หมายถึง คนที่ไม่ถูกกัน เข้ากันไม่ได้ มักทะเลาะกัน"},
+  {t:"สำนวนไทย",q:"การพยายามทำสิ่งที่ยากลำบากด้วยความอดทนไม่ยอมแพ้ ตรงกับสำนวนใด",
+   o:["เข็นครกขึ้นภูเขา","นกน้อยทำรังแต่พอตัว","ตัดหางปล่อยวัด","ผักชีโรยหน้า"],a:0,
+   h:"นึกถึงงานหนักที่ต้องใช้ความเพียรอย่างมาก",
+   expl:"\"เข็นครกขึ้นภูเขา\" หมายถึงทำงานยากที่ต้องใช้ความพยายามอย่างสูง",
+   insight:"เข็นครกขึ้นภูเขา หมายถึง การทำงานที่ยากลำบากต้องใช้ความเพียรพยายามมาก"},
+  {t:"สำนวนไทย",q:"การใช้จ่ายอย่างประหยัด พอเหมาะกับฐานะของตน ตรงกับสำนวนใด",
+   o:["นกน้อยทำรังแต่พอตัว","ตัดหางปล่อยวัด","ผักชีโรยหน้า","ปากหวานก้นเปรี้ยว"],a:0,
+   h:"นึกถึงการทำสิ่งต่าง ๆ ให้พอดีกับกำลังตน",
+   expl:"\"นกน้อยทำรังแต่พอตัว\" หมายถึงทำสิ่งต่าง ๆ ให้พอเหมาะกับฐานะ",
+   insight:"นกน้อยทำรังแต่พอตัว หมายถึง ทำสิ่งต่าง ๆ ให้พอเหมาะกับฐานะและกำลังของตน"},
+  {t:"สำนวนไทย",q:"การพึ่งพาตนเอง ไม่พึ่งพาผู้อื่น ตรงกับสำนวนใด",
+   o:["ตนเป็นที่พึ่งแห่งตน","น้ำขึ้นให้รีบตัก","จับปลาสองมือ","ขมิ้นกับปูน"],a:0,
+   h:"คำสอนเรื่องการช่วยเหลือตัวเอง",
+   expl:"\"ตนเป็นที่พึ่งแห่งตน\" สอนให้พึ่งพาตนเองก่อนผู้อื่น",
+   insight:"ตนเป็นที่พึ่งแห่งตน หมายถึง ควรพึ่งพาตนเอง ไม่หวังพึ่งผู้อื่นตลอดเวลา"},
+];
+BANK.forEach((q,i)=>q.id=i);
+
+/* ---------- STATE ---------- */
+function freshState(){
+  const s={ledger:{}};
+  BANK.forEach(q=>{ s.ledger[q.id]={streak:0,status:"active",lastCorrect:0}; });
+  return s;
+}
+function loadState(){
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(!raw) return freshState();
+    const s=JSON.parse(raw);
+    if(!s||typeof s!=="object"||!s.ledger) return freshState();
+    // ensure every bank id exists (in case bank grew)
+    BANK.forEach(q=>{ if(!s.ledger[q.id]) s.ledger[q.id]={streak:0,status:"active",lastCorrect:0}; });
+    return s;
+  }catch(e){ return freshState(); }
+}
+function saveState(){ try{ localStorage.setItem(LS_KEY,JSON.stringify(STATE)); }catch(e){} }
+let STATE=loadState();
+
+/* ---------- HELPERS ---------- */
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function eligible(q){
+  const L=STATE.ledger[q.id];
+  if(L.status!=="active") return false;
+  if(FINAL_PASS_SPACING_MS>0 && L.streak===STREAK_TO_MASTER-1){
+    return Date.now()-L.lastCorrect>=FINAL_PASS_SPACING_MS;
+  }
+  return true;
+}
+function topicIndex(name){ return TOPICS.indexOf(name); }
+function counts(){
+  let active=0,mastered=0;
+  BANK.forEach(q=>{ STATE.ledger[q.id].status==="mastered"?mastered++:active++; });
+  return {active,mastered,total:BANK.length};
+}
+function topicStats(name){
+  let mastered=0,total=0,half=0;
+  BANK.forEach(q=>{
+    if(q.t!==name) return;
+    total++;
+    const L=STATE.ledger[q.id];
+    if(L.status==="mastered") mastered++;
+    else if(L.streak>0) half++;
+  });
+  return {mastered,total,half};
+}
+
+/* ---------- SESSION ---------- */
+let session=null;
+function buildSession(){
+  let pool=BANK.filter(eligible);
+  // exit ramp: if not enough strictly-eligible, relax spacing rule
+  if(pool.length<QS_PER_ROUND){
+    const extra=BANK.filter(q=>STATE.ledger[q.id].status==="active" && !pool.includes(q));
+    pool=pool.concat(extra);
+  }
+  pool=shuffle(pool).slice(0,Math.min(QS_PER_ROUND,pool.length));
+  session={queue:pool,idx:0,correct:0,answered:false,
+    topicStats:{}, drawn:pool.length};
+  pool.forEach(q=>{
+    if(!session.topicStats[q.t]) session.topicStats[q.t]={correct:0,drawn:0};
+    session.topicStats[q.t].drawn++;
+  });
+}
+
+/* ---------- RENDER: HOME ---------- */
+const app=document.getElementById("app");
+function renderHome(){
+  const c=counts();
+  const pct=c.total?Math.round(c.mastered/c.total*100):0;
+  const pills=TOPICS.map((t,i)=>
+    `<span class="pill" style="border-color:${TOPIC_COLORS[i]};color:${TOPIC_COLORS[i]}">${t}</span>`).join("");
+  const twoCol=TOPICS.length>=7?"two":"";
+  const topicCards=TOPICS.map((t,i)=>{
+    const ts=topicStats(t);
+    const tpct=ts.total?Math.round(ts.mastered/ts.total*100):0;
+    const halfHtml=ts.half>0
+      ? `<div class="half" title="ตอบถูกอีกครั้งเดียวก็จบ">▶${ts.half}</div>`:"";
+    return `<div class="topic">
+      <div class="tn" style="color:${TOPIC_COLORS[i]}">${t}</div>
+      ${halfHtml}
+      <div class="cnt">${ts.mastered}/${ts.total} ข้อ</div>
+      <div class="tbar"><span style="width:${tpct}%;background:${TOPIC_COLORS[i]}"></span></div>
+    </div>`;
+  }).join("");
+  const canContinue=c.active>0;
+
+  app.innerHTML=`
+    <div class="topbar"><span class="ver">${APP_VERSION}</span></div>
+    <h1 class="title">${QUIZ_NAME}</h1>
+    <div class="pills">${pills}</div>
+
+    <div class="card">
+      <div class="stats">
+        <div class="stat active"><div class="num">${c.active}</div><div class="lbl">ข้อที่ยังเรียนอยู่</div></div>
+        <div class="stat done"><div class="num">${c.mastered}</div><div class="lbl">เรียนจบแล้ว</div></div>
+      </div>
+      <div class="bar"><span id="mainbar"></span></div>
+      <div class="howto">ตอบถูก ${STREAK_TO_MASTER} ครั้งติดต่อกันเพื่อเรียนจบข้อนั้น
+      หากตอบผิดจะเริ่มนับใหม่ในข้อนั้น ทำให้ครบทั้ง ${c.total} ข้อเพื่อจบทั้งหมด</div>
+    </div>
+
+    <div class="btns">
+      <button class="btn-primary" id="continueBtn" ${canContinue?"":"disabled"}>▶ ทำต่อ</button>
+      <button class="btn-secondary" id="resetBtn">↺ เริ่มใหม่ทั้งหมด</button>
+    </div>
+
+    <div class="topics ${twoCol}">${topicCards}</div>
+  `;
+  // animate main bar
+  requestAnimationFrame(()=>{ const b=document.getElementById("mainbar"); if(b) b.style.width=pct+"%"; });
+  document.getElementById("continueBtn").onclick=()=>{ if(canContinue){ buildSession(); renderQuiz(); } };
+  document.getElementById("resetBtn").onclick=renderResetModal;
+}
+
+/* ---------- RENDER: QUIZ ---------- */
+function renderQuiz(){
+  const q=session.queue[session.idx];
+  const ti=topicIndex(q.t);
+  const color=TOPIC_COLORS[ti];
+  session.answered=false;
+  const opts=shuffle(q.o.map((text,i)=>({text,correct:i===q.a})));
+
+  app.innerHTML=`
+    <div class="qhead">
+      <span class="badge" style="background:${color}">${q.t}</span>
+      <span class="qcount">ข้อ ${session.idx+1} จาก ${session.queue.length}</span>
+    </div>
+    <div class="qtext">${q.q}</div>
+    <div class="hintwrap">
+      <button class="hintbtn" id="hintBtn">💡 ดูคำใบ้</button>
+      <div class="hintbox hidden" id="hintBox">${q.h}</div>
+    </div>
+    <div class="opts" id="opts"></div>
+    <div class="feedback hidden" id="feedback">
+      <div class="expl"><b>เฉลย:</b> <span id="explText"></span></div>
+      <div class="insight"><b>ประเด็นสำคัญ:</b> <span id="insightText"></span></div>
+    </div>
+    <div class="nextbar hidden" id="nextbar">
+      <button class="btn-primary" id="nextBtn">ถัดไป →</button>
+    </div>
+  `;
+  document.getElementById("hintBtn").onclick=function(){
+    const box=document.getElementById("hintBox");
+    box.classList.toggle("hidden");
+    this.textContent=box.classList.contains("hidden")?"💡 ดูคำใบ้":"💡 ซ่อนคำใบ้";
+  };
+  const optsEl=document.getElementById("opts");
+  opts.forEach(o=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.textContent=o.text;
+    b.onclick=()=>answer(q,o,b,opts);
+    optsEl.appendChild(b);
+  });
+}
+
+function answer(q,chosen,btn,opts){
+  if(session.answered) return;
+  session.answered=true;
+  const L=STATE.ledger[q.id];
+
+  if(chosen.correct){
+    L.streak++; L.lastCorrect=Date.now();
+    if(L.streak>=STREAK_TO_MASTER) L.status="mastered";
+    session.correct++;
+    session.topicStats[q.t].correct++;
+  }else{
+    L.streak=0;
+  }
+  saveState(); // save immediately after every answer
+
+  // highlight
+  const btns=document.querySelectorAll(".opt");
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(opts[i].correct) b.classList.add("correct");
+    else if(b===btn) b.classList.add("wrong");
+  });
+  document.getElementById("explText").textContent=q.expl;
+  document.getElementById("insightText").textContent=q.insight;
+  document.getElementById("feedback").classList.remove("hidden");
+  const nb=document.getElementById("nextbar");
+  nb.classList.remove("hidden");
+  document.getElementById("nextBtn").onclick=()=>{
+    session.idx++;
+    if(session.idx>=session.queue.length) renderResults();
+    else renderQuiz();
+  };
+}
+
+/* ---------- RENDER: RESULTS ---------- */
+function renderResults(){
+  // count completed this session
+  let completed=0;
+  session.queue.forEach(q=>{ if(STATE.ledger[q.id].status==="mastered") completed++; });
+  const rows=Object.keys(session.topicStats).map(t=>{
+    const s=session.topicStats[t];
+    const ti=topicIndex(t);
+    return `<tr><td style="color:${TOPIC_COLORS[ti]};font-weight:600">${t}</td>
+      <td class="c">${s.correct}</td><td class="c">${s.drawn}</td></tr>`;
+  }).join("");
+
+  app.innerHTML=`
+    <h1 class="title">ผลรอบนี้</h1>
+    <div class="card">
+      <div class="score">${session.correct} / ${session.queue.length}</div>
+      <div class="scorelbl">ตอบถูก</div>
+      ${completed>0?`<div class="completebadge">+ เรียนจบ ${completed} ข้อในรอบนี้</div>`:""}
+      <table>
+        <thead><tr><th>หัวข้อ</th><th class="c">ถูก</th><th class="c">ออกในรอบนี้</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <button class="btn-primary" id="contBtn">ทำต่อ →</button>
+  `;
+  document.getElementById("contBtn").onclick=renderHome;
+}
+
+/* ---------- RESET MODAL ---------- */
+function renderResetModal(){
+  const ov=document.createElement("div");
+  ov.className="overlay";
+  ov.innerHTML=`
+    <div class="modal">
+      <p>การกระทำนี้จะลบความคืบหน้าทั้งหมด คุณแน่ใจหรือไม่?</p>
+      <div class="row">
+        <button class="m-cancel" id="mCancel">ยกเลิก</button>
+        <button class="m-confirm" id="mConfirm">ยืนยัน</button>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+  document.getElementById("mCancel").onclick=()=>ov.remove();
+  document.getElementById("mConfirm").onclick=()=>{
+    try{ localStorage.removeItem(LS_KEY); }catch(e){}
+    STATE=freshState(); saveState();
+    ov.remove(); renderHome();
+  };
+}
+
+/* ---------- INIT ---------- */
+renderHome();
+</script>
+</body>
+</html>
