@@ -142,7 +142,7 @@
 </style>
 </head>
 <body>
-<div class="ver" id="ver">ver1.20</div>
+<div class="ver" id="ver">ver1.21</div>
 <div class="app">
 
   <!-- HOME -->
@@ -213,7 +213,7 @@ const QUIZ_NAME = "แบบฝึกหัดภาษาไทย ป.5";
 const QS_PER_ROUND = 16;
 const STREAK_TO_MASTER = 2;
 const FINAL_PASS_SPACING_MS = 10*60*1000; // 10 minutes
-const VERSION = "ver1.20";
+const VERSION = "ver1.21";
 const TCOLORS = ["var(--t0)","var(--t1)","var(--t2)","var(--t3)","var(--t4)","var(--t5)","var(--t6)"];
 
 function slugify(s){return s.replace(/\s+/g,'-').replace(/[^\w\-ก-๙]/g,'').toLowerCase();}
@@ -313,6 +313,7 @@ function startSession(){
 }
 function renderQ(){
   const q=session.list[session.i];
+  q._answered=false;            // reset per render so re-drawn questions stay clickable
   document.getElementById('qbadge').textContent=q.t;
   const c=tColor(q.t);
   const b=document.getElementById('qbadge'); b.style.borderColor=c; b.style.color=c;
