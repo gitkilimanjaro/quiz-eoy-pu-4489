@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P5 Science Revision</title>
+<style>
+  :root{
+    /* Animal-Crossing-ish cozy palette */
+    --bg:#fdf6e3;            /* warm cream */
+    --bg2:#f3ead0;
+    --card:#fffdf7;
+    --ink:#5a4a36;          /* warm brown ink */
+    --ink-soft:#9a8a72;
+    --leaf:#7bc47f;         /* soft leaf green */
+    --leaf-dk:#5aa860;
+    --sky:#8ed0e8;
+    --sky-dk:#56b4d3;
+    --sun:#ffd166;
+    --peach:#ffb38a;
+    --coral:#ff8a7a;
+    --berry:#e87aa8;
+    --navy:#5aa860;         /* primary button = leafy green (cozy, not navy) */
+    --green:#5aa860;
+    --red:#ef6f6c;
+    --orange:#f4a259;
+    --shadow:0 4px 0 rgba(146,120,80,.18), 0 8px 18px rgba(146,120,80,.15);
+    --shadow-sm:0 3px 0 rgba(146,120,80,.16);
+    /* topic colors - candy/cozy */
+    --t0:#5aa860; --t1:#56b4d3; --t2:#f4a259; --t3:#b07cc6;
+    --t4:#4caf9d; --t5:#ef6f6c; --t6:#e87aa8; --t7:#a98467;
+    --t8:#f6a623; --t9:#6c9bd1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Chalkboard SE",system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(255,209,102,.18), transparent 38%),
+      radial-gradient(circle at 88% 12%, rgba(142,208,232,.18), transparent 36%),
+      radial-gradient(circle at 50% 100%, rgba(123,196,127,.20), transparent 50%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--ink); line-height:1.5; -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .wrap{max-width:560px; margin:0 auto; padding:18px 16px 70px;}
+  .screen{display:none; animation:pop .35s cubic-bezier(.34,1.56,.64,1);}
+  .screen.active{display:block;}
+  @keyframes pop{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes bobble{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+  .topbar{position:relative; min-height:26px;}
+  .ver{position:absolute; top:6px; right:6px; font-size:11px; font-weight:700; color:#fff;
+    background:var(--peach); padding:3px 10px; border-radius:999px; box-shadow:var(--shadow-sm);}
+
+  h1{font-size:28px; font-weight:800; letter-spacing:-.01em; margin:10px 0 4px; color:var(--ink);
+     text-shadow:0 2px 0 #fff;}
+  .leaf-emoji{display:inline-block; animation:bobble 2.6s ease-in-out infinite; transform-origin:bottom;}
+  .subtitle{font-size:13px; color:var(--ink-soft); margin-bottom:16px; font-weight:600;}
+
+  .pills{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:18px;}
+  .pill{font-size:11px; font-weight:700; padding:5px 11px; border-radius:999px;
+    background:#fff; border:2px solid; box-shadow:var(--shadow-sm); white-space:nowrap;}
+
+  .card{background:var(--card); border:2.5px solid #fff; border-radius:22px; box-shadow:var(--shadow);
+    padding:20px; margin-bottom:18px;}
+  .stats{display:flex; gap:14px; margin-bottom:14px;}
+  .stat{flex:1; text-align:center; background:var(--bg2); border-radius:18px; padding:12px 6px;}
+  .stat .num{font-size:32px; font-weight:800; line-height:1;}
+  .stat .lbl{font-size:11px; color:var(--ink-soft); margin-top:5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;}
+  .bar{height:14px; background:#ece2c8; border-radius:99px; overflow:hidden; margin:8px 0 14px;
+    border:2px solid #fff; box-shadow:inset 0 1px 3px rgba(146,120,80,.15);}
+  .bar>span{display:block; height:100%; width:0; border-radius:99px; transition:width .7s cubic-bezier(.34,1.56,.64,1);
+    background:linear-gradient(90deg,var(--leaf),var(--leaf-dk));}
+  .howto{font-size:13px; color:var(--ink-soft); font-weight:600;}
+  .howto b{color:var(--leaf-dk);}
+
+  .btn{display:block; width:100%; border:none; border-radius:18px; padding:15px;
+    font-size:16px; font-weight:800; cursor:pointer; font-family:inherit;
+    transition:transform .08s, box-shadow .08s, filter .15s;}
+  .btn:active{transform:translateY(3px);}
+  .btn-primary{background:var(--leaf); color:#fff; margin-bottom:12px;
+    box-shadow:0 5px 0 var(--leaf-dk), 0 9px 16px rgba(90,168,96,.3); text-shadow:0 1px 0 rgba(0,0,0,.12);}
+  .btn-primary:active{box-shadow:0 2px 0 var(--leaf-dk);}
+  .btn-ghost{background:#fff; color:var(--coral); border:2.5px solid var(--coral);
+    box-shadow:0 4px 0 rgba(255,138,122,.35);}
+  .btn-ghost:active{box-shadow:0 1px 0 rgba(255,138,122,.35);}
+  .btn-row{margin-bottom:20px;}
+
+  .topics{display:grid; grid-template-columns:1fr; gap:12px;}
+  .topics.two{grid-template-columns:1fr 1fr;}
+  .topic{background:var(--card); border:2.5px solid #fff; border-radius:18px; box-shadow:var(--shadow-sm);
+    padding:14px; transition:transform .12s;}
+  .topic:hover{transform:translateY(-3px);}
+  .topic .tname{font-size:13px; font-weight:800; margin-bottom:8px; line-height:1.25; display:flex; gap:6px; align-items:center;}
+  .topic .ic{font-size:16px;}
+  .topic .meta{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--ink-soft);
+    margin-bottom:8px; flex-wrap:wrap; font-weight:700;}
+  .half{color:var(--orange); font-weight:800;}
+  .tbar{height:10px; background:#ece2c8; border-radius:99px; overflow:hidden; border:1.5px solid #fff;}
+  .tbar>span{display:block; height:100%; width:0; transition:width .7s cubic-bezier(.34,1.56,.64,1);}
+
+  /* QUIZ */
+  .qhead{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:10px;}
+  .qbadge{font-size:12px; font-weight:800; padding:6px 13px; border-radius:999px; background:#fff; border:2.5px solid;
+    box-shadow:var(--shadow-sm); display:flex; gap:5px; align-items:center;}
+  .qcount{font-size:13px; color:var(--ink-soft); font-weight:800; background:var(--bg2); padding:6px 12px; border-radius:999px;}
+  .qcard{background:var(--card); border:2.5px solid #fff; border-radius:24px; box-shadow:var(--shadow); padding:20px;}
+  .qtext{font-size:19px; font-weight:800; text-align:center; margin:6px 0 16px; line-height:1.4; color:var(--ink);}
+  .hintwrap{margin-bottom:14px; text-align:center;}
+  .hintbtn{background:var(--sun); border:none; color:#7a5d12; font-size:13px; font-weight:800;
+    padding:9px 16px; border-radius:14px; cursor:pointer; font-family:inherit; box-shadow:0 3px 0 #e0ab3a;}
+  .hintbtn:active{transform:translateY(2px); box-shadow:0 1px 0 #e0ab3a;}
+  .hintbox{display:none; margin-top:11px; font-size:13px; color:#7a5d12; background:#fff6db;
+    border:2px dashed var(--sun); border-radius:14px; padding:11px 13px; text-align:left; font-weight:600;}
+  .hintbox.show{display:block; animation:pop .3s ease;}
+  .opts{display:flex; flex-direction:column; gap:11px;}
+  .opt{background:#fff; border:2.5px solid #ece2c8; border-radius:16px; padding:14px 15px; font-size:15px;
+    text-align:left; cursor:pointer; font-family:inherit; color:var(--ink); font-weight:700;
+    box-shadow:0 3px 0 #ece2c8; transition:all .12s;}
+  .opt:hover:not(:disabled){border-color:var(--sky-dk); box-shadow:0 3px 0 var(--sky);}
+  .opt:active:not(:disabled){transform:translateY(2px); box-shadow:0 1px 0 var(--sky);}
+  .opt:disabled{cursor:default;}
+  .opt.correct{background:#e7f6e8; border-color:var(--leaf-dk); color:var(--leaf-dk); box-shadow:0 3px 0 var(--leaf);}
+  .opt.wrong{background:#fdeceb; border-color:var(--red); color:var(--red); box-shadow:0 3px 0 #f3a9a6;}
+  .feedback{margin-top:18px;}
+  .explbox{background:#eef7fb; border:2px solid var(--sky); border-radius:16px; padding:13px 15px; font-size:14px; margin-bottom:11px; font-weight:600;}
+  .explbox b{color:var(--sky-dk);}
+  .insightbox{background:#fff6db; border:2px solid var(--sun); border-radius:16px; padding:13px 15px; font-size:14px; font-weight:600;}
+  .insightbox b{color:#d99413;}
+  .next{margin-top:18px;}
+
+  /* RESULTS */
+  .score{font-size:46px; font-weight:800; text-align:center; margin:8px 0 2px; color:var(--leaf-dk);}
+  .scorelbl{text-align:center; color:var(--ink-soft); margin-bottom:16px; font-weight:700;}
+  .badge{text-align:center; background:#e7f6e8; color:var(--leaf-dk); font-weight:800; border:2px solid var(--leaf);
+    border-radius:16px; padding:12px; margin-bottom:16px; font-size:14px;}
+  .cheer{text-align:center; font-size:40px; margin-bottom:6px; animation:floaty 2.4s ease-in-out infinite;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{text-align:left; padding:9px 6px; border-bottom:2px solid #f3ead0;}
+  th{color:var(--ink-soft); font-weight:800;}
+  td.n,th.n{text-align:center;}
+
+  /* MODAL */
+  .overlay{display:none; position:fixed; inset:0; background:rgba(90,74,54,.5); z-index:50;
+    align-items:center; justify-content:center; padding:24px; backdrop-filter:blur(2px);}
+  .overlay.show{display:flex; animation:pop .25s ease;}
+  .modal{background:var(--card); border:3px solid #fff; border-radius:24px; padding:26px; max-width:340px; text-align:center; box-shadow:var(--shadow);}
+  .modal .face{font-size:38px; margin-bottom:8px;}
+  .modal p{margin-bottom:20px; font-size:15px; font-weight:700;}
+  .modal .row{display:flex; gap:10px;}
+  .modal .row .btn{margin:0;}
+  .btn-cancel{background:var(--bg2); color:var(--ink); box-shadow:0 4px 0 #ddd0b0;}
+  .btn-cancel:active{box-shadow:0 1px 0 #ddd0b0;}
+  .btn-confirm{background:var(--coral); color:#fff; box-shadow:0 4px 0 #e0705f;}
+  .btn-confirm:active{box-shadow:0 1px 0 #e0705f;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HOME -->
+  <section id="home" class="screen active">
+    <div class="topbar"><span class="ver" id="verTag">ver2.00</span></div>
+    <h1><span class="leaf-emoji">🌱</span> P5 Science Revision</h1>
+    <p class="subtitle">Your cozy little study island — answer questions, grow your garden of knowledge! 🐾</p>
+    <div class="pills" id="pills"></div>
+
+    <div class="card">
+      <div class="stats">
+        <div class="stat"><div class="num" id="activeN" style="color:var(--sky-dk)">0</div><div class="lbl">Active Questions</div></div>
+        <div class="stat"><div class="num" id="doneN" style="color:var(--leaf-dk)">0</div><div class="lbl">Completed</div></div>
+      </div>
+      <div class="bar"><span id="homeBar"></span></div>
+      <p class="howto" id="howto"></p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="continueBtn">🌟 Continue Progress</button>
+      <button class="btn btn-ghost" id="resetBtn">🔄 Start All Over</button>
+    </div>
+
+    <div class="topics" id="topicList"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <div class="qhead">
+      <span class="qbadge" id="qBadge"></span>
+      <span class="qcount" id="qCount"></span>
+    </div>
+    <div class="qcard">
+      <div class="qtext" id="qText"></div>
+      <div class="hintwrap">
+        <button class="hintbtn" id="hintBtn">💡 Show hint</button>
+        <div class="hintbox" id="hintBox"></div>
+      </div>
+      <div class="opts" id="opts"></div>
+      <div class="feedback" id="feedback" style="display:none">
+        <div class="explbox" id="explBox"></div>
+        <div class="insightbox" id="insightBox"></div>
+        <button class="btn btn-primary next" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="topbar"></div>
+    <div class="cheer" id="cheer">🎉</div>
+    <h1 style="text-align:center">Round Complete!</h1>
+    <div class="card">
+      <div class="score" id="rScore">0 / 0</div>
+      <div class="scorelbl">correct this round</div>
+      <div class="badge" id="rBadge" style="display:none"></div>
+      <table>
+        <thead><tr><th>Topic</th><th class="n">Correct</th><th class="n">Seen</th></tr></thead>
+        <tbody id="rTable"></tbody>
+      </table>
+    </div>
+    <button class="btn btn-primary" id="continueStudy">🏡 Back to Island</button>
+  </section>
+
+</div>
+
+<!-- RESET MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="face">😺</div>
+    <p>This will erase all your progress. Are you sure?</p>
+    <div class="row">
+      <button class="btn btn-cancel" id="mCancel">Cancel</button>
+      <button class="btn btn-confirm" id="mConfirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const BANK = [
+{ t:"Reproduction in Plants", q:"Which part of the flower develops into the fruit after fertilisation?", o:["Stigma","Anther","Ovary","Sepal"], a:2, h:"Think about which part contains the ovules.", expl:"After fertilisation the ovary grows and develops into the fruit, while the ovules inside become seeds.", insight:"The ovary develops into the fruit; the ovules develop into seeds." },
+{ t:"Reproduction in Plants", q:"What is the correct order of events in plant reproduction?", o:["Fertilisation → pollination → germination → seed formation","Germination → pollination → fertilisation → seed formation","Pollination → fertilisation → seed formation → germination","Pollination → germination → fertilisation → seed formation"], a:2, h:"Pollen must arrive before the seed can form, and the seed must form before it can grow.", expl:"Pollen lands on the stigma (pollination), the male and female cells join (fertilisation), seeds form, and a seed later grows into a new plant (germination).", insight:"Order: pollination, then fertilisation, then seed formation, then germination." },
+{ t:"Reproduction in Plants", q:"A flower has large, brightly coloured petals and produces nectar and scent. How is it most likely pollinated?", o:["By wind, which carries the small light pollen grains between separate flowers","By water, which transports pollen across the surface","By self-pollination, without any external agent involved","By insects, which are attracted to the colour, scent and nectar"], a:3, h:"What do colour, scent and nectar attract?", expl:"Bright petals, scent and nectar are adaptations to attract insects, which transfer pollen as they feed.", insight:"Bright petals, scent and nectar are adaptations for insect pollination." },
+{ t:"Reproduction in Plants", q:"A seed has a winged structure that lets it spin as it falls. How is it dispersed?", o:["By animals, because the wing acts as a hook that catches onto passing fur","By water, because the wing helps the seed float and drift","By wind, because the wing slows its fall and carries it further","By explosive splitting, because the wing flings the seed out"], a:2, h:"What kind of structure helps a seed travel through the air?", expl:"A wing increases air resistance so the seed is carried away by wind before landing.", insight:"Wing-like or hairy structures are adaptations for wind dispersal." },
+{ t:"Reproduction in Plants", q:"Why is seed dispersal important for a plant species?", o:["It increases the temperature of the soil so that seeds can germinate faster","It allows the parent plant to absorb more nutrients from its surroundings","It prevents insects and animals from feeding on the developing seeds","It reduces competition for water, sunlight and space among the young plants"], a:3, h:"Think about what happens if all seeds land right under the parent.", expl:"Spreading seeds away from the parent means seedlings do not crowd each other or the parent for resources.", insight:"Dispersal spreads seeds out, reducing competition for water, sunlight, minerals and space." },
+{ t:"Reproduction in Plants", q:"Which part of the flower receives the pollen grains during pollination?", o:["Ovary","Anther","Stigma","Filament"], a:2, h:"It is the topmost part of the female structure and is often sticky.", expl:"The stigma is the sticky top of the female part that catches pollen grains.", insight:"Pollen lands on the stigma during pollination." },
+{ t:"Reproduction in Plants", q:"What is pollination?", o:["The joining of the male cell and the female cell inside the ovule","The growth of a young plant from a seed in suitable conditions","The transfer of pollen grains from the anther to the stigma","The spreading of seeds away from the parent plant by an agent"], a:2, h:"It happens before fertilisation and involves moving pollen.", expl:"Pollination is the transfer of pollen from the anther (male) to the stigma (female).", insight:"Pollination = transfer of pollen from anther to stigma." },
+{ t:"Reproduction in Plants", q:"Which is the male part of a flower that produces pollen?", o:["Anther","Stigma","Ovary","Ovule"], a:0, h:"It sits at the top of the stalk-like filament.", expl:"The anther produces pollen grains and is held up by the filament.", insight:"The anther is the male part that produces pollen." },
+{ t:"Reproduction in Plants", q:"A fruit has small hooks on its surface. How is its seed most likely dispersed?", o:["By animals, because the hooks catch onto fur or feathers","By wind, because the hooks make the fruit lighter to carry","By water, because the hooks trap air and help it float","By splitting, because the hooks build up tension and burst"], a:0, h:"What would hooks attach to?", expl:"Hooks catch onto the fur of passing animals, which carry the fruit away before it drops off.", insight:"Hooks are an adaptation for dispersal by animals." },
+{ t:"Reproduction in Plants", q:"What must happen to an ovule before it can develop into a seed?", o:["It must be fertilised by joining with the male cell from a pollen grain","It must be dispersed away from the parent plant by an external agent","It must absorb extra water and dissolved minerals transported all the way up from the roots","It must be pollinated by pollen landing directly on its surface"], a:0, h:"Pollination alone is not enough — what step comes next?", expl:"The pollen produces a male cell that travels down to the ovule and joins with it (fertilisation); only then does the ovule become a seed.", insight:"An ovule becomes a seed only after fertilisation." },
+{ t:"Reproduction in Plants", q:"A coconut is light, has a hollow space inside and a fibrous husk. How is it dispersed?", o:["By wind, because it is light enough to be blown along","By water, because it floats and is carried by currents","By animals, because the husk sticks to fur easily","By splitting, because the husk bursts to fling it away"], a:1, h:"Coconuts are often found on beaches — how did they get there?", expl:"The air space and fibrous husk let the coconut float, so water currents carry it to new shores.", insight:"Floating, with a fibrous husk and air space, is an adaptation for water dispersal." },
+{ t:"Reproduction in Plants", q:"In an experiment, seeds are sown close together in one tray and far apart in another. The crowded seeds grow into smaller, weaker plants. What does this show?", o:["Overcrowding raises the soil temperature too much, which then harms all the growing plants","Overcrowding blocks pollination, so fewer seeds are able to form","Overcrowding speeds up germination but stops plants growing tall","Overcrowding makes plants compete for resources, so they grow less well"], a:3, h:"What is in short supply when many plants share one space?", expl:"Crowded plants compete for water, sunlight and minerals, so each gets less and grows poorly.", insight:"Overcrowding increases competition for water, sunlight and minerals, reducing growth." },
+{ t:"Reproduction in Humans", q:"What is fertilisation in humans?", o:["The release of an egg cell from the ovary","The development of a baby inside the womb","The joining of a sperm cell and an egg cell","The transfer of many sperm cells into the female reproductive system"], a:2, h:"It is the moment two cells become one.", expl:"Fertilisation is when a sperm cell joins with an egg cell to form a single cell that can grow into a baby.", insight:"Fertilisation = the joining of a sperm cell and an egg cell." },
+{ t:"Reproduction in Humans", q:"Where does a baby develop inside the mother's body?", o:["Ovary","Stomach","Womb","Bladder"], a:2, h:"It is a muscular organ in the female reproductive system.", expl:"The fertilised egg grows into a baby inside the womb (uterus).", insight:"A baby develops in the womb (uterus)." },
+{ t:"Reproduction in Humans", q:"Which cell is produced by the female reproductive system?", o:["Sperm cell","Egg cell","Pollen grain","Root cell"], a:1, h:"It is much larger than the male cell.", expl:"The female reproductive system produces egg cells; the male produces sperm cells.", insight:"The female produces egg cells; the male produces sperm cells." },
+{ t:"Reproduction in Humans", q:"How is human reproduction similar to plant reproduction?", o:["Both rely on insects to carry the male cell to the female cell","Both involve a male cell joining with a female cell at fertilisation","Both produce seeds that are later dispersed to new places","Both need the young to develop inside a protective womb"], a:1, h:"Look for the step that is shared by all sexual reproduction.", expl:"In both plants and humans, fertilisation is the joining of a male cell and a female cell.", insight:"In both plants and humans, fertilisation is the joining of a male and a female cell." },
+{ t:"Reproduction in Humans", q:"A child has dimples like their mother. What does this show?", o:["A characteristic can be inherited from a parent","A characteristic is always caused by the environment","Dimples appear only in children, never in adults","Dimples are learned by copying the parent over time"], a:0, h:"Where did the trait come from?", expl:"Dimples are an inherited characteristic passed from parent to child through reproduction.", insight:"Inherited characteristics are passed from parents to their young." },
+{ t:"Reproduction in Humans", q:"Which of these is an inherited characteristic rather than one shaped by the environment?", o:["A scar from injury","A suntan from sunbathing","Body weight from diet","Eye colour at birth"], a:3, h:"Which one are you born with, set by your parents?", expl:"Eye colour is inherited from parents; scars, suntans and weight are affected by the environment.", insight:"Inherited traits (e.g. eye colour) come from parents; others (scars, suntan) come from the environment." },
+{ t:"Reproduction in Humans", q:"What is heredity?", o:["The growth of a young organism into a full-sized adult","The ability of living things to respond to their surroundings","The spreading of young organisms to new living spaces","The passing of characteristics from parents to their young"], a:3, h:"It explains why children resemble their parents.", expl:"Heredity is the passing on of characteristics from parents to offspring during reproduction.", insight:"Heredity = passing of characteristics from parents to young." },
+{ t:"Water & Changes of State", q:"What is the process called when water changes from liquid to gas at any temperature, from the surface only?", o:["Boiling","Condensation","Melting","Evaporation"], a:3, h:"It happens slowly, even on a warm day, without bubbling.", expl:"Evaporation is water turning to water vapour at the surface, and can happen at any temperature.", insight:"Evaporation: liquid to gas at the surface, at any temperature." },
+{ t:"Water & Changes of State", q:"Tim's cold glasses become foggy when he walks into a warm, humid room. Why?", o:["Water already on the cold lenses evaporates quickly into the surrounding warm air","Water vapour in the air condenses on the cold lenses","The lenses melt slightly and turn into water droplets","The warm air freezes onto the cold lens surface"], a:1, h:"Warm moist air meets a cold surface — what does the gas turn into?", expl:"Water vapour loses heat to the cold lenses and condenses into tiny droplets, making them foggy.", insight:"Condensation: water vapour loses heat on a cold surface and turns to liquid." },
+{ t:"Water & Changes of State", q:"At what temperature does pure water boil at sea level?", o:["0°C","100°C","50°C","37°C"], a:1, h:"It is the upper fixed point of the water states.", expl:"Pure water boils at 100°C at sea level, forming bubbles of water vapour throughout the liquid.", insight:"Pure water boils at 100°C; it freezes/melts at 0°C." },
+{ t:"Water & Changes of State", q:"What must water gain in order to evaporate?", o:["Cold","Light","Pressure","Heat"], a:3, h:"What makes wet clothes dry faster on a hot day?", expl:"Water must gain heat to evaporate; the more heat, the faster evaporation occurs.", insight:"Water gains heat to evaporate; it loses heat to condense or freeze." },
+{ t:"Water & Changes of State", q:"Two ice cubes are placed on two plates: one metal, one plastic. The cube on the metal plate melts faster. Why?", o:["Metal conducts heat to the ice faster than plastic does","Plastic gives out more heat to the ice than metal does","Metal is colder than plastic, so it melts the ice quicker","Plastic blocks the air, stopping the ice from melting at all"], a:0, h:"Which material lets heat pass through it more easily?", expl:"Metal is a better conductor, so heat from the surroundings reaches the ice more quickly and it melts faster.", insight:"Better conductors transfer heat to the ice faster, so it melts more quickly." },
+{ t:"Water & Changes of State", q:"Which condition makes water evaporate fastest?", o:["Cold, still and small exposed surface area","Hot, still and small exposed surface area","Cold, windy and large exposed surface area","Hot, windy and large exposed surface area"], a:3, h:"Heat, moving air and surface area each speed it up — which option has all three?", expl:"Higher temperature, more wind and a larger exposed surface area all increase the rate of evaporation.", insight:"Evaporation is faster with more heat, more wind and a larger exposed surface area." },
+{ t:"Water & Changes of State", q:"What is the process called when a gas changes into a liquid?", o:["Evaporation","Melting","Boiling","Condensation"], a:3, h:"It is the reverse of evaporation.", expl:"Condensation is when water vapour (gas) loses heat and changes into liquid water.", insight:"Condensation = gas changing to liquid (it loses heat)." },
+{ t:"Water & Changes of State", q:"Two beakers hold the same amount of water but one has a wider opening. The wider one loses water faster over a day. What does this show?", o:["A wider beaker holds water at a higher temperature than a narrow one","Wide beakers cause water to boil rather than slowly evaporate","Narrow beakers stop evaporation from happening at the surface","A larger exposed surface area increases the rate of evaporation"], a:3, h:"What is different between the two beakers?", expl:"The only difference is the exposed surface area; the larger area means faster evaporation.", insight:"A larger exposed surface area means a faster rate of evaporation." },
+{ t:"Water & Changes of State", q:"Which statement about the states of water is correct?", o:["Steam forms when water boils at 100°C","Water exists as a solid only, at all temperatures","Water exists as a gas only above 100°C","Melting and boiling happen at the same temperature"], a:0, h:"Eliminate the statements that ignore evaporation or fix water in one state.", expl:"Steam (water vapour) forms when water boils at 100°C; water can be solid, liquid or gas depending on heat, and evaporation occurs below 100°C too.", insight:"Steam forms at boiling (100°C); water can also become gas by evaporation below 100°C." },
+{ t:"Water Cycle", q:"What is the correct order of stages in the water cycle?", o:["Condensation → evaporation → collection → precipitation","Evaporation → condensation → precipitation → collection","Precipitation → evaporation → condensation → collection","Collection → precipitation → evaporation → condensation"], a:1, h:"Water rises as gas, forms clouds, falls, then gathers.", expl:"Water evaporates, the vapour condenses into clouds, falls as precipitation, and collects in water bodies before repeating.", insight:"Water cycle order: evaporation, condensation, precipitation, collection." },
+{ t:"Water Cycle", q:"Which part of the water cycle does the Sun directly cause?", o:["Condensation of rising water vapour into clouds","Precipitation of rain from clouds","Evaporation of water from water bodies","Collection of water in rivers"], a:2, h:"The Sun provides heat — which stage needs heat?", expl:"The Sun's heat causes water to evaporate from oceans, lakes and rivers, driving the whole cycle.", insight:"The Sun's heat drives evaporation, the starting stage of the water cycle." },
+{ t:"Water Cycle", q:"In the water cycle, how do clouds form?", o:["Water vapour rises, cools and condenses into tiny droplets","Rain droplets rise from the ground and gather in the sky","Water freezes on the ground and floats up into the air","Liquid water boils at the surface and rises as bubbles"], a:0, h:"What happens to vapour as it rises and cools?", expl:"As water vapour rises it cools and condenses into tiny droplets, which gather to form clouds.", insight:"Clouds form when rising water vapour cools and condenses into droplets." },
+{ t:"Water Cycle", q:"Why is the water cycle important?", o:["It removes all of the dissolved salt from the world's oceans","It keeps a constant supply of fresh water on Earth","It increases the total amount of water on Earth","It stops water from ever evaporating into the air"], a:1, h:"Think about where our usable water keeps coming from.", expl:"The water cycle continuously recycles water, maintaining a steady supply of fresh water for living things.", insight:"The water cycle maintains a constant supply of fresh water on Earth." },
+{ t:"Water Cycle", q:"In a model of the water cycle, water is heated and droplets later form on a cool lid above. The droplets on the lid represent which stage?", o:["Evaporation","Precipitation","Condensation","Collection"], a:2, h:"Vapour meeting a cool surface and turning to droplets — what is that?", expl:"The vapour rises, meets the cool lid, loses heat and condenses into droplets, modelling condensation.", insight:"Droplets forming on a cool surface model condensation." },
+{ t:"Water Cycle", q:"What is precipitation in the water cycle?", o:["Water vapour rising up from warm water bodies","Water gathering in rivers, lakes and the sea","Water turning from liquid into vapour in the air","Water falling from clouds as rain, snow or hail"], a:3, h:"It is the stage where water comes back down.", expl:"Precipitation is water falling from clouds to the ground as rain, snow or hail.", insight:"Precipitation = water falling from clouds (rain, snow, hail)." },
+{ t:"Plant Transport System", q:"Which tubes carry water and minerals from the roots up to the leaves?", o:["Food-carrying tubes","Water-carrying tubes","Air tubes","Root hairs"], a:1, h:"They transport substances absorbed by the roots upward.", expl:"Water-carrying tubes transport water and dissolved minerals from the roots up the stem to the leaves.", insight:"Water-carrying tubes move water and minerals from roots up to the leaves." },
+{ t:"Plant Transport System", q:"What do the food-carrying tubes transport?", o:["Water and minerals from the roots up to the leaves","Air taken from the leaves and passed down to the roots of the whole plant","Food made in the leaves to all parts of the plant","Sunlight from the leaves to the rest of the plant"], a:2, h:"Food is made in the leaves — where must it go?", expl:"Food-carrying tubes transport the food made in the leaves to all other parts of the plant.", insight:"Food-carrying tubes move food from the leaves to all parts of the plant." },
+{ t:"Plant Transport System", q:"A white flower's stem is split, with each half placed in differently coloured water. The petals become half one colour, half the other. What does this show?", o:["Water-carrying tubes in the stem transport water up to the petals","Food-carrying tubes located in the leaves push the coloured water steadily upward","The petals make their own coloured water from the dye supplied","The flower absorbs colour directly through its outer petal surface"], a:0, h:"How did the colour reach the petals from the water?", expl:"Each side's water-carrying tubes carried its coloured water up to the matching half of the petals, proving water travels through these tubes.", insight:"Water-carrying tubes transport water from the stem up to the petals." },
+{ t:"Plant Transport System", q:"Celery placed in coloured water shows coloured streaks running up its stalk. What do the streaks show?", o:["The position of the food-carrying tubes in the leaves","The place where the celery makes its own food","The position of the water-carrying tubes in the stalk","The route that air takes down into the roots"], a:2, h:"What carried the coloured water upward?", expl:"The coloured streaks mark the water-carrying tubes, which transported the coloured water up the stalk.", insight:"Coloured streaks reveal the water-carrying tubes that transport water up the stem." },
+{ t:"Plant Transport System", q:"Why does removing a ring of bark from a tree trunk eventually harm the tree?", o:["It cuts the water-carrying tubes, so water cannot reach the leaves","It stops the leaves from making food in sunlight altogether","It cuts the food-carrying tubes, so food cannot reach the roots","It removes the layer where the tree stores all its seeds"], a:2, h:"The food-carrying tubes lie just under the bark.", expl:"The food-carrying tubes are in the bark layer; removing the ring stops food reaching the roots, which slowly die.", insight:"Food-carrying tubes lie in the bark; cutting them stops food reaching the roots." },
+{ t:"Plant Transport System", q:"What is the main function of a plant's transport system?", o:["To make all of the food for the whole plant using sunlight, water and air","To protect the plant from being eaten by animals","To carry water, minerals and food to all parts of the plant","To anchor the plant firmly into the surrounding soil"], a:2, h:"Transport means moving things from place to place.", expl:"The transport system moves water and minerals up, and food from the leaves to the rest of the plant.", insight:"The transport system carries water, minerals and food to all parts of the plant." },
+{ t:"Plant Transport System", q:"Which part of a plant absorbs water and minerals from the soil?", o:["Leaves","Flowers","Roots","Petals"], a:2, h:"It is the part below the ground.", expl:"The roots absorb water and dissolved minerals from the soil, which then travel up the water-carrying tubes.", insight:"Roots absorb water and minerals from the soil." },
+{ t:"Plant Transport System", q:"Where in the plant is food mainly made?", o:["Roots","Stem","Flowers","Leaves"], a:3, h:"This part contains chlorophyll to trap sunlight.", expl:"Leaves contain chlorophyll, which traps sunlight to make food for the plant.", insight:"Food is made in the leaves, which contain chlorophyll." },
+{ t:"Plant Transport System", q:"Substances move both up and down a plant's stem. Which statement correctly describes this?", o:["Both water and food move only upward, using the same single tube","Water always moves down only to the roots, while food remains stored inside the leaves","Food moves up to the leaves while water stays in the roots only","Water moves up in one set of tubes; food moves around in another set"], a:3, h:"There are two separate sets of tubes with different jobs.", expl:"Water-carrying tubes move water and minerals upward, while food-carrying tubes move food from the leaves to all parts.", insight:"Two tube systems: water-carrying (up) and food-carrying (to all parts)." },
+{ t:"Respiratory System", q:"Which organ takes in oxygen from the air we breathe?", o:["Lungs","Heart","Stomach","Kidneys"], a:0, h:"It fills with air each time you breathe in.", expl:"The lungs take in oxygen from inhaled air and pass it into the blood.", insight:"The lungs take in oxygen from the air and pass it into the blood." },
+{ t:"Respiratory System", q:"When we breathe out, which gas is released in larger amounts than when we breathe in?", o:["Pure oxygen","Plain nitrogen","Water vapour","Carbon dioxide"], a:3, h:"It is the waste gas the body needs to get rid of.", expl:"Exhaled air contains more carbon dioxide, a waste gas produced by the body.", insight:"Breathed-out air contains more carbon dioxide and less oxygen." },
+{ t:"Respiratory System", q:"What is the correct path of air into the body?", o:["Nose → lungs → windpipe","Nose → windpipe → lungs","Windpipe → nose → lungs","Lungs → windpipe → nose"], a:1, h:"Air enters at the top and ends deep in the chest.", expl:"Air goes in through the nose, down the windpipe, and into the lungs.", insight:"Air path: nose, then windpipe, then lungs." },
+{ t:"Respiratory System", q:"People in a poorly ventilated, crowded room start to feel drowsy and breathe faster. Why?", o:["Oxygen builds up while carbon dioxide is used up by the people","The room gets colder, which slows everyone's breathing down","The air pressure rises, forcing people to breathe more slowly","Oxygen levels drop and carbon dioxide builds up in the room"], a:3, h:"Many people breathing in a sealed room change the air how?", expl:"As people breathe, they use up oxygen and release carbon dioxide; with little ventilation, oxygen falls and they breathe faster to compensate.", insight:"In poorly ventilated rooms, oxygen falls and carbon dioxide rises as people breathe." },
+{ t:"Respiratory System", q:"Fish take in oxygen using gills, while humans use lungs. What do both organs have in common?", o:["Both let oxygen pass into the blood of the animal","Both take in their oxygen directly from the surrounding air only","Both pump blood around the animal's whole body","Both make food for the animal using oxygen"], a:0, h:"What is the shared job, even though the setting differs?", expl:"Gills and lungs both allow oxygen to pass into the blood — gills from water, lungs from air.", insight:"Gills and lungs both let oxygen pass into the blood." },
+{ t:"Respiratory System", q:"What is the role of the windpipe?", o:["To pump blood from the heart to the lungs","To make food for the body using the air","To absorb oxygen directly into the blood","To carry air between the nose and the lungs"], a:3, h:"It is the tube connecting the nose to the lungs.", expl:"The windpipe is the air passage carrying air between the nose/mouth and the lungs.", insight:"The windpipe carries air between the nose and the lungs." },
+{ t:"Respiratory System", q:"A table shows breathing rate falling steadily from babies to adults. What does this suggest?", o:["As a person gets older, their breathing rate tends to increase","As a person gets older, their breathing rate tends to decrease","Breathing rate stays exactly the same throughout a person's life","Breathing rate depends only on height and not at all on age"], a:1, h:"Read the direction of the trend in the table.", expl:"The data show breathing rate decreasing with age, so older people generally breathe more slowly than babies.", insight:"Breathing rate generally decreases as a person gets older." },
+{ t:"Respiratory System", q:"Why does breathing rate increase during exercise?", o:["The body needs more oxygen and must remove more carbon dioxide","The body needs to cool down by taking in more cold air","The lungs shrink during exercise and hold less air each breath","The heart stops briefly, so the lungs must work much harder"], a:0, h:"What does the active body need more of?", expl:"Exercising muscles need more oxygen and produce more carbon dioxide, so breathing speeds up to supply oxygen and remove the waste gas.", insight:"During exercise, breathing speeds up to supply more oxygen and remove more carbon dioxide." },
+{ t:"Circulatory System", q:"What are the three main parts of the circulatory system?", o:["The lungs, the windpipe and the air sacs","The heart, the blood vessels and the blood","The roots, the stem and the leaves of plants","The brain, the nerves and the spinal cord"], a:1, h:"Think of the pump, the pipes and the fluid.", expl:"The circulatory system is made up of the heart (pump), the blood vessels (pipes) and the blood (fluid).", insight:"Circulatory system = heart + blood vessels + blood." },
+{ t:"Circulatory System", q:"What is the main function of the heart?", o:["To pump blood around the body","To take in oxygen from the air","To make food for the whole body","To remove solid waste from food"], a:0, h:"It is a muscular pump.", expl:"The heart pumps blood through the blood vessels to all parts of the body.", insight:"The heart pumps blood around the body." },
+{ t:"Circulatory System", q:"What does the blood transport around the body?", o:["Oxygen, food and water to the body's cells","Only oxygen, and nothing else, to the cells","Only food, directly from the stomach lining","Air from the lungs straight to the stomach"], a:0, h:"Cells need several things delivered to them.", expl:"Blood carries oxygen, digested food and water to the body's cells, and carries away waste.", insight:"Blood transports oxygen, food and water to cells and carries waste away." },
+{ t:"Circulatory System", q:"During exercise, Claire's heart rate rises sharply then levels off, as shown on a graph. Why does it rise?", o:["The heart tries to cool itself down by beating much faster during the exercise","Blood becomes thinner during exercise and flows more quickly","The lungs stop working, so the heart must beat much faster","Muscles need more oxygen, so the heart pumps faster to supply it"], a:3, h:"What do working muscles demand more of?", expl:"Active muscles need more oxygen and food, so the heart beats faster to pump blood to them more quickly.", insight:"Heart rate rises during exercise to deliver more oxygen and food to muscles." },
+{ t:"Circulatory System", q:"After exercise stops, what happens to a person's heart rate?", o:["It gradually slows back down to the resting rate","It immediately drops far below the normal resting heart rate","It keeps rising for several more minutes","It stays at the exercise rate permanently"], a:0, h:"The muscles need less oxygen once you rest.", expl:"Once exercise stops, the muscles need less oxygen, so the heart rate gradually returns to its resting level.", insight:"After exercise, heart rate gradually returns to the resting rate." },
+{ t:"Circulatory System", q:"How do the respiratory and circulatory systems work together?", o:["The heart somehow adds extra oxygen to the air before it ever enters the lungs","The lungs add oxygen to the blood, which the heart pumps around","The lungs pump the blood while the heart fills with fresh air","The blood makes oxygen, which the lungs then send to the heart"], a:1, h:"Where does oxygen enter the blood, and what moves the blood?", expl:"Oxygen passes from the lungs into the blood, and the heart then pumps that oxygen-rich blood to the rest of the body.", insight:"Lungs put oxygen into the blood; the heart pumps it around the body." },
+{ t:"Circulatory System", q:"What are blood vessels?", o:["Sacs in the lungs that take in oxygen","Tubes that carry air to the lungs","Tubes that carry blood throughout the body","Glands that produce digested food"], a:2, h:"They are the 'pipes' of the circulatory system.", expl:"Blood vessels are the tubes through which blood flows to and from all parts of the body.", insight:"Blood vessels are tubes that carry blood through the body." },
+{ t:"Circulatory System", q:"Why is regular exercise good for the circulatory system?", o:["It removes all the blood vessels the body does not need","It stops the heart from ever needing to beat quickly","It strengthens the heart so it pumps blood more efficiently","It permanently lowers the amount of blood in the body"], a:2, h:"The heart is a muscle — what does training do to muscles?", expl:"Exercise strengthens the heart muscle, allowing it to pump blood more efficiently with each beat.", insight:"Exercise strengthens the heart, making it pump more efficiently." },
+{ t:"Circulatory System", q:"A diagram shows blood flowing from the heart, to the lungs, back to the heart, then to the body. Why does blood pass through the lungs?", o:["To pick up food before being pumped to the body","To remove water before being pumped to the body","To pick up oxygen before being pumped to the body","To be warmed up before being pumped to the body"], a:2, h:"What does blood collect at the lungs?", expl:"Blood flows to the lungs to take in oxygen, then returns to the heart to be pumped, oxygen-rich, to the body.", insight:"Blood passes through the lungs to pick up oxygen before reaching the body." },
+{ t:"The Unit of Life (Cells)", q:"What is the basic unit of life?", o:["The organ","The tissue","The system","The cell"], a:3, h:"It is the smallest building block of all living things.", expl:"All living things are made of cells, the smallest unit that can carry out life processes.", insight:"The cell is the basic unit of life." },
+{ t:"The Unit of Life (Cells)", q:"Which part of a plant cell traps sunlight to make food?", o:["Nucleus","Membrane","Chloroplast","Cytoplasm"], a:2, h:"It contains the green pigment chlorophyll.", expl:"Chloroplasts contain chlorophyll, which traps sunlight so the cell can make food.", insight:"Chloroplasts contain chlorophyll and trap sunlight to make food." },
+{ t:"The Unit of Life (Cells)", q:"Which statement about cells is true?", o:["All living cells must contain exactly the same internal parts as one another","Cells are found only in animals and never in any plants","The cell is the smallest unit that carries out life processes","A single cell can never carry out any life process alone"], a:2, h:"Eliminate the statements that are too absolute.", expl:"Cells are the smallest units of life and can carry out life processes; different cells have different parts suited to their jobs.", insight:"The cell is the smallest unit able to carry out life processes." },
+{ t:"The Unit of Life (Cells)", q:"Which cell part controls the activities of the cell?", o:["Nucleus","Cytoplasm","Wall","Chloroplast"], a:0, h:"It acts like the control centre of the cell.", expl:"The nucleus controls the activities that take place inside the cell.", insight:"The nucleus controls the cell's activities." },
+{ t:"The Unit of Life (Cells)", q:"Which part is found in a plant cell but NOT in an animal cell?", o:["Cell nucleus","Cell wall","Cell membrane","Cell cytoplasm"], a:1, h:"It gives plant cells a fixed, rigid shape.", expl:"Plant cells have a cell wall that gives them a fixed shape; animal cells do not have one.", insight:"Plant cells have a cell wall; animal cells do not." },
+{ t:"The Unit of Life (Cells)", q:"How are cells, tissues, organs and systems related?", o:["Cells form tissues, tissues form organs, organs form systems","Whole systems form the organs, those organs form cells, and cells form tissues","Organs form cells, cells form systems, systems form tissues","Tissues form cells, cells form systems, systems form organs"], a:0, h:"Build up from the smallest unit to the largest.", expl:"Similar cells group into tissues, tissues into organs, and organs into systems.", insight:"Cells → tissues → organs → systems, from smallest to largest." },
+{ t:"The Unit of Life (Cells)", q:"A single-celled organism lives in a pond and carries out all life processes by itself. What does this show?", o:["Single cells can survive only when joined into large tissues","Pond organisms are not made of cells like other living things","One cell can do only one life process and nothing else","A single cell can perform all the processes needed for life"], a:3, h:"It survives alone — what does that mean about one cell?", expl:"A single-celled organism shows that one cell can carry out all the life processes needed to survive.", insight:"A single cell can carry out all the life processes needed for life." },
+{ t:"The Unit of Life (Cells)", q:"Which part surrounds the cell and controls what enters and leaves it?", o:["Nucleus","Chloroplast","Cytoplasm","Membrane"], a:3, h:"It is the boundary layer of every cell.", expl:"The cell membrane surrounds the cell and controls which substances enter and leave.", insight:"The cell membrane controls what enters and leaves the cell." },
+{ t:"Electrical Systems", q:"What is needed for a simple circuit to make a bulb light up?", o:["A complete loop with a power source, wires and the bulb","Only a bulb and a single wire with no power source","A power source and bulb that are not connected by wires","Two separate loops that do not touch each other at all"], a:0, h:"Electricity must be able to flow all the way round.", expl:"A bulb lights only when there is a complete (closed) circuit connecting a power source, wires and the bulb.", insight:"A bulb lights only in a complete (closed) circuit with a power source." },
+{ t:"Electrical Systems", q:"Which of these is an electrical conductor?", o:["Plastic ruler","Rubber band","Wooden stick","Metal clip"], a:3, h:"Conductors are usually metals.", expl:"Metals such as steel conduct electricity; plastic, rubber and wood are insulators.", insight:"Metals (e.g. steel) are conductors; plastic, rubber and wood are insulators." },
+{ t:"Electrical Systems", q:"What does an electrical insulator do?", o:["It does not allow electricity to flow through it","It allows electricity to flow through it easily","It stores electricity for later use in a circuit","It increases the brightness of a bulb in a circuit"], a:0, h:"Think of the plastic covering around a wire.", expl:"An insulator does not let electricity pass through it, unlike a conductor.", insight:"Insulators do not allow electricity to flow through them." },
+{ t:"Electrical Systems", q:"In a circuit tester, a bulb lights only when the two ends touch a material. The bulb lights when touching a metal key but not a plastic comb. What does this show?", o:["The plastic comb must be the conductor while the metal key is instead the insulator","The metal key is a conductor and the plastic comb is an insulator","Both objects are conductors but the comb has a weaker current","Both objects are insulators but the key stores more electricity"], a:1, h:"The bulb lights only when current can flow through the object.", expl:"The bulb lights only when current passes through the object, so the metal key conducts (conductor) and the comb does not (insulator).", insight:"If the tester bulb lights, the material is a conductor; if not, it is an insulator." },
+{ t:"Electrical Systems", q:"What is the job of a switch in a circuit?", o:["To open or close the circuit, turning the current on or off","To increase the amount of electricity stored in the battery","To change the electrical energy into useful light energy inside the connecting wires","To stop electricity from ever flowing through the circuit"], a:0, h:"What happens when you flick a light switch?", expl:"A switch opens the circuit to stop the current or closes it to let current flow.", insight:"A switch opens or closes a circuit to turn the current off or on." },
+{ t:"Electrical Systems", q:"Two bulbs are connected in series in one circuit. What happens if one bulb is removed?", o:["The other bulb goes out because the circuit is broken","The other bulb glows brighter than it did before","The other bulb stays exactly as bright as before","The other bulb lights up only after a short delay"], a:0, h:"In a series circuit there is only one path for the current.", expl:"In a series circuit there is one loop; removing a bulb breaks it, so the current stops and the other bulb goes out.", insight:"In a series circuit, breaking one part stops current to all parts." },
+{ t:"Electrical Systems", q:"What happens to the brightness of bulbs when more bulbs are added in series?", o:["The bulbs become dimmer than before","The bulbs become brighter than before","The bulbs stay exactly the same brightness","The bulbs switch off completely at once"], a:0, h:"More bulbs share the same current in one loop.", expl:"Adding more bulbs in series makes each bulb dimmer, as they share the same current in one loop.", insight:"Adding bulbs in series makes each bulb dimmer." },
+{ t:"Electrical Systems", q:"Which energy change happens in a lit bulb in a circuit?", o:["Light energy changes into electrical energy for the wires","Electrical energy changes into light and heat energy","Heat energy changes into electrical energy in the battery","Sound energy changes into light energy inside the bulb"], a:1, h:"What does the bulb give out when lit?", expl:"A lit bulb converts electrical energy from the source into light energy (and some heat).", insight:"In a bulb, electrical energy changes into light (and heat) energy." },
+{ t:"Using Electricity", q:"Why should you never touch electrical switches or appliances with wet hands?", o:["Water makes the switch slippery and harder to press down","Water cools the appliance and stops it from working at all","Water conducts electricity and could give you a dangerous shock","Water increases the brightness of the appliance dangerously"], a:2, h:"Think about whether water lets electricity pass through.", expl:"Water is a conductor, so wet hands let electricity flow through the body, risking a serious electric shock.", insight:"Water conducts electricity, so wet hands raise the risk of electric shock." },
+{ t:"Using Electricity", q:"Which of these is a sensible way to save electricity at home?", o:["Leaving all of the lights switched on so that the bulbs last much longer","Using as many appliances at once as you possibly can","Keeping the television on overnight while everyone sleeps","Switching off lights and appliances when they are not in use"], a:3, h:"Saving electricity means using less of it.", expl:"Turning off lights and appliances when not needed reduces the amount of electrical energy used.", insight:"Switch off lights and appliances when not in use to save electricity." },
+{ t:"Using Electricity", q:"Why is it dangerous to plug too many appliances into one socket?", o:["The appliances will simply share the available electricity and then all stop working at once","Too much electricity flows, which can overheat wires and cause a fire","The socket will store the extra electricity until it runs out","The appliances will run faster than they are designed to run"], a:1, h:"What happens when wires carry more current than they should?", expl:"Overloading a socket draws too much current, which can overheat the wires and start a fire.", insight:"Overloading a socket can overheat wires and cause a fire." },
+{ t:"Using Electricity", q:"What is the purpose of a fuse in an electrical appliance?", o:["To increase the amount of current flowing steadily to the appliance","To break the circuit safely if too much current flows","To store extra electricity for the appliance to use","To make the appliance run faster and more brightly"], a:1, h:"It is a safety device that 'blows' when current is too high.", expl:"A fuse melts and breaks the circuit if the current gets too high, preventing overheating and fire.", insight:"A fuse breaks the circuit safely when the current is too high." },
+{ t:"Reproduction in Plants", q:"A plant grows fruits with juicy, sweet flesh around its seeds. How are these seeds most likely dispersed?", o:["By wind that lifts the heavy juicy fruit into the air","By water that dissolves the sweet flesh around the seeds","By the fruit splitting open and flinging the seeds out","By animals that eat the fruit and drop the seeds elsewhere"], a:3, h:"Why would a plant make its fruit tasty?", expl:"Animals eat the sweet fruit and the seeds pass out or are dropped far from the parent plant.", insight:"Sweet, fleshy fruits are an adaptation for dispersal by animals." },
+{ t:"Reproduction in Plants", q:"What happens to the petals of a flower after fertilisation has taken place?", o:["They wither and drop off as the fruit begins to form","They grow much larger and far brighter to attract many more insects","They turn into the seeds that the plant will disperse","They harden into a protective case around the new fruit"], a:0, h:"The petals' job (attracting pollinators) is done — what then?", expl:"Once fertilisation occurs the petals are no longer needed, so they wither and fall as the ovary forms a fruit.", insight:"After fertilisation, petals wither and fall while the ovary develops into a fruit." },
+{ t:"Reproduction in Plants", q:"Why do wind-pollinated flowers often have small, dull petals and no scent?", o:["They use the dull petals to trap passing pollen from the wind","They rely on water and so have no use for petals or scent","They attract animals instead of insects with their plain look","They do not need to attract insects, so they save those features"], a:3, h:"What do bright petals and scent normally attract?", expl:"Wind carries their pollen, so they do not need bright petals, scent or nectar to attract insect pollinators.", insight:"Wind-pollinated flowers lack bright petals, scent and nectar because they don't need to attract insects." },
+{ t:"Reproduction in Humans", q:"How does a developing baby get the food and oxygen it needs inside the womb?", o:["From the air the baby breathes in directly through its mouth","From the mother's body, through a cord connected to the baby","From food the baby eats and digests on its own in the womb","From the egg cell's store, which lasts until the baby is born"], a:1, h:"The baby can't eat or breathe air yet — where does supply come from?", expl:"The baby receives food and oxygen from the mother's blood through the umbilical cord.", insight:"A developing baby gets food and oxygen from the mother through the umbilical cord." },
+{ t:"Reproduction in Humans", q:"Which statement about inherited and environmental characteristics is correct?", o:["The ability to swim is inherited, but eye colour is learned","Both eye colour and swimming ability are always inherited","Eye colour is inherited, but the ability to swim is learned","Both eye colour and swimming ability are shaped by practice"], a:2, h:"Which trait are you born with, and which do you pick up?", expl:"Eye colour is passed from parents (inherited); swimming is a skill gained from the environment (learned).", insight:"Inherited traits come from parents; learned skills and acquired traits come from the environment." },
+{ t:"Water & Changes of State", q:"Wet clothes are hung out to dry. On which day will they dry fastest?", o:["A cool, still day with the clothes bunched up together","A cold, windy day with the clothes folded into a pile","A hot, windy day with the clothes spread out widely","A warm, still day with the clothes packed close together"], a:2, h:"Heat, wind and surface area each speed evaporation — pick the option with all three.", expl:"Heat, moving air and a large exposed surface area all speed up evaporation, so spread-out clothes dry fastest on a hot, windy day.", insight:"Evaporation is fastest with high heat, moving air and a large exposed surface area." },
+{ t:"Water & Changes of State", q:"Water droplets form on the outside of a cold glass of iced drink. Where do these droplets come from?", o:["Water vapour in the air condensing on the cold glass surface","Water leaking slowly out through tiny holes in the glass","The iced drink soaking through and seeping out of the glass","The cold glass melting slightly and turning into water"], a:0, h:"What does warm moist air do when it meets a cold surface?", expl:"Water vapour in the surrounding air loses heat to the cold glass and condenses into liquid droplets on the outside.", insight:"Droplets on a cold glass form when water vapour in the air condenses." },
+{ t:"Water Cycle", q:"Where does most of the water that evaporates into the air come from?", o:["Clouds that release their water as vapour into the sky","Rain that turns back into vapour before reaching the ground","Oceans, seas and other large water bodies on Earth","Underground rocks that slowly leak vapour into the air"], a:2, h:"What covers most of Earth's surface?", expl:"Most evaporation happens from the oceans and seas, which cover most of Earth's surface.", insight:"Most water vapour comes from evaporation off oceans and large water bodies." },
+{ t:"Plant Transport System", q:"A plant is left without water for several days and its leaves droop. Why?", o:["Without any water the food-carrying tubes completely stop delivering food to the leaves","Without water the leaves make too much food and become heavy","Without water the roots grow upward and pull the leaves down","Without water the cells lose firmness, so the plant cannot stay upright"], a:3, h:"Water keeps plant cells firm — what happens when it's missing?", expl:"Water keeps plant cells firm and the plant upright; without it the cells lose firmness and the leaves droop.", insight:"Water keeps plant cells firm; lack of water makes the plant wilt and droop." },
+{ t:"Plant Transport System", q:"In an experiment a leafy shoot loses water faster on a warm, windy day than a cool, still one. What does this show?", o:["Plants lose water faster in warm, windy conditions through their leaves","Plants make more food in warm, windy conditions using their leaves","Warm, windy air forces extra water up into the plant's leaves","Wind blows water droplets directly onto the surface of the leaves"], a:0, h:"This mirrors how evaporation speeds up — applied to a plant.", expl:"Like evaporation, water loss from leaves increases with heat and wind, so the shoot loses more water in warm, windy conditions.", insight:"Plants lose water faster from their leaves in warm, windy conditions." },
+{ t:"Respiratory System", q:"What happens to the air sacs in the lungs when a person breathes in?", o:["They empty out air, pushing carbon dioxide into the blood","They pump blood from the lungs towards the beating heart","They fill with air, letting oxygen pass into the blood","They make food for the body using the oxygen breathed in"], a:2, h:"Breathing in brings air into the lungs — what do the air sacs do with it?", expl:"On breathing in, the air sacs fill with air and oxygen passes through their thin walls into the blood.", insight:"Air sacs fill with air on breathing in, letting oxygen pass into the blood." },
+{ t:"Respiratory System", q:"Two people exercise; one is fit and one is not. Why might the unfit person breathe much faster?", o:["Their lungs are larger and so take in air more quickly","Their body needs to work harder to take in enough oxygen","Their heart has stopped, forcing the lungs to do more work","Their body makes extra oxygen to cope with the exercise"], a:1, h:"A less-fit body is less efficient at supplying oxygen.", expl:"A less-fit person's body is less efficient, so they must breathe faster to take in the extra oxygen their muscles need.", insight:"Breathing faster supplies the extra oxygen the body needs during exertion." },
+{ t:"Circulatory System", q:"On a graph, Sam's heart rate is highest during running and lowest while sitting. Why is it lowest while sitting?", o:["Sitting cools the body, which makes the heart slow right down","The heart only beats quickly when a person is fast asleep","Sitting stops blood from flowing, so the heart can rest fully","Resting muscles need less oxygen, so the heart pumps more slowly"], a:3, h:"Less active muscles need less oxygen.", expl:"While sitting, the muscles are inactive and need less oxygen, so the heart can pump more slowly.", insight:"At rest, muscles need less oxygen, so heart rate is lower." },
+{ t:"Circulatory System", q:"Why does the body have a circulatory system as well as a respiratory system?", o:["The blood takes in oxygen from the air instead of the lungs","The lungs alone pump the blood while the circulatory system simply holds the air","The two systems do exactly the same job as a safety backup","The blood delivers the oxygen taken in by the lungs to the cells"], a:3, h:"How does oxygen from the lungs reach the rest of the body?", expl:"The lungs take in oxygen, but the blood is needed to carry that oxygen to every cell in the body.", insight:"The respiratory system takes in oxygen; the circulatory system delivers it to the cells." },
+{ t:"Circulatory System", q:"A table shows resting heart rates: athlete 55, average adult 72, young child 90. What does the trend suggest?", o:["Younger and fitter people always have the highest heart rates","Fitter and older people tend to have lower resting heart rates","Heart rate is the same for everyone regardless of age or fitness","Only the time of day decides a person's resting heart rate"], a:1, h:"Compare the athlete and the child in the data.", expl:"The data show lower resting rates in the fit athlete and adult than the young child, suggesting fitness and age lower resting heart rate.", insight:"Resting heart rate tends to be lower in fitter and older people than in young children." },
+{ t:"The Unit of Life (Cells)", q:"Why do red blood cells, nerve cells and muscle cells look different from one another?", o:["All living cells always look exactly the same, so this difference simply cannot happen","Each cell has a shape suited to the special job it does","Cells change shape randomly and have no particular job","Only plant cells differ; animal cells all look identical"], a:1, h:"Form follows function — shape matches the task.", expl:"Different cells have shapes suited to their jobs, which is why red blood, nerve and muscle cells look different.", insight:"Cells have shapes suited to their specific functions." },
+{ t:"The Unit of Life (Cells)", q:"Where in a cell do most of the cell's activities actually take place?", o:["Cytoplasm","Wall","Chloroplast","Membrane"], a:0, h:"It is the jelly-like substance filling the cell.", expl:"The cytoplasm is the jelly-like region where most of the cell's activities occur.", insight:"Most cell activities take place in the cytoplasm." },
+{ t:"Electrical Systems", q:"A bulb in a working circuit suddenly goes out, though the battery is fine. What is the most likely cause?", o:["The battery has become too strong for the bulb to handle","The wires have turned into insulators while the circuit ran","A break somewhere in the circuit has stopped the current","The switch has begun storing the electricity inside itself"], a:2, h:"A bulb needs an unbroken loop to light.", expl:"A bulb lights only in a complete circuit; if it goes out with a good battery, the circuit has been broken somewhere.", insight:"A bulb goes out when the circuit is broken and current can no longer flow." },
+{ t:"Electrical Systems", q:"Two identical bulbs are connected in parallel. What happens to the second bulb if the first one is removed?", o:["The second bulb goes out because the loop is now broken","The second bulb glows much more dimly than before","The second bulb only lights again after a short delay","The second bulb stays lit because it has its own path"], a:3, h:"In parallel, each bulb sits on its own branch of the circuit.", expl:"In a parallel circuit each bulb has its own path, so removing one leaves the other's path complete and still lit.", insight:"In a parallel circuit, removing one bulb leaves others lit, as each has its own path." },
+{ t:"Using Electricity", q:"Why are the parts of a plug that you hold made of plastic rather than metal?", o:["Plastic is a conductor, so it carries electricity to your hand","Plastic is cheaper, though metal would be safer to hold","Plastic stores electricity so the plug works without a socket","Plastic is an insulator, so it protects you from electric shock"], a:3, h:"What kind of material does NOT let electricity pass through?", expl:"Plastic is an insulator, so it stops electricity reaching your hand and protects you from a shock.", insight:"Plug casings use plastic because it is an insulator that prevents electric shock." },
+];
+BANK.forEach((q,i)=>q.id=i);
+
+// ---------- CONFIG ----------
+var QUIZ_NAME = "P5 Science Revision";
+var QS_PER_ROUND = 16;
+var STREAK_TO_MASTER = 2;
+var FINAL_PASS_SPACING_MS = 30 * 60 * 1000;
+var LS_KEY = "p5-science-revision_v1";
+var VERSION = "ver2.00";
+
+var TOPIC_ICON = {
+  "Reproduction in Plants":"🌸",
+  "Reproduction in Humans":"👶",
+  "Water & Changes of State":"💧",
+  "Water Cycle":"☔",
+  "Plant Transport System":"🌿",
+  "Respiratory System":"🫁",
+  "Circulatory System":"❤️",
+  "The Unit of Life (Cells)":"🔬",
+  "Electrical Systems":"💡",
+  "Using Electricity":"🔌"
+};
+
+var TOPIC_ORDER = [];
+BANK.forEach(function(q){ if(TOPIC_ORDER.indexOf(q.t)<0) TOPIC_ORDER.push(q.t); });
+var TOPIC_COLOR = {};
+TOPIC_ORDER.forEach(function(t,i){ TOPIC_COLOR[t] = "var(--t"+(i%10)+")"; });
+
+// ---------- STATE ----------
+function freshState(){
+  var s = { ledger:{} };
+  BANK.forEach(function(q){ s.ledger[q.id] = { streak:0, status:"active", lastCorrect:0 }; });
+  return s;
+}
+function loadState(){
+  try{
+    var raw = localStorage.getItem(LS_KEY);
+    if(!raw) return freshState();
+    var s = JSON.parse(raw);
+    if(!s || typeof s!=="object" || !s.ledger) return freshState();
+    BANK.forEach(function(q){ if(!s.ledger[q.id]) s.ledger[q.id]={streak:0,status:"active",lastCorrect:0}; });
+    return s;
+  }catch(e){ return freshState(); }
+}
+function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(STATE)); }catch(e){} }
+var STATE = loadState();
+
+// ---------- HELPERS ----------
+function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+function byTopic(){
+  var m={}; TOPIC_ORDER.forEach(function(t){m[t]={total:0,mastered:0,half:0};});
+  BANK.forEach(function(q){
+    var L=STATE.ledger[q.id]; var g=m[q.t]; g.total++;
+    if(L.status==="mastered") g.mastered++;
+    else if(L.streak>0) g.half++;
+  });
+  return m;
+}
+function counts(){
+  var active=0,mastered=0;
+  BANK.forEach(function(q){ if(STATE.ledger[q.id].status==="mastered") mastered++; else active++; });
+  return {active:active, mastered:mastered, total:BANK.length};
+}
+
+// ---------- HOME ----------
+function renderHome(){
+  document.getElementById("verTag").textContent = VERSION;
+  var c = counts();
+  document.getElementById("activeN").textContent = c.active;
+  document.getElementById("doneN").textContent = c.mastered;
+  var pct = c.total ? Math.round(c.mastered/c.total*100) : 0;
+  setTimeout(function(){ document.getElementById("homeBar").style.width = pct+"%"; }, 60);
+  document.getElementById("howto").innerHTML =
+    "Answer correctly <b>"+STREAK_TO_MASTER+"</b> times in a row to complete a question! 🌟 A wrong answer resets that question. Work through all <b>"+c.total+"</b> questions to finish your island!";
+
+  var pills = document.getElementById("pills"); pills.innerHTML="";
+  TOPIC_ORDER.forEach(function(t){
+    var col=TOPIC_COLOR[t];
+    var el=document.createElement("span"); el.className="pill";
+    el.style.color=col; el.style.borderColor=col;
+    el.textContent=(TOPIC_ICON[t]||"")+" "+t;
+    pills.appendChild(el);
+  });
+
+  var m = byTopic();
+  var list = document.getElementById("topicList");
+  list.className = "topics" + (TOPIC_ORDER.length>=7 ? " two" : "");
+  list.innerHTML="";
+  TOPIC_ORDER.forEach(function(t){
+    var g=m[t], col=TOPIC_COLOR[t];
+    var tp = g.total ? Math.round(g.mastered/g.total*100) : 0;
+    var card=document.createElement("div"); card.className="topic";
+    var half = g.half>0 ? '<span class="half" title="One more correct answer to complete these">&#9654;'+g.half+'</span>' : '';
+    card.innerHTML =
+      '<div class="tname" style="color:'+col+'"><span class="ic">'+(TOPIC_ICON[t]||"")+'</span>'+t+'</div>'+
+      '<div class="meta">'+half+'<span>'+g.mastered+' / '+g.total+'</span></div>'+
+      '<div class="tbar"><span style="background:'+col+'"></span></div>';
+    list.appendChild(card);
+    var bar=card.querySelector(".tbar>span");
+    setTimeout(function(){ bar.style.width=tp+"%"; },60);
+  });
+}
+
+// ---------- SESSION ----------
+var session=null;
+function eligible(){
+  var now=Date.now(), out=[];
+  BANK.forEach(function(q){
+    var L=STATE.ledger[q.id];
+    if(L.status!=="active") return;
+    if(L.streak===STREAK_TO_MASTER-1 && FINAL_PASS_SPACING_MS>0){
+      if(now - L.lastCorrect < FINAL_PASS_SPACING_MS) return;
+    }
+    out.push(q.id);
+  });
+  return out;
+}
+function startSession(){
+  var pool = eligible();
+  if(pool.length===0){
+    BANK.forEach(function(q){ if(STATE.ledger[q.id].status==="active") pool.push(q.id); });
+  }
+  if(pool.length===0){
+    alert("🎉 You've completed every question! Tap 'Start All Over' to play again.");
+    return;
+  }
+  pool = shuffle(pool);
+  var ids = pool.slice(0, Math.min(QS_PER_ROUND, pool.length));
+  session = { ids:ids, i:0, correct:0, drawn:{}, completed:0, scoreByTopic:{} };
+  show("quiz"); renderQuestion();
+}
+function renderQuestion(){
+  var id = session.ids[session.i];
+  var q = BANK[id];
+  document.getElementById("feedback").style.display="none";
+  var badge=document.getElementById("qBadge");
+  badge.innerHTML='<span>'+(TOPIC_ICON[q.t]||"")+'</span>'+q.t;
+  badge.style.color=TOPIC_COLOR[q.t]; badge.style.borderColor=TOPIC_COLOR[q.t];
+  document.getElementById("qCount").textContent="Q "+(session.i+1)+" of "+session.ids.length;
+  document.getElementById("qText").textContent=q.q;
+  var hb=document.getElementById("hintBox"); hb.textContent=q.h; hb.className="hintbox";
+  document.getElementById("hintBtn").style.display="inline-block";
+
+  var order = shuffle([0,1,2,3]);
+  var opts=document.getElementById("opts"); opts.innerHTML="";
+  order.forEach(function(oi){
+    var b=document.createElement("button"); b.className="opt"; b.textContent=q.o[oi];
+    b.onclick=function(){ answer(oi, b, opts, q); };
+    opts.appendChild(b);
+  });
+}
+function answer(chosen, btn, opts, q){
+  var L=STATE.ledger[q.id];
+  var buttons=opts.querySelectorAll(".opt");
+  buttons.forEach(function(b){ b.disabled=true; });
+  var t=q.t;
+  session.drawn[t]=(session.drawn[t]||0)+1;
+  if(chosen===q.a){
+    btn.classList.add("correct");
+    session.correct++;
+    session.scoreByTopic[t]=(session.scoreByTopic[t]||0)+1;
+    L.streak++; L.lastCorrect=Date.now();
+    if(L.streak>=STREAK_TO_MASTER && L.status!=="mastered"){ L.status="mastered"; session.completed++; }
+  }else{
+    buttons.forEach(function(b){ if(b.textContent===q.o[q.a]) b.classList.add("correct"); });
+    btn.classList.add("wrong");
+    L.streak=0;
+  }
+  saveState();
+  document.getElementById("explBox").innerHTML="<b>Why:</b> "+q.expl;
+  document.getElementById("insightBox").innerHTML="<b>⭐ Examiner insight:</b> "+q.insight;
+  document.getElementById("feedback").style.display="block";
+  document.getElementById("nextBtn").focus();
+}
+function nextQuestion(){
+  session.i++;
+  if(session.i>=session.ids.length) renderResults();
+  else renderQuestion();
+}
+
+// ---------- RESULTS ----------
+function renderResults(){
+  document.getElementById("rScore").textContent=session.correct+" / "+session.ids.length;
+  var ratio = session.ids.length ? session.correct/session.ids.length : 0;
+  document.getElementById("cheer").textContent = ratio>=0.8 ? "🏆" : ratio>=0.5 ? "🎉" : "🌱";
+  var badge=document.getElementById("rBadge");
+  if(session.completed>0){ badge.style.display="block"; badge.textContent="🌟 "+session.completed+" question"+(session.completed>1?"s":"")+" completed this round!"; }
+  else badge.style.display="none";
+  var tb=document.getElementById("rTable"); tb.innerHTML="";
+  var sbt=session.scoreByTopic||{};
+  Object.keys(session.drawn).forEach(function(t){
+    var tr=document.createElement("tr");
+    tr.innerHTML='<td style="color:'+TOPIC_COLOR[t]+';font-weight:800">'+(TOPIC_ICON[t]||"")+' '+t+'</td>'+
+      '<td class="n">'+(sbt[t]||0)+'</td><td class="n">'+session.drawn[t]+'</td>';
+    tb.appendChild(tr);
+  });
+  show("results");
+}
+
+// ---------- NAV ----------
+function show(id){
+  ["home","quiz","results"].forEach(function(s){ document.getElementById(s).classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+  if(id==="home") renderHome();
+  window.scrollTo(0,0);
+}
+
+// ---------- EVENTS ----------
+document.getElementById("continueBtn").onclick=startSession;
+document.getElementById("continueStudy").onclick=function(){ show("home"); };
+document.getElementById("nextBtn").onclick=nextQuestion;
+document.getElementById("hintBtn").onclick=function(){
+  document.getElementById("hintBox").classList.add("show"); this.style.display="none";
+};
+document.getElementById("resetBtn").onclick=function(){ document.getElementById("overlay").classList.add("show"); };
+document.getElementById("mCancel").onclick=function(){ document.getElementById("overlay").classList.remove("show"); };
+document.getElementById("mConfirm").onclick=function(){
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  STATE=freshState(); saveState();
+  document.getElementById("overlay").classList.remove("show");
+  show("home");
+};
+
+renderHome();
+</script>
+</body>
+</html>
