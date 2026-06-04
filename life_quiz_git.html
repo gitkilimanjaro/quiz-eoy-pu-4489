@@ -96,6 +96,24 @@ body.answered{padding-bottom:70px}
   border-radius:10px;font-size:.9rem;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;
   margin-bottom:10px;text-align:center}
 .btn-reset:hover{background:#ffebee}
+.btn-sectionb{display:block;width:100%;padding:13px;background:#fff;color:#1b5e20;border:1.5px solid #1b5e20;
+  border-radius:10px;font-size:.92rem;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;
+  margin-bottom:10px;text-align:center}
+.btn-sectionb:hover{background:#e8f5e9}
+.sb-progress{font-size:.85rem;color:#555;margin-bottom:8px;text-align:center}
+.sb-card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sb-tag{display:inline-block;font-size:.72rem;font-weight:bold;color:#1b5e20;background:#e8f5e9;border-radius:20px;padding:3px 10px;margin-bottom:10px}
+.sb-marks{float:right;font-size:.8rem;color:#888;font-weight:bold}
+.sb-prompt{font-size:1.05rem;line-height:1.5;margin-bottom:14px}
+.sb-answer{background:#f1f8e9;border-left:4px solid #1b5e20;border-radius:6px;padding:12px 14px;margin-top:8px;font-size:.95rem;line-height:1.55;display:none}
+.sb-answer ul{margin:6px 0 0 18px;padding:0}
+.sb-answer li{margin-bottom:4px}
+.sb-reveal{display:block;width:100%;padding:11px;background:#1b5e20;color:#fff;border:none;border-radius:9px;font-size:.95rem;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif}
+.sb-reveal:hover{background:#2e7d32}
+.sb-nav{display:flex;gap:10px;margin-top:6px}
+.sb-nav button{flex:1;padding:12px;border-radius:9px;font-size:.92rem;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;border:1.5px solid #1b5e20;background:#fff;color:#1b5e20}
+.sb-nav button:hover{background:#e8f5e9}
+.sb-note{font-size:.82rem;color:#666;background:#fffde7;border:1px solid #fff59d;border-radius:8px;padding:10px;margin-bottom:14px;line-height:1.45}
 .all-done{background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:14px;
   font-size:.88rem;color:#1b5e20;text-align:center;margin-top:8px;line-height:1.5}
 .trow{margin-bottom:11px}
@@ -138,7 +156,7 @@ body.answered{padding-bottom:70px}
 <div class="wrap" id="homescreen">
   <div class="home-header">
   <h1>&#127807; Grade 7 Life Science</h1>
-  <span class="ver-badge">Rev.3</span>
+  <span class="ver-badge">Rev.4</span>
 </div>
   <div class="topic-bar">
     <span class="tbadge IntroSci">Introducing Science</span>
@@ -178,7 +196,7 @@ body.answered{padding-bottom:70px}
   </div>
   <div class="srs-info">
     <strong>How it works:</strong> Answer a question correctly twice in a row to master and retire it.
-    One wrong answer resets its streak back to zero. Work through all 204 questions to complete the course.
+    One wrong answer resets its streak back to zero. Work through all 211 questions to complete the course.
   </div>
   <div class="card dash-card" style="margin-bottom:14px">
     <div class="dash-title">&#128218; Topic Breakdown</div>
@@ -190,9 +208,10 @@ body.answered{padding-bottom:70px}
     </div>
   </div>
   <button class="btn-continue" id="btn-continue" onclick="startRound()">&#9654; Continue Progress</button>
+  <button class="btn-sectionb" onclick="startSectionB()">&#9999;&#65039; Section B Practice (written answers)</button>
   <button class="btn-reset" onclick="confirmReset()">&#8635; Start All Over</button>
   <div class="all-done" id="all-done" style="display:none">
-    &#127881; You have mastered all 204 questions! Tap <em>Start All Over</em> to begin again.
+    &#127881; You have mastered all 211 questions! Tap <em>Start All Over</em> to begin again.
   </div>
 </div>
 
@@ -229,12 +248,25 @@ body.answered{padding-bottom:70px}
   </div>
 </div>
 
+<!-- SECTION B DRILL SCREEN -->
+<div class="wrap" id="sbscreen" style="display:none">
+  <div class="home-header">
+    <h1>&#9999;&#65039; Section B Practice</h1>
+  </div>
+  <div class="sb-note">
+    <strong>Written-answer practice.</strong> The real exam is half short-answer (50 of 80 marks). Read each prompt, write or say your full answer, then tap <em>Reveal model answer</em> to check yourself. This drill does <strong>not</strong> save progress and does not affect your quiz streaks.
+  </div>
+  <div class="sb-progress" id="sb-progress"></div>
+  <div id="sb-body"></div>
+  <button class="btn-home" onclick="goHome()" style="margin-top:4px">&#8962; Back to Home</button>
+</div>
+
 <button id="fixednext" onclick="nextQ()">Next question &#8594;</button>
 
 <div id="modal-overlay" style="display:none" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title">&#9888; Reset all progress?</div>
-    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 204 questions will return to active rotation. This cannot be undone.</p>
+    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 211 questions will return to active rotation. This cannot be undone.</p>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-confirm" onclick="doReset()">Yes, start all over</button>
@@ -491,6 +523,21 @@ q(1,"IntroSci","A student wants to mix two small amounts of chemicals together s
   "The revision guide describes test tubes as being used for small experiments. Which option matches this description?",
   "A test tube is the most suitable apparatus for small-scale experiments involving chemicals. It is small, easy to heat or mix, and minimises the amount of chemical used. Other apparatus serve different purposes: beakers hold larger volumes of liquid, measuring cylinders measure volume precisely, microscopes view tiny objects, and stopwatches measure time.",
   "KEY: Test tube = small experiments. One of the seven apparatus in revision guide section 1.5.");
+
+// --- EXTRA: gap-fill questions added to match mock exam coverage ---
+
+q(2,"IntroSci","Which row correctly matches a branch of science to a technology that came from it?",
+  ["Biology - skyscrapers","Chemistry - plastics","Physics - vaccines","Geology - electricity","Astronomy - antibiotics"],1,
+  "Match each science to what it actually produces. Plastics are made by studying substances and reactions.",
+  "Chemistry is the study of substances and how they react, and it gave us plastics, medicines, and new materials. Vaccines come from biology and medicine, electricity is applied physics, and skyscrapers come from physics and engineering. Technology is the application of science to solve practical problems.",
+  "KEY: Technology = science applied. Chemistry -> plastics/materials; Physics -> electricity; Biology -> vaccines/medicine.");
+
+q(2,"IntroSci","Which of the following is an example of the abuse or misuse of technology?",
+  ["Talking to friends on the other side of the world","Food technology that creates new flavours","Using cyberbullying to harass others online","Using the internet to research for homework","Video-calling a doctor for medical advice"],2,
+  "Technology has benefits AND harms. Which option uses technology to hurt someone?",
+  "Cyberbullying is a misuse of technology because it uses online tools to harass, threaten, or hurt other people. The other options are positive or neutral uses such as communication, food production, research, and telemedicine. The same technology can be used responsibly or abused.",
+  "KEY: Misuse of technology = using it to cause harm, e.g. cyberbullying. Same tool can help or harm.");
+
 
 // ======================================
 // TOPIC 2: MEASUREMENTS (30 Qs)
@@ -853,6 +900,27 @@ q(2,"LivingThings","A muscle can only pull, not push. How then can a joint move 
   "If one muscle pulls a bone one way, what brings it back? Think: the other muscle pulls it the other way.",
   "Muscles work in antagonistic pairs. When one muscle contracts (shortens), its paired muscle relaxes. For the arm: the bicep contracts to bend the elbow, while the tricep relaxes. To straighten the arm, the tricep contracts and the bicep relaxes. This allows movement in both directions at a joint.",
   "KEY: Antagonistic pairs = two muscles that work opposite each other (one contracts, one relaxes).");
+
+// --- EXTRA: gap-fill questions added to match mock exam coverage ---
+
+q(2,"LivingThings","When the triceps muscle in the arm contracts, which bone does it pull on, and what happens to the forearm?",
+  ["It pulls the radius and the forearm bends up","It pulls the ulna and the forearm straightens down","It pulls the humerus and the arm rotates","It pulls the ulna and the forearm bends up","It pulls no bone; muscles only push"],1,
+  "The triceps is the straightening muscle. It is attached by a tendon to the ulna (the forearm bone on the little-finger side).",
+  "The triceps contracts to straighten the arm. It is attached by a tendon to the ulna, so when it contracts it pulls the ulna and the forearm moves down (straightens). The biceps does the opposite: it pulls the radius to bend the forearm up. Muscles can only pull, so they work in antagonistic pairs.",
+  "KEY: Triceps contracts -> pulls ulna -> forearm straightens. Biceps contracts -> pulls radius -> forearm bends up.");
+
+q(1,"LivingThings","What does the term antagonistic muscles mean?",
+  ["Two muscles that always contract at the same time","A pair of muscles that work against each other, one contracting while the other relaxes","Muscles that can both push and pull on a bone","Muscles found only in the heart","Muscles that never tire during exercise"],1,
+  "Antagonistic means opposing. Think about how the biceps and triceps take turns.",
+  "Antagonistic muscles are a pair that work in opposite directions: when one contracts (shortens), the other relaxes. The biceps and triceps are the classic example. Because a muscle can only pull and not push, this opposing arrangement is the only way a joint can be moved back and forth.",
+  "KEY: Antagonistic muscles = a pair working in opposition; one contracts while the other relaxes (e.g. biceps and triceps).");
+
+q(2,"LivingThings","An exam question shows three organs: the brain, the stamen, and the ovary. Which correctly states the system each belongs to?",
+  ["Brain - nervous; stamen - plant reproductive; ovary - reproductive","Brain - circulatory; stamen - digestive; ovary - nervous","Brain - nervous; stamen - root system; ovary - excretory","Brain - reproductive; stamen - nervous; ovary - digestive","Brain - muscular; stamen - reproductive; ovary - circulatory"],0,
+  "The brain controls responses; the stamen is the male part of a flower; the ovary produces egg cells.",
+  "The brain is part of the nervous system, which controls and coordinates the body. The stamen is part of the plant reproductive system (it is the male part of a flower that makes pollen). The ovary is part of the reproductive system, producing egg cells in animals and developing into fruit in flowering plants. The exam asks you to name the system an organ belongs to.",
+  "KEY: Brain = nervous system; stamen = plant reproductive part; ovary = reproductive system.");
+
 
 // ======================================
 // TOPIC 4: MICROORGANISMS (30 Qs)
@@ -1508,6 +1576,21 @@ q(2,"Classifying","A student finds a tall tree with needle-like leaves and hard 
   "The tree is a conifer. Conifers have needle-like or scale-like leaves (adapted to reduce water loss), produce seeds in cones (not flowers), and do not produce fruit. Common examples include pine, spruce, fir, cedar, and cypress trees. Most conifers are evergreen, keeping their leaves year-round.",
   "KEY: Needle leaves + cones + seeds + no flowers = CONIFER. Examples: pine, spruce, fir, cedar.");
 
+// --- EXTRA: gap-fill questions added to match mock exam coverage ---
+
+q(2,"Classifying","Which of the following is NOT a feature of a crustacean?",
+  ["A hard exoskeleton","Scales","A segmented body","Two pairs of antennae","Jointed legs"],1,
+  "Crustaceans (like crabs and shrimp) are arthropods. Scales belong to a different group of animals.",
+  "Crustaceans such as crabs, shrimp, and woodlice have a hard exoskeleton, a segmented body, two pairs of antennae, and jointed legs. Scales are a feature of fish and reptiles, not crustaceans. The exoskeleton is the external skeleton that supports and protects the soft body.",
+  "KEY: Crustacean features = exoskeleton, segmented body, two pairs of antennae, jointed legs. Scales are NOT a crustacean feature.");
+
+q(2,"Classifying","A monkey and a squirrel are different species. If they mated, what would most likely happen, and why?",
+  ["They would produce healthy, fertile offspring because both are mammals","They would not produce offspring, because members of different species cannot breed to produce fertile young","They would produce offspring that can breed, because they live in the same habitat","They would always produce twins","They would produce offspring identical to the monkey only"],1,
+  "A species is defined by being able to breed together AND produce fertile offspring. Are a monkey and a squirrel the same species?",
+  "A species is a group of organisms that can breed together to produce fertile offspring. A monkey and a squirrel are different species, so they cannot naturally breed to produce fertile young, even though both are mammals living in similar habitats. Being the same kind of animal is not enough; only members of the same species can do this.",
+  "KEY: Species = organisms that breed to produce FERTILE offspring. Different species (monkey and squirrel) cannot.");
+
+
 // ======================================
 //  SRS CONFIG
 // ======================================
@@ -1573,11 +1656,114 @@ function shuffle(arr){
   }
 }
 
+// ------ SECTION B WRITTEN-ANSWER DRILL (no storage, does not touch SRS) -----------------------------
+// Recall-style prompts modelled on the real End-of-Year mock Section B + mark scheme.
+var SECTION_B = [
+  {tag:"Scientific method", marks:1,
+   prompt:"Observation: <em>Puddles of water take longer to dry on a cool day than on a hot day.</em> Write a hypothesis for this investigation.",
+   answer:"A hypothesis is a testable prediction. For example: <em>\"If the temperature is higher, then puddles of water will dry up faster.\"</em><br>It must link the variable you change (temperature) to the variable you measure (drying time), and be testable."},
+  {tag:"Lab safety", marks:2,
+   prompt:"What do these two hazard symbols represent? <strong>X</strong>: a test tube dripping liquid onto a hand. <strong>Y</strong>: an exploding bomb burst.",
+   answer:"<strong>X = Corrosive</strong> (can burn/damage skin, eyes and materials).<br><strong>Y = Explosive</strong> (can explode if heated, knocked or sparked)."},
+  {tag:"Lab safety", marks:2,
+   prompt:"Rose is heating some alcohol in a test tube. List <strong>two</strong> precautions she should take.",
+   answer:"Any two of:<ul><li>Keep the alcohol away from open flames (it is flammable) \u2013 use a water bath, not direct heating.</li><li>Wear safety goggles.</li><li>Point the mouth of the test tube away from herself and others.</li><li>Tie back long hair and use a test-tube holder.</li></ul>"},
+  {tag:"Cells & tissues", marks:2,
+   prompt:"Two cells are shown: <strong>A</strong> a small disc-shaped cell with no nucleus, <strong>B</strong> a long branched cell with a long fibre. Name cell A and cell B.",
+   answer:"<strong>Cell A = red blood cell</strong> (disc-shaped, carries oxygen).<br><strong>Cell B = nerve cell (neuron)</strong> (long, branched, carries electrical signals)."},
+  {tag:"Cells & tissues", marks:2,
+   prompt:"Complete the definition: \u201cA tissue is a group of cells with similar __________ working together to perform a shared __________.\u201d",
+   answer:"A tissue is a group of cells with similar <strong>structure</strong> working together to perform a shared <strong>function</strong> (job)."},
+  {tag:"Organ systems", marks:3,
+   prompt:"State the organ system each of these organs belongs to: <strong>brain</strong>, <strong>stamen</strong>, <strong>ovary</strong>.",
+   answer:"<ul><li><strong>Brain</strong> \u2013 nervous system</li><li><strong>Stamen</strong> \u2013 (plant) reproductive system (it is the male part of a flower)</li><li><strong>Ovary</strong> \u2013 reproductive system</li></ul>"},
+  {tag:"Living things", marks:3,
+   prompt:"Two characteristics of living things are movement and nutrition. State <strong>three</strong> other characteristics of living organisms.",
+   answer:"Any three of the seven life processes (MRS GREN): <strong>Respiration, Sensitivity, Growth, Reproduction, Excretion</strong>.<br>(The full seven: Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition.)"},
+  {tag:"Plants vs animals", marks:5,
+   prompt:"Place ticks to show the correct features. Which apply to <strong>animals</strong>, <strong>plants</strong>, or both? Features: can respire / can grow / can make their own food / contain DNA / can respond to changes.",
+   answer:"<ul><li>Can respire \u2013 <strong>both</strong> animals and plants</li><li>Can grow \u2013 <strong>both</strong></li><li>Can make their own food \u2013 <strong>plants only</strong> (photosynthesis)</li><li>Contain DNA \u2013 <strong>both</strong></li><li>Can respond to changes \u2013 <strong>both</strong></li></ul>"},
+  {tag:"Cell labelling", marks:5,
+   prompt:"An animal cell is shown. (i) Name <strong>three</strong> structures you could label. (ii) State <strong>two</strong> structures found in plant cells but <strong>not</strong> animal cells.",
+   answer:"(i) Any three: <strong>cell membrane, cytoplasm, nucleus</strong> (also mitochondria).<br>(ii) Two of: <strong>cell wall, chloroplasts, (large/permanent) vacuole</strong>."},
+  {tag:"Muscles & joints", marks:4,
+   prompt:"The arm shows biceps and triceps. (a) Which bone does the triceps pull on? (b) When the triceps contracts, does the forearm move up? (c) Define <em>antagonistic muscles</em>. (d) Which type of joint is at the elbow?",
+   answer:"(a) The <strong>ulna</strong> (forearm bone).<br>(b) <strong>No</strong> \u2013 the forearm straightens/moves down.<br>(c) <strong>Antagonistic muscles</strong> are a pair that work against each other: when one contracts, the other relaxes (e.g. biceps and triceps).<br>(d) A <strong>hinge joint</strong>."},
+  {tag:"Microorganisms", marks:1,
+   prompt:"Explain what is meant by the term <em>decomposer</em>.",
+   answer:"A decomposer is an organism (such as bacteria or fungi) that breaks down dead organisms and waste, releasing nutrients back into the soil/environment."},
+  {tag:"Food preservation", marks:2,
+   prompt:"Match each food to the best preservation method: <strong>milk</strong> and an <strong>orange</strong>. Methods available: lowering temperature using a fridge; using heat through pasteurisation.",
+   answer:"<ul><li><strong>Milk \u2013 pasteurisation</strong> (heat kills most microorganisms without spoiling the taste).</li><li><strong>Orange \u2013 lowering temperature in a fridge</strong> (slows microbial growth and ripening).</li></ul>"},
+  {tag:"Microorganisms", marks:3,
+   prompt:"Yeast is used in making bread. Tick the <strong>correct</strong> functions of yeast: fermentation / making bread sweeter / releasing carbon dioxide for the dough to rise / making bread fluffy / providing a colourful bread.",
+   answer:"Correct functions: <strong>fermentation</strong>, <strong>releasing carbon dioxide for the dough to rise</strong>, and <strong>making bread fluffy</strong>.<br>(NOT \u201cmaking it sweeter\u201d or \u201ccolourful bread\u201d.)"},
+  {tag:"Habitats", marks:3,
+   prompt:"A photo shows a tropical forest with trees cut down. (i) Name this type of habitat destruction. (ii) Describe <strong>two</strong> reasons humans destroy tropical forests.",
+   answer:"(i) <strong>Deforestation</strong>.<br>(ii) Any two: to clear land for <strong>farming/agriculture</strong>; for <strong>timber/wood</strong>; to build <strong>roads, houses or settlements</strong>; for <strong>mining</strong>."},
+  {tag:"Pollution", marks:2,
+   prompt:"(b) State one source of pollution in a <strong>marine</strong> environment (plastic cup floating in the sea). (c) State one source of pollution in a <strong>land</strong> environment (tractor spraying a field).",
+   answer:"(b) Marine: <strong>plastic waste / litter dumped into the sea</strong> (also oil spills, sewage).<br>(c) Land: <strong>pesticides/fertilisers sprayed onto fields</strong> (chemical run-off)."},
+  {tag:"Food chains", marks:3,
+   prompt:"Food chain: rice plant \u2192 locust \u2192 lizard \u2192 snake. (a) State the producer. (b) Explain the role of a producer. (c) State the top predator.",
+   answer:"(a) Producer = <strong>rice plant</strong>.<br>(b) A producer makes its own food by <strong>photosynthesis</strong> and provides energy for the rest of the food chain.<br>(c) Top predator = <strong>snake</strong>."},
+  {tag:"Species", marks:3,
+   prompt:"(i) Define the term <em>species</em>. (ii) Predict whether a monkey and a squirrel can breed naturally to produce offspring, and explain.",
+   answer:"(i) A <strong>species</strong> is a group of organisms that can breed together to produce <strong>fertile</strong> offspring.<br>(ii) <strong>No</strong> \u2013 a monkey and a squirrel are different species, so they cannot naturally breed to produce fertile offspring."},
+  {tag:"Vertebrate groups", marks:4,
+   prompt:"A gorilla carries its young. (i) Name this vertebrate group and give <strong>one</strong> visible feature shown. (ii) Name <strong>two</strong> other groups of vertebrates.",
+   answer:"(i) Group = <strong>mammals</strong>; visible feature = <strong>body covered in hair/fur</strong> (also: feeds young / live young).<br>(ii) Any two of: <strong>fish, amphibians, reptiles, birds</strong>."}
+];
+
+var sbIndex = 0;
+
+function startSectionB(){
+  sbIndex = 0;
+  document.getElementById('homescreen').style.display='none';
+  document.getElementById('quizscreen').style.display='none';
+  document.getElementById('rscreen').style.display='none';
+  document.getElementById('fixednext').style.display='none';
+  document.getElementById('sbscreen').style.display='block';
+  document.body.className='';
+  renderSectionB();
+  window.scrollTo(0,0);
+}
+
+function renderSectionB(){
+  var item = SECTION_B[sbIndex];
+  document.getElementById('sb-progress').textContent =
+    'Question '+(sbIndex+1)+' of '+SECTION_B.length;
+  var h = '<div class="sb-card">';
+  h += '<span class="sb-tag">'+item.tag+'</span>';
+  h += '<span class="sb-marks">['+item.marks+' mark'+(item.marks>1?'s':'')+']</span>';
+  h += '<div class="sb-prompt">'+item.prompt+'</div>';
+  h += '<button class="sb-reveal" id="sb-reveal-btn" onclick="revealSB()">Reveal model answer</button>';
+  h += '<div class="sb-answer" id="sb-answer">'+item.answer+'</div>';
+  h += '</div>';
+  h += '<div class="sb-nav">';
+  h += '<button onclick="prevSB()"'+(sbIndex===0?' disabled style="opacity:.4"':'')+'>&#8592; Previous</button>';
+  if(sbIndex < SECTION_B.length-1){
+    h += '<button onclick="nextSB()">Next &#8594;</button>';
+  } else {
+    h += '<button onclick="goHome()">Finish &#10003;</button>';
+  }
+  h += '</div>';
+  document.getElementById('sb-body').innerHTML = h;
+}
+
+function revealSB(){
+  document.getElementById('sb-answer').style.display='block';
+  document.getElementById('sb-reveal-btn').style.display='none';
+}
+function nextSB(){ if(sbIndex<SECTION_B.length-1){sbIndex++; renderSectionB(); window.scrollTo(0,0);} }
+function prevSB(){ if(sbIndex>0){sbIndex--; renderSectionB(); window.scrollTo(0,0);} }
+
 // ------ HOME ---------------------------------------------------------------------------------------------------
 function showHome(){
   document.getElementById('homescreen').style.display='block';
   document.getElementById('quizscreen').style.display='none';
   document.getElementById('rscreen').style.display='none';
+  document.getElementById('sbscreen').style.display='none';
   document.getElementById('fixednext').style.display='none';
   document.body.className='';
   updateDashboard();
