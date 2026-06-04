@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade 7 Physical Science — Combined Quiz v13</title>
+<title>Grade 7 Physical Science — Combined Quiz v14</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f0f4f8;padding:20px}
@@ -196,6 +196,51 @@ body.answered{padding-bottom:70px}
 .hint-btn{display:block;background:none;border:1px solid #9fa8da;color:#3949ab;
   padding:7px 14px;border-radius:6px;font-size:.83rem;cursor:pointer;
   margin-bottom:8px;font-family:Arial,sans-serif}
+
+.sb-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sb-back{background:#fff;border:1.5px solid #1a237e;color:#1a237e;border-radius:8px;
+  padding:6px 12px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;font-size:.85rem}
+.sb-title{font-size:1.05rem;font-weight:bold;color:#1a237e;flex:1}
+.sb-count{font-size:.8rem;color:#666;font-family:Arial,sans-serif}
+.sb-intro{background:#e8eaf6;border-radius:10px;padding:12px 14px;font-size:.82rem;
+  color:#283593;line-height:1.5;margin-bottom:12px}
+.sb-q{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:16px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:12px}
+.sb-topic{display:inline-block;background:#1a237e;color:#fff;font-size:.72rem;font-weight:bold;
+  padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.sb-marks{float:right;background:#fff3e0;color:#e65100;font-size:.72rem;font-weight:bold;
+  padding:3px 10px;border-radius:20px;border:1px solid #ffcc80}
+.sb-prompt{font-size:.95rem;color:#1a1a1a;line-height:1.6;white-space:pre-wrap;margin-bottom:14px}
+.sb-prompt table{border-collapse:collapse;margin:10px 0;font-size:.85rem;width:100%}
+.sb-prompt th,.sb-prompt td{border:1px solid #ccc;padding:5px 8px;text-align:left}
+.sb-prompt th{background:#f5f5f5}
+.sb-reveal-btn{display:block;width:100%;padding:12px;background:#1a237e;color:#fff;border:none;
+  border-radius:10px;font-size:.95rem;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif}
+.sb-answer{display:none;margin-top:14px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;
+  padding:14px;font-size:.9rem;line-height:1.6;color:#1b5e20;white-space:pre-wrap}
+.sb-answer b{color:#1b5e20}
+.sb-answer i{color:#555;font-size:.85rem}
+.sb-anstitle{font-weight:bold;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;
+  color:#2e7d32;margin-bottom:8px}
+.sb-rate{display:none;margin-top:12px}
+.sb-rate-label{font-size:.82rem;color:#555;margin-bottom:8px;font-family:Arial,sans-serif;text-align:center}
+.sb-rate-btns{display:flex;gap:8px}
+.sb-rate-btns button{flex:1;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;
+  font-family:Arial,sans-serif;font-size:.85rem;border:1.5px solid}
+.rate-got{background:#e8f5e9;color:#2e7d32;border-color:#2e7d32}
+.rate-part{background:#fff8e1;color:#f57f17;border-color:#f57f17}
+.rate-miss{background:#ffebee;color:#c62828;border-color:#c62828}
+.sb-nav{display:flex;gap:10px;margin-top:4px}
+.sb-prevbtn,.sb-nextbtn{flex:1;padding:11px;border-radius:10px;font-weight:bold;cursor:pointer;
+  font-family:Arial,sans-serif;font-size:.9rem;border:1.5px solid #1a237e;background:#fff;color:#1a237e}
+.sb-nextbtn{background:#1a237e;color:#fff}
+.sb-prevbtn:disabled{opacity:.4;cursor:not-allowed}
+.sb-tally{margin-top:14px;text-align:center;font-size:.82rem;color:#555;font-family:Arial,sans-serif}
+.btn-sectionb{display:block;width:100%;padding:13px;background:#fff;color:#1a237e;
+  border:1.5px solid #1a237e;border-radius:10px;font-size:.92rem;font-weight:bold;
+  cursor:pointer;font-family:Arial,sans-serif;margin-top:8px}
+.btn-sectionb:hover{background:#eef0fa}
+
 </style>
 </head>
 <body>
@@ -203,7 +248,7 @@ body.answered{padding-bottom:70px}
 <!-- ═══════════════ HOME SCREEN ═══════════════ -->
 <div class="wrap" id="homescreen">
   <h1>&#9883; Grade 7 Physical Science</h1>
-  <p class="sub">257 Questions &middot; 11 Topics &middot; 16 per session &middot; v13</p>
+  <p class="sub">257 Questions &middot; 11 Topics &middot; 16 per session &middot; v14</p>
   <div class="mode-banner" id="mode-banner" style="display:none">&#129504; MEMORIZATION DRILL &mdash; 32 must-know facts (units, names, orders, pH, rock types). Separate progress from the main quiz.</div>
 
   <div class="topic-bar">
@@ -259,6 +304,7 @@ body.answered{padding-bottom:70px}
   <!-- Mode toggle buttons -->
   <button class="btn-rote" id="btn-enter-rote" onclick="enterRoteMode()">&#129504; Memorization Drill &nbsp;(32 must-know facts)</button>
   <button class="btn-rote-back" id="btn-exit-rote" onclick="exitRoteMode()" style="display:none">&#8592; Back to Full Quiz</button>
+  <button class="btn-sectionb" id="btn-sectionb" onclick="showSectionB()">&#9997;&#65039; Section B Practice &nbsp;(written-answer drill)</button>
 
   <!-- Subject mastery card -->
   <div class="card" style="margin-top:4px">
@@ -311,11 +357,32 @@ body.answered{padding-bottom:70px}
 <!-- Fixed next button -->
 <button id="fixednext" onclick="nextQ()">Next question &#8594;</button>
 
+
+<!-- ═══════════════ SECTION B PRACTICE SCREEN ═══════════════ -->
+<div class="wrap" id="sbscreen" style="display:none">
+  <div class="sb-head">
+    <button class="sb-back" onclick="showHome()">&#8592; Home</button>
+    <span class="sb-title">&#9997;&#65039; Section B Practice</span>
+    <span class="sb-count" id="sb-count"></span>
+  </div>
+  <div class="sb-intro" id="sb-intro">
+    Written-answer practice in the exam's structured-question style. Read the question,
+    write or say your full answer, then reveal the model answer and rate yourself honestly.
+    <b>Nothing is saved</b> &mdash; this is pure practice.
+  </div>
+  <div id="sb-card"></div>
+  <div class="sb-nav">
+    <button class="sb-prevbtn" id="sb-prev" onclick="sbPrev()">&#8592; Previous</button>
+    <button class="sb-nextbtn" id="sb-next" onclick="sbNext()">Next &#8594;</button>
+  </div>
+  <div class="sb-tally" id="sb-tally"></div>
+</div>
+
 <!-- Confirm reset modal -->
 <div id="modal-overlay" style="display:none" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title">&#9888; Reset all progress?</div>
-    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All 241 questions will return to active rotation. This cannot be undone.</p>
+    <p class="modal-msg">This will permanently wipe your mastery history and streak data. All questions in this set will return to active rotation. This cannot be undone.</p>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-confirm" onclick="doReset()">Yes, start all over</button>
@@ -753,11 +820,113 @@ function shuffle(arr){
 // ═══════════════════════════════════════════════════════
 //  HOME SCREEN
 // ═══════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════
+//  SECTION B PRACTICE (no saving — pure practice/reference)
+// ═══════════════════════════════════════════════════════
+var SECTION_B = [{"topic": "Particle Model", "marks": 4, "prompt": "Complete the table describing the three states of matter:\n\n| State | Arrangement | Movement | Spacing |\n|---|---|---|---|\n| Solid | regular | ? | very close |\n| Liquid | ? | move around each other | close |\n| Gas | random | move freely & randomly | ? |\n\nFill in the three missing cells, and state which state has the most energy.", "answer": "• Solid movement: <b>vibrate in fixed positions</b> [1]\n• Liquid arrangement: <b>irregular</b> [1]\n• Gas spacing: <b>far apart</b> [1]\n• Most energy: <b>Gas</b> [1]\n\n<i>Tip: solids vibrate but don't move around; gas particles have the most energy and most space.</i>"}, {"topic": "Changes of State", "marks": 4, "prompt": "A puddle of water slowly disappears on a warm day. Later, water droplets form on the outside of a cold glass.\n\n(a) Name the process that makes the puddle disappear. [1]\n(b) Name the process that forms droplets on the cold glass. [1]\n(c) For the puddle, describe what happens to the energy and movement of the water particles. [2]", "answer": "(a) <b>Evaporation</b> [1]\n(b) <b>Condensation</b> [1]\n(c) The particles <b>gain energy</b> [1] and <b>move faster</b>, so they break free from the liquid surface and become a gas [1].\n\n<i>Evaporation happens at the surface, below boiling point.</i>"}, {"topic": "Diffusion", "marks": 3, "prompt": "A student sprays perfume in one corner of a room. After a few minutes, people across the room can smell it.\n\n(a) Name the process responsible. [1]\n(b) Explain why the smell spreads across the room. Use the word <b>particles</b> in your answer. [2]", "answer": "(a) <b>Diffusion</b> [1]\n(b) The perfume <b>particles move randomly</b> from an area of <b>high concentration</b> (where it was sprayed) to areas of <b>low concentration</b> [1], spreading until evenly mixed throughout the room [1].\n\n<i>Must mention high→low concentration AND random particle movement for both marks.</i>"}, {"topic": "Gas Pressure", "marks": 3, "prompt": "A sealed syringe contains trapped gas. The plunger is pushed in, making the volume smaller. Temperature stays the same.\n\n(a) What causes the pressure of a gas? [1]\n(b) What happens to the pressure when the volume becomes smaller? [1]\n(c) Explain your answer to (b). [1]", "answer": "(a) Gas <b>particles colliding with the walls</b> of the container [1]\n(b) The pressure <b>increases</b> [1]\n(c) With less space, the particles are <b>closer together and collide with the walls more frequently</b> [1]\n\n<i>Key word: 'more frequent collisions' — not 'harder' collisions (temperature is unchanged).</i>"}, {"topic": "Materials", "marks": 6, "prompt": "A metal cooking pot has a metal body and a plastic handle.\n\n(a) State two properties that make metal suitable for the pot body. [2]\n(b) State two properties that make plastic suitable for the handle. [2]\n(c) State two properties that make copper suitable for the electrical wiring inside an appliance. [2]", "answer": "(a) Metal body: <b>good thermal (heat) conductor</b> [1] + <b>high melting point</b> [1]\n(b) Plastic handle: <b>poor heat conductor / good thermal insulator</b> [1] + <b>does not melt easily / durable</b> [1]\n(c) Copper wiring: <b>good electrical conductor</b> [1] + <b>ductile (can be drawn into wires)</b> [1]\n\n<i>Match the property to the job — 'good conductor' for the body, 'insulator' for the handle.</i>"}, {"topic": "Strength & Flexibility", "marks": 6, "prompt": "Four materials were tested:\n\n| Material | Stretch before breaking / mm | Mass to break / kg |\n|---|---|---|\n| W | 5 | 100 |\n| X | 20 | 180 |\n| Y | 8 | 250 |\n| Z | 30 | 80 |\n\n(a) Which material is strongest? Explain using data. [2]\n(b) Which material is most flexible? Explain using data. [2]\n(c) A climbing rope must be strong and not stretch much. Which is best? Explain. [2]", "answer": "(a) <b>Y</b> — it needs the <b>heaviest mass (250 kg)</b> to break it [1+1]\n(b) <b>Z</b> — it <b>stretches the most (30 mm)</b> before breaking [1+1]\n(c) <b>Y</b> — it holds the <b>heaviest mass (250 kg)</b> AND <b>stretches little (8 mm)</b> [1+1]\n\n<i>Always quote the actual number from the table as your evidence — that's where the second mark is.</i>"}, {"topic": "Acids & Alkalis", "marks": 4, "prompt": "Four liquids were tested with universal indicator:\n\n| Liquid | UI colour | pH |\n|---|---|---|\n| P | red | 1 |\n| Q | orange | 4 |\n| R | green | 7 |\n| S | purple | 13 |\n\n(a) Classify each liquid (strongly acidic / weakly acidic / neutral / alkaline). [2]\n(b) Liquid P is added to Liquid S until it turns green. Name this reaction. [1]\n(c) Name the type of substance an antacid tablet contains. [1]", "answer": "(a) P = <b>strongly acidic</b>, Q = <b>weakly acidic</b>, R = <b>neutral</b>, S = <b>alkaline</b> [2 for all correct]\n(b) <b>Neutralisation</b> [1]\n(c) A <b>(mild) alkali / base</b> [1]\n\n<i>Green = neutral = pH 7 = the endpoint of neutralisation.</i>"}, {"topic": "Rocks", "marks": 3, "prompt": "A rock has visible layers and contains the fossil of a shell.\n\n(a) Identify the type of rock. [1]\n(b) Describe how this type of rock forms. [2]", "answer": "(a) <b>Sedimentary rock</b> [1]\n(b) Small particles/sediments are <b>deposited in layers</b> [1] and <b>compressed/cemented together over a long time</b> under pressure [1].\n\n<i>Fossils + layers = sedimentary. Igneous and metamorphic rarely contain fossils.</i>"}, {"topic": "Friction", "marks": 2, "prompt": "A box is pulled across four surfaces. The force needed to move it:\n\n| Surface | Force / N |\n|---|---|\n| ice | 0.5 |\n| wood | 3.0 |\n| rubber mat | 7.2 |\n| tile | 1.8 |\n\n(a) Which surface has the most friction? [1]\n(b) Explain your answer using the data. [1]", "answer": "(a) <b>Rubber mat</b> [1]\n(b) It needed the <b>greatest force (7.2 N)</b> to move the box across it [1]\n\n<i>More friction = more force needed to overcome it. Quote the number.</i>"}, {"topic": "Mass & Weight", "marks": 4, "prompt": "An astronaut has a mass of 70 kg.\nEarth gravitational field strength = 10 N/kg. Moon = 1.6 N/kg.\n\n(a) What is the astronaut's mass on the Moon? [1]\n(b) Calculate their weight on Earth. Show formula and working. [2]\n(c) Is their weight on the Moon greater than, less than, or equal to on Earth? [1]", "answer": "(a) <b>70 kg</b> (mass never changes) [1]\n(b) Formula: <b>W = m × g</b> [1] &nbsp; Working: W = 70 × 10 = <b>700 N</b> [1]\n(c) <b>Less than</b> (Moon's gravity is weaker) [1]\n\n<i>Always write the formula AND the unit (N) — separate marks for each.</i>"}, {"topic": "Energy Transfers", "marks": 6, "prompt": "A ball is thrown straight up into the air, then falls back down.\n\n(a) What energy store is greatest at the highest point? [1]\n(b) Describe the main energy transfer as the ball falls back down. [1]\n(c) When the ball hits the ground and stops, name two forms the energy transfers into. [2]\n(d) Complete: Energy cannot be ______ or ______. It can only be ______ or transferred. [2]", "answer": "(a) <b>Gravitational potential energy (GPE)</b> [1]\n(b) <b>GPE transfers/transforms into kinetic energy</b> [1]\n(c) <b>Sound energy</b> + <b>thermal (heat) energy</b> [2]\n(d) created / destroyed … transformed [2]\n\n<i>Full statement: 'Energy cannot be CREATED or DESTROYED. It can only be TRANSFORMED or transferred.'</i>"}, {"topic": "Solar System", "marks": 5, "prompt": "| Planet | Distance from Sun / million km | Orbit time / Earth years |\n|---|---|---|\n| A | 58 | 0.24 |\n| B | 150 | 1.00 |\n| C | 228 | 1.88 |\n| D | 778 | 11.9 |\n\n(a) Describe the relationship between distance from the Sun and orbit time. [1]\n(b) Which planet is most likely Earth? [1]\n(c) Name the three planets immediately after Mars, in order. [3]", "answer": "(a) The <b>greater the distance, the longer the orbit time</b> [1]\n(b) <b>B</b> (150 million km, 1.00 year) [1]\n(c) <b>Jupiter, Saturn, Uranus</b> [3 — one mark each, in order]\n\n<i>Mars is the 4th planet; after it: Jupiter (5), Saturn (6), Uranus (7), Neptune (8).</i>"}, {"topic": "Distance-Time Graph", "marks": 5, "prompt": "A cyclist's journey:\n• Rides 12 km in 1 hour\n• Rests for 30 minutes (0.5 h)\n• Rides another 6 km in 0.5 hour\n\n(a) Describe how you would plot this on a distance-time graph (axes + 3 segments). [2]\n(b) Calculate the average speed for the whole journey. Show formula and working. [3]", "answer": "(a) <b>Time on the x-axis, distance on the y-axis</b> [1]. Segment 1: rising line to (1, 12); rest: <b>horizontal line</b> from (1,12) to (1.5,12); segment 3: rising line to (2, 18) [1].\n(b) Formula: <b>average speed = total distance ÷ total time</b> [1]\nWorking: (12 + 6) ÷ (1 + 0.5 + 0.5) = 18 ÷ 2 [1] = <b>9 km/h</b> [1]\n\n<i>Include the rest time in total time! Total = 2 h, not 1.5 h. The rest = a flat line.</i>"}, {"topic": "Magnetism", "marks": 2, "prompt": "Two bar magnets are placed end to end. The North pole of one faces the North pole of the other.\n\n(a) Will they attract or repel? [1]\n(b) Explain your answer. [1]", "answer": "(a) <b>Repel</b> [1]\n(b) Because <b>like poles repel</b> each other (and unlike poles attract) [1]\n\n<i>N–N or S–S = repel. N–S = attract.</i>"}, {"topic": "Electromagnets", "marks": 5, "prompt": "A student makes an electromagnet to pick up paper clips, using a nail, wire and battery.\n\n(a) Complete the method: [3]\nStep 1: Wrap a long piece of ______ around an ______.\nStep 2: Connect the ends of the wire to a ______.\nStep 3: Bring the nail near the paper clips to test if it can ______ them.\n(b) State two ways to make the electromagnet stronger. [2]", "answer": "(a) Step 1: <b>wire</b> around an <b>iron nail</b> [1+1]; Step 2: connect to a <b>battery/cell</b> [1]; Step 3: <b>attract/pick up</b> them [implied]\n(b) Any two of: <b>more coils/turns of wire</b> [1] / <b>increase the current (stronger battery)</b> [1] / <b>use an iron core</b> [1]\n\n<i>Three strength factors: more coils, more current, iron core.</i>"}];
+var sbIdx = 0;
+var sbRatings = {};  // in-memory only, reset on reload
+
+function mdTable(txt){
+  // Convert simple markdown tables + **bold** to HTML
+  var lines = txt.split("\n");
+  var out = [], i = 0;
+  while(i < lines.length){
+    if(lines[i].indexOf("|") !== -1 && i+1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i+1])){
+      var tbl = "<table>";
+      var headers = lines[i].split("|").filter(function(c){return c.trim()!=="";});
+      tbl += "<tr>" + headers.map(function(h){return "<th>"+h.trim()+"</th>";}).join("") + "</tr>";
+      i += 2;
+      while(i < lines.length && lines[i].indexOf("|") !== -1){
+        var cells = lines[i].split("|").filter(function(c,idx,arr){return !(idx===0&&c.trim()==="")&&!(idx===arr.length-1&&c.trim()==="");});
+        tbl += "<tr>" + cells.map(function(c){return "<td>"+c.trim()+"</td>";}).join("") + "</tr>";
+        i++;
+      }
+      tbl += "</table>";
+      out.push(tbl);
+    } else {
+      out.push(lines[i]);
+      i++;
+    }
+  }
+  return out.join("\n").replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+}
+
+function showSectionB(){
+  document.getElementById('homescreen').style.display='none';
+  document.getElementById('quizscreen').style.display='none';
+  document.getElementById('rscreen').style.display='none';
+  document.getElementById('fixednext').style.display='none';
+  document.getElementById('sbscreen').style.display='block';
+  document.body.className='';
+  sbIdx = 0;
+  window.scrollTo(0,0);
+  renderSB();
+}
+
+function renderSB(){
+  var q = SECTION_B[sbIdx];
+  document.getElementById('sb-count').textContent = "Q" + (sbIdx+1) + " of " + SECTION_B.length;
+  var html = '<div class="sb-q">';
+  html += '<span class="sb-marks">' + q.marks + ' marks</span>';
+  html += '<span class="sb-topic">' + q.topic + '</span>';
+  html += '<div class="sb-prompt">' + mdTable(q.prompt) + '</div>';
+  html += '<button class="sb-reveal-btn" id="sb-reveal" onclick="sbReveal()">&#128065;&#65039; Reveal Model Answer</button>';
+  html += '<div class="sb-answer" id="sb-answer"><div class="sb-anstitle">Model Answer (mark points)</div>' + mdTable(q.answer) + '</div>';
+  html += '<div class="sb-rate" id="sb-rate"><div class="sb-rate-label">How did you do? (not saved &mdash; just for you)</div>';
+  html += '<div class="sb-rate-btns">';
+  html += '<button class="rate-got" onclick="sbRate(\'got\')">&#9989; Got it</button>';
+  html += '<button class="rate-part" onclick="sbRate(\'part\')">&#9999;&#65039; Partial</button>';
+  html += '<button class="rate-miss" onclick="sbRate(\'miss\')">&#10060; Missed</button>';
+  html += '</div></div>';
+  html += '</div>';
+  document.getElementById('sb-card').innerHTML = html;
+
+  document.getElementById('sb-prev').disabled = (sbIdx === 0);
+  document.getElementById('sb-next').textContent = (sbIdx === SECTION_B.length-1) ? "Finish \u2192" : "Next \u2192";
+
+  // restore previous reveal/rating state for this question if revisited
+  if(sbRatings[sbIdx]){
+    document.getElementById('sb-answer').style.display='block';
+    document.getElementById('sb-rate').style.display='block';
+    document.getElementById('sb-reveal').style.display='none';
+  }
+  renderSBTally();
+}
+
+function sbReveal(){
+  document.getElementById('sb-answer').style.display='block';
+  document.getElementById('sb-rate').style.display='block';
+  document.getElementById('sb-reveal').style.display='none';
+}
+function sbRate(r){
+  sbRatings[sbIdx] = r;
+  renderSBTally();
+  setTimeout(function(){ if(sbIdx < SECTION_B.length-1){ sbNext(); } }, 350);
+}
+function sbNext(){
+  if(sbIdx < SECTION_B.length-1){ sbIdx++; window.scrollTo(0,0); renderSB(); }
+  else { showHome(); }
+}
+function sbPrev(){
+  if(sbIdx > 0){ sbIdx--; window.scrollTo(0,0); renderSB(); }
+}
+function renderSBTally(){
+  var got=0, part=0, miss=0, done=0;
+  for(var k in sbRatings){ done++; if(sbRatings[k]==='got')got++; else if(sbRatings[k]==='part')part++; else miss++; }
+  var el = document.getElementById('sb-tally');
+  if(done===0){ el.textContent = ""; return; }
+  el.innerHTML = "This session: &#9989; " + got + " &nbsp; &#9999;&#65039; " + part + " &nbsp; &#10060; " + miss + " &nbsp;(" + done + "/" + SECTION_B.length + " attempted)";
+}
+
+
 function showHome(){
   document.getElementById('homescreen').style.display='block';
   document.getElementById('quizscreen').style.display='none';
   document.getElementById('rscreen').style.display='none';
   document.getElementById('fixednext').style.display='none';
+  var sbs=document.getElementById('sbscreen'); if(sbs) sbs.style.display='none';
   document.body.className='';
 
   // Mode-aware UI
