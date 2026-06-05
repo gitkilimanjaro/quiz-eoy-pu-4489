@@ -73,7 +73,13 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-
 .hint-box{background:#fffde7;border:1px solid #f9ca24;border-radius:8px;padding:.65rem .9rem;font-size:.83rem;color:#555;margin-bottom:.8rem;display:none;line-height:1.5}
 .hint-box.open{display:block}
 .options{display:flex;flex-direction:column;gap:.55rem}
-.opt-btn{background:#fff;border:1.5px solid #dde;border-radius:10px;padding:.8rem 1rem;font-size:.9rem;text-align:left;cursor:pointer;color:#1a1a2e;line-height:1.45;transition:background .12s,border-color .12s;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.opt-btn{background:#fff;border:1.5px solid #dde;border-radius:10px;padding:.8rem 1rem;font-size:.9rem;text-align:left;cursor:pointer;color:#1a1a2e;line-height:1.45;transition:background .12s,border-color .12s;box-shadow:0 1px 3px rgba(0,0,0,.05);display:flex;align-items:flex-start;gap:.7rem}
+.opt-letter{flex:0 0 auto;width:1.6rem;height:1.6rem;border-radius:6px;background:#eef0f6;color:#555;font-weight:700;font-size:.82rem;display:flex;align-items:center;justify-content:center;margin-top:.05rem}
+.opt-text{flex:1 1 auto}
+.opt-btn.correct .opt-letter{background:#2e7d32;color:#fff}
+.opt-btn.wrong .opt-letter{background:#c62828;color:#fff}
+.opt-btn.reveal .opt-letter{background:#2e7d32;color:#fff}
+
 .opt-btn:hover:not(:disabled){background:#f4f6ff;border-color:#99aaf0}
 .opt-btn.correct{background:#e8f5e9;border-color:#2e7d32;color:#1b5e20}
 .opt-btn.wrong{background:#ffebee;border-color:#c62828;color:#b71c1c}
@@ -116,9 +122,9 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-
 <body>
 <div id="homeScreen" class="screen active">
   <div class="home-header">
-    <span class="version-tag">ver4.00</span>
+    <span class="version-tag">ver5.00</span>
     <h1>History Exam Prep</h1>
-    <div class="home-meta">135 Questions &middot; 6 Topics &middot; 16 per session &middot; v4.00</div>
+    <div class="home-meta">135 Questions &middot; 6 Topics &middot; 16 per session &middot; v5.00</div>
     <div class="topic-pills" id="topicPills"></div>
   </div>
   <div class="progress-card">
@@ -260,7 +266,7 @@ function renderQuestion(){
   const indices=[0,1,2,3];
   const shuffled=shuffle(indices);
   const correctShufflePos=shuffled.indexOf(q.a);
-  document.getElementById('optionsWrap').innerHTML=shuffled.map((origIdx,pos)=>`<button class="opt-btn" onclick="pick(this,${pos},${correctShufflePos})">${q.o[origIdx]}</button>`).join('');
+  document.getElementById('optionsWrap').innerHTML=shuffled.map((origIdx,pos)=>`<button class="opt-btn" onclick="pick(this,${pos},${correctShufflePos})"><span class="opt-letter">${'ABCD'[pos]}</span><span class="opt-text">${q.o[origIdx]}</span></button>`).join('');
 }
 
 function toggleHint(){
