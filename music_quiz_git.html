@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 7 Music — End of Year Theory Quiz</title>
+<style>
+  :root{
+    --bg:#f5f6fa; --card:#ffffff; --ink:#1a1a2e; --navy:#1a1a2e;
+    --green:#2e7d32; --red:#c62828; --orange:#f57c00;
+    --shadow:0 2px 8px rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    line-height:1.45; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:540px;margin:0 auto;padding:16px 14px 60px;}
+  .card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:18px 16px;margin-bottom:14px;}
+  h1{font-size:1.45rem;margin:0 0 4px;font-weight:800;letter-spacing:-.01em;}
+  .ver{position:absolute;top:10px;right:12px;font-size:.72rem;color:#8a8aa0;font-weight:600;}
+  .topwrap{position:relative;}
+  .pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .pill{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:#fff;border:1.5px solid;}
+  .bignum{font-size:2rem;font-weight:800;line-height:1;}
+  .statrow{display:flex;gap:18px;margin-bottom:12px;}
+  .stat{flex:1;}
+  .stat .lbl{font-size:.78rem;color:#555;margin-top:2px;}
+  .bar{height:10px;border-radius:999px;background:#e6e7ef;overflow:hidden;margin:6px 0 2px;}
+  .bar>span{display:block;height:100%;width:0;background:var(--navy);border-radius:999px;transition:width .6s ease;}
+  .howto{font-size:.85rem;color:#444;margin-top:10px;}
+  .btn{display:block;width:100%;border:none;border-radius:10px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;}
+  .btn-primary{background:var(--navy);color:#fff;}
+  .btn-secondary{background:#fff;color:var(--red);border:1.6px solid var(--red);margin-top:10px;}
+  .btn:active{transform:translateY(1px);}
+  .topicrow{display:block;}
+  .topicgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .topiccard{background:var(--card);border-radius:10px;box-shadow:var(--shadow);padding:12px;}
+  .topiccard .tname{font-weight:800;font-size:.92rem;}
+  .topiccard .half{color:var(--orange);font-weight:800;font-size:.8rem;margin-left:6px;}
+  .topiccard .cnt{font-size:.78rem;color:#555;margin-top:2px;}
+  .sectionlabel{font-size:.8rem;font-weight:700;color:#777;text-transform:uppercase;letter-spacing:.05em;margin:4px 2px 8px;}
+  /* quiz screen */
+  .qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .qbadge{font-size:.74rem;font-weight:800;padding:4px 10px;border-radius:999px;background:#fff;border:1.5px solid;}
+  .qcount{font-size:.82rem;color:#666;font-weight:600;}
+  .qtext{font-size:1.18rem;font-weight:700;text-align:center;margin:10px 4px 16px;}
+  .hintbtn{background:#eef0f7;border:none;color:var(--navy);font-weight:700;font-size:.84rem;padding:8px 12px;border-radius:8px;cursor:pointer;font-family:inherit;margin-bottom:12px;}
+  .hintbox{background:#fff8ec;border:1px solid #f0d9ad;border-radius:8px;padding:10px 12px;font-size:.88rem;margin-bottom:12px;}
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:1.6px solid #d8dae6;border-radius:10px;padding:13px 14px;margin-bottom:9px;font-size:.97rem;cursor:pointer;font-family:inherit;color:var(--ink);transition:background .15s,border-color .15s;}
+  .opt:hover:not(:disabled){border-color:#b8bbd0;}
+  .opt:disabled{cursor:default;}
+  .opt.correct{background:#e7f4e8;border-color:var(--green);color:#1b4d1f;font-weight:700;}
+  .opt.wrong{background:#fce8e8;border-color:var(--red);color:#7a1b1b;font-weight:700;}
+  .explbox{background:#eef0f7;border-radius:8px;padding:12px 14px;font-size:.9rem;margin-top:12px;}
+  .insightbox{border:1.5px solid var(--navy);background:#f7f8fd;border-radius:8px;padding:12px 14px;font-size:.9rem;margin-top:10px;}
+  .insightbox b{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);margin-bottom:4px;}
+  .next{margin-top:16px;}
+  /* results */
+  .score{font-size:2.4rem;font-weight:800;text-align:center;}
+  .scorelbl{text-align:center;color:#555;margin-bottom:14px;}
+  .badge{background:#e7f4e8;border:1px solid #bcdcbd;color:#1b4d1f;border-radius:8px;padding:10px 12px;font-weight:700;text-align:center;font-size:.92rem;margin-bottom:14px;}
+  table{width:100%;border-collapse:collapse;font-size:.86rem;}
+  th,td{text-align:left;padding:7px 6px;border-bottom:1px solid #e6e7ef;}
+  th{color:#666;font-weight:700;font-size:.76rem;text-transform:uppercase;letter-spacing:.04em;}
+  td.num,th.num{text-align:center;}
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(20,20,40,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50;}
+  .overlay.show{display:flex;}
+  .modal{background:#fff;border-radius:12px;padding:22px 20px;max-width:340px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.25);}
+  .modal p{margin:0 0 18px;font-size:.96rem;font-weight:600;}
+  .modal .row{display:flex;gap:10px;}
+  .modal .row .btn{margin:0;}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===================== HOME ===================== -->
+  <div id="home">
+    <div class="card topwrap">
+      <span class="ver" id="verref">ver1.00</span>
+      <h1>Grade 7 Music</h1>
+      <div style="font-weight:600;color:#555;font-size:.95rem;">End of Year Theory Quiz</div>
+      <div class="pills" id="homePills"></div>
+    </div>
+
+    <div class="card">
+      <div class="statrow">
+        <div class="stat"><div class="bignum" id="activeCount" style="color:var(--navy)">0</div><div class="lbl">Active Questions</div></div>
+        <div class="stat"><div class="bignum" id="masteredCount" style="color:var(--green)">0</div><div class="lbl">Completed</div></div>
+      </div>
+      <div class="bar"><span id="homeBar"></span></div>
+      <div class="howto" id="howtoText"></div>
+    </div>
+
+    <button class="btn btn-primary" id="continueBtn">▶ Continue Progress</button>
+    <button class="btn btn-secondary" id="resetBtn">↺ Start All Over</button>
+
+    <div style="height:16px;"></div>
+    <div class="sectionlabel">Topics</div>
+    <div id="topicContainer"></div>
+  </div>
+
+  <!-- ===================== QUIZ ===================== -->
+  <div id="quiz" class="hidden">
+    <div class="card">
+      <div class="qhead">
+        <span class="qbadge" id="qBadge"></span>
+        <span class="qcount" id="qCount"></span>
+      </div>
+      <div class="qtext" id="qText"></div>
+      <button class="hintbtn" id="hintBtn">💡 Show hint</button>
+      <div class="hintbox hidden" id="hintBox"></div>
+      <div id="optsWrap"></div>
+      <div id="feedback"></div>
+      <button class="btn btn-primary next hidden" id="nextBtn">Next →</button>
+    </div>
+  </div>
+
+  <!-- ===================== RESULTS ===================== -->
+  <div id="results" class="hidden">
+    <div class="card">
+      <div class="score" id="rScore">0 / 0</div>
+      <div class="scorelbl">correct this round</div>
+      <div class="badge hidden" id="rBadge"></div>
+      <table>
+        <thead><tr><th>Topic</th><th class="num">Correct</th><th class="num">Seen</th></tr></thead>
+        <tbody id="rTable"></tbody>
+      </table>
+      <button class="btn btn-primary" style="margin-top:18px;" id="continueStudyBtn">Continue Studying →</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== RESET MODAL ===================== -->
+<div class="overlay" id="resetOverlay">
+  <div class="modal">
+    <p>This will erase all your progress. Are you sure?</p>
+    <div class="row">
+      <button class="btn btn-secondary" style="margin:0;" id="cancelReset">Cancel</button>
+      <button class="btn btn-primary" id="confirmReset">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ CONFIG ============ */
+const QUIZ_NAME = "Grade 7 Music — End of Year Theory Quiz";
+const LS_KEY = "grade-7-music-end-of-year-theory-quiz_v1";
+const QS_PER_ROUND = 16;
+const STREAK_TO_MASTER = 2;
+const FINAL_PASS_SPACING_MS = 10 * 60 * 1000; // 10 minutes
+
+/* ============ QUESTION BANK ============ */
+const BANK = [
+  // ===== NOTE NAMES =====
+  { t:"Note Names", q:"In the treble clef, what are the names of the four spaces from bottom to top?", o:["F, A, C, E","E, G, B, D","G, B, D, F","A, C, E, G"], a:0, h:"They spell a common word.", expl:"The treble spaces spell FACE from bottom to top.", insight:"Treble clef spaces (bottom to top) = F, A, C, E." },
+  { t:"Note Names", q:"In the treble clef, what are the names of the five lines from bottom to top?", o:["E, G, B, D, F","F, A, C, E, G","G, B, D, F, A","D, F, A, C, E"], a:0, h:"A mnemonic in the deck uses 'Bus' and 'Drives'.", expl:"Treble lines spell E, G, B, D, F — 'Every Green Bus Drives Fast'.", insight:"Treble clef lines (bottom to top) = E, G, B, D, F." },
+  { t:"Note Names", q:"In the bass clef, what are the names of the five lines from bottom to top?", o:["G, B, D, F, A","E, G, B, D, F","A, C, E, G, B","F, A, C, E, G"], a:0, h:"Different from the treble lines.", expl:"Bass clef lines from bottom to top are G, B, D, F, A.", insight:"Bass clef lines (bottom to top) = G, B, D, F, A." },
+  { t:"Note Names", q:"In the bass clef, what are the names of the four spaces from bottom to top?", o:["A, C, E, G","F, A, C, E","G, B, D, F","E, G, B, D"], a:0, h:"Not the same as the treble spaces.", expl:"Bass clef spaces from bottom to top are A, C, E, G.", insight:"Bass clef spaces (bottom to top) = A, C, E, G." },
+  { t:"Note Names", q:"Which note sits on the very first ledger line below the treble staff?", o:["Middle C","Middle D","Bottom E","Low G"], a:0, h:"It links the treble and bass staves.", expl:"Middle C sits one ledger line below the bottom line of the treble staff.", insight:"Middle C = one ledger line below the treble staff." },
+  { t:"Note Names", q:"Which note sits on the first ledger line above the bass staff?", o:["Middle C","Middle D","Top A","High F"], a:0, h:"It is the same shared note that joins both clefs.", expl:"Middle C sits one ledger line above the top line of the bass staff.", insight:"Middle C = one ledger line above the bass staff." },
+  { t:"Note Names", q:"What does the symbol ♭ (flat) do to a note?", o:["Lowers its pitch by a semitone","Raises its pitch by a semitone","Cancels a previous accidental sign","Doubles the note's overall length"], a:0, h:"Think of the direction 'down'.", expl:"A flat lowers a note's pitch by one semitone.", insight:"Flat (♭) = lower the pitch by a semitone." },
+  { t:"Note Names", q:"What does the symbol ♯ (sharp) do to a note?", o:["Raises its pitch by a semitone","Lowers its pitch by a semitone","Cancels a previous accidental sign","Halves the note's overall length"], a:0, h:"Think of the direction 'up'.", expl:"A sharp raises a note's pitch by one semitone.", insight:"Sharp (♯) = raise the pitch by a semitone." },
+  { t:"Note Names", q:"Reading notes that spell C, then A, then F, then E — what hidden word do they make?", o:["CAFE","FACE","FADE","CAGE"], a:0, h:"It is a place you buy coffee.", expl:"The notes C–A–F–E spell the word CAFE.", insight:"Note-spelling: read each note letter in order to find the word." },
+
+  // ===== NOTE VALUES & RESTS =====
+  { t:"Note Values & Rests", q:"How many crotchet beats does a semibreve last?", o:["4","2","1","3"], a:0, h:"It is the longest basic note value at this level.", expl:"A semibreve lasts for four crotchet beats.", insight:"Semibreve = 4 crotchet beats." },
+  { t:"Note Values & Rests", q:"How many crotchet beats does a minim last?", o:["2","1","4","3"], a:0, h:"Half a semibreve.", expl:"A minim lasts for two crotchet beats.", insight:"Minim = 2 crotchet beats." },
+  { t:"Note Values & Rests", q:"How many crotchet beats does a crotchet last?", o:["1","2","4","3"], a:0, h:"It is the unit beat itself.", expl:"A crotchet lasts for one crotchet beat.", insight:"Crotchet = 1 crotchet beat." },
+  { t:"Note Values & Rests", q:"How long does a quaver last, measured in crotchet beats?", o:["Half a beat","One beat","Two beats","Four beats"], a:0, h:"Shorter than a crotchet; usually beamed in pairs.", expl:"A quaver lasts for half a crotchet beat.", insight:"Quaver = ½ a crotchet beat." },
+  { t:"Note Values & Rests", q:"How many crotchet beats does a dotted minim last?", o:["3","2","4","6"], a:0, h:"A minim plus half its value.", expl:"A dotted minim lasts three beats: minim (2) plus the dot (1).", insight:"Dotted minim = 3 crotchet beats (2 + 1)." },
+  { t:"Note Values & Rests", q:"What does a dot written after a note do to its length?", o:["Adds half the note's value again to its length","Makes the note last twice as long as before","Removes half of the note's value from its length","Tells the player to perform the note staccato"], a:0, h:"It is about adding, not detaching.", expl:"A dot adds half of the note's own value again to its length.", insight:"A dot adds half the note's value again to its length." },
+  { t:"Note Values & Rests", q:"How many crotchet beats does a minim rest last?", o:["2","1","4","3"], a:0, h:"A rest matching the two-beat note.", expl:"A minim rest lasts for two crotchet beats of silence.", insight:"Minim rest = 2 crotchet beats of silence." },
+  { t:"Note Values & Rests", q:"Besides four beats, what else can a semibreve rest mean?", o:["A whole bar of silence in any time signature","Exactly two crotchet beats of silence in the bar","Just half a crotchet beat of silence here","A signal to repeat the whole previous bar"], a:0, h:"It works regardless of the time signature.", expl:"A semibreve rest can mean a whole bar of silence in any time signature.", insight:"Semibreve rest = 4 beats OR a whole bar's silence in any time signature." },
+  { t:"Note Values & Rests", q:"Add the beats: a minim rest, plus a dotted minim, plus a crotchet. How many crotchet beats in total?", o:["6","5","4","7"], a:0, h:"2 + 3 + 1.", expl:"Minim rest (2) + dotted minim (3) + crotchet (1) = 6 beats.", insight:"Total beats = add each value: 2 + 3 + 1 = 6." },
+
+  // ===== INTERVALS =====
+  { t:"Intervals", q:"What is the interval between two notes of the same pitch played together?", o:["Unison","2nd","Octave","3rd"], a:0, h:"'One' is in the word.", expl:"Two notes of the same pitch form a unison.", insight:"Same pitch = unison (a 1st)." },
+  { t:"Intervals", q:"When counting an interval, which note do you call number 1?", o:["The lower note","The higher note","The middle note","The loudest note"], a:0, h:"Count upward.", expl:"You count up from the lower note, calling it 1.", insight:"To count an interval: call the lower note 1 and count up to the higher note." },
+  { t:"Intervals", q:"You count up from one note to the next and reach the number 3. What is the interval called?", o:["A 3rd","A 2nd","A 4th","A 5th"], a:0, h:"The number you reach names it.", expl:"Counting up to the third letter names the interval a 3rd.", insight:"The number you count up to names the interval (e.g. reaching 3 = a 3rd)." },
+  { t:"Intervals", q:"What interval is formed between a note and the next note eight letter-names higher?", o:["Octave","5th","4th","Unison"], a:0, h:"'Oct' means eight.", expl:"Eight notes apart (1 to 8) is an octave.", insight:"Eight notes apart = an octave." },
+  { t:"Intervals", q:"From C up to G, what is the interval?", o:["A 5th","A 4th","A 3rd","A 6th"], a:0, h:"C-D-E-F-G.", expl:"C, D, E, F, G = 5 letters, so C to G is a 5th.", insight:"C to G = a 5th (C-D-E-F-G is five letters)." },
+  { t:"Intervals", q:"From C up to F, what is the interval?", o:["A 4th","A 3rd","A 5th","A 2nd"], a:0, h:"C-D-E-F.", expl:"C, D, E, F = 4 letters, so C to F is a 4th.", insight:"C to F = a 4th (four letters)." },
+  { t:"Intervals", q:"Two notes sit on a line and the very next space directly above it. What interval is this?", o:["A 2nd","A 3rd","A unison","A 4th"], a:0, h:"Line to the very next space is one step.", expl:"A line to the adjacent space is one step up — a 2nd.", insight:"Adjacent line-to-space (one step) = a 2nd." },
+
+  // ===== TIME SIGNATURES =====
+  { t:"Time Signatures", q:"In a time signature, what does the top number tell you?", o:["The number of beats in each bar","The kind of beat used in each bar","How loudly the music is played","The overall speed of the piece"], a:0, h:"It counts something per bar.", expl:"The top number shows how many beats are in each bar.", insight:"Time signature top number = number of beats per bar." },
+  { t:"Time Signatures", q:"In a time signature, what does the bottom number tell you?", o:["The kind of beat used in each bar","The number of beats in each bar","How loudly the music is played","The number of bars in the piece"], a:0, h:"At this level a 4 here means a crotchet.", expl:"The bottom number shows the type of beat; 4 means a crotchet.", insight:"Time signature bottom number = type of beat (4 = crotchet)." },
+  { t:"Time Signatures", q:"How many crotchet beats are in each bar of 3/4 time?", o:["3","2","4","6"], a:0, h:"The top number gives it away.", expl:"In 3/4 there are three crotchet beats per bar.", insight:"3/4 = three crotchet beats per bar." },
+  { t:"Time Signatures", q:"The symbol 'C' on a staff is sometimes used in place of which time signature?", o:["4/4","3/4","2/4","6/8"], a:0, h:"It is nicknamed 'common time'.", expl:"The 'C' symbol stands for 4/4, called common time.", insight:"'C' = common time = 4/4." },
+  { t:"Time Signatures", q:"A bar contains a crotchet, a crotchet rest, and a crotchet. Which time signature fits it best?", o:["3/4","4/4","2/4","5/4"], a:0, h:"Count the total beats in the bar.", expl:"Crotchet + crotchet rest + crotchet = 3 beats, which fits 3/4.", insight:"Match the time signature to the total beats in the bar (here 3 = 3/4)." },
+
+  // ===== KEY SIGNATURES & TRIADS =====
+  { t:"Key Signatures & Triads", q:"How many sharps or flats are in the key signature of C major?", o:["None","One sharp","One flat","Two sharps"], a:0, h:"It is the plainest key signature.", expl:"C major has no sharps and no flats.", insight:"C major key signature = no sharps or flats." },
+  { t:"Key Signatures & Triads", q:"What is the key signature of G major?", o:["One sharp","One flat","No sharps or flats","Two sharps"], a:0, h:"A single accidental, and it is a sharp.", expl:"G major has one sharp in its key signature.", insight:"G major key signature = one sharp." },
+  { t:"Key Signatures & Triads", q:"What is the key signature of F major?", o:["One flat","One sharp","No sharps or flats","Two flats"], a:0, h:"A single accidental, and it is a flat.", expl:"F major has one flat in its key signature.", insight:"F major key signature = one flat." },
+  { t:"Key Signatures & Triads", q:"A tonic triad is built from which degrees of the scale?", o:["The 1st, 3rd and 5th","The 1st, 2nd and 3rd","The 2nd, 4th and 6th","The 1st, 4th and 8th"], a:0, h:"Skip a degree each time, starting on the tonic.", expl:"A tonic triad uses the 1st, 3rd and 5th degrees of the scale.", insight:"Tonic triad = 1st + 3rd + 5th degrees of the scale." },
+  { t:"Key Signatures & Triads", q:"Which three notes make up the tonic triad in C major?", o:["C, E, G","C, F, A","C, D, E","C, E, A"], a:0, h:"Start on C, then miss a letter each time.", expl:"The C major tonic triad is C, E, G (degrees 1, 3, 5).", insight:"C major tonic triad = C, E, G." },
+  { t:"Key Signatures & Triads", q:"Which three notes make up the tonic triad in F major?", o:["F, A, C","F, G, A","F, A, D","F, C, E"], a:0, h:"Start on F, miss a letter each time.", expl:"The F major tonic triad is F, A, C (degrees 1, 3, 5).", insight:"F major tonic triad = F, A, C." },
+  { t:"Key Signatures & Triads", q:"The Roman numeral written under a tonic triad is which symbol?", o:["I","V","IV","II"], a:0, h:"It is built on the first degree.", expl:"The tonic triad is labelled with the Roman numeral I (the 1st degree).", insight:"Tonic triad = Roman numeral I (built on the 1st degree)." },
+  { t:"Key Signatures & Triads", q:"Which note is 'doh' in the key of G major?", o:["G","C","F","D"], a:0, h:"Doh is the home note of the key.", expl:"In G major, the tonic (doh) is G.", insight:"Doh = the tonic = the note the key is named after (G major → G)." },
+
+  // ===== DYNAMICS =====
+  { t:"Dynamics", q:"What does pianissimo (pp) mean?", o:["Very soft","Very loud","Medium soft","Quite fast"], a:0, h:"More extreme than plain piano.", expl:"Pianissimo (pp) means very soft.", insight:"pp (pianissimo) = very soft." },
+  { t:"Dynamics", q:"What does forte (f) mean?", o:["Loud","Soft","Smooth","Slow"], a:0, h:"Not the very loudest — just loud.", expl:"Forte (f) means loud.", insight:"f (forte) = loud." },
+  { t:"Dynamics", q:"What does mezzo forte (mf) mean?", o:["Medium loud","Very loud","Medium soft","Very soft"], a:0, h:"'Mezzo' means half.", expl:"Mezzo forte (mf) means medium loud.", insight:"mf (mezzo forte) = medium loud ('mezzo' = half)." },
+  { t:"Dynamics", q:"What does crescendo mean?", o:["Getting gradually louder","Getting gradually softer","Staying always very soft","Playing the notes detached"], a:0, h:"Shown by a widening hairpin.", expl:"Crescendo means getting gradually louder.", insight:"Crescendo = getting gradually louder." },
+  { t:"Dynamics", q:"What does diminuendo (dim.) mean?", o:["Getting gradually softer","Getting gradually louder","Playing always very loud","Speeding the music up"], a:0, h:"Shown by a narrowing hairpin.", expl:"Diminuendo means getting gradually softer.", insight:"Diminuendo = getting gradually softer." },
+
+  // ===== ARTICULATION & TEMPO =====
+  { t:"Articulation & Tempo", q:"What does legato mean?", o:["Play smoothly","Play detached","Play loudly","Play slower"], a:0, h:"The opposite of detached.", expl:"Legato means to play smoothly.", insight:"Legato = play smoothly." },
+  { t:"Articulation & Tempo", q:"What does staccato mean?", o:["Play the notes detached, short and crisp","Play the notes smoothly joined together","Play the passage gradually getting louder","Play the music at a steady walking pace"], a:0, h:"Shown by a dot above or below the note.", expl:"Staccato means to play notes detached, short and crisp.", insight:"Staccato = detached, short and crisp." },
+  { t:"Articulation & Tempo", q:"What does the tempo marking Andante mean?", o:["At a walking pace","Fast","At a moderate pace","Getting slower"], a:0, h:"Think of walking.", expl:"Andante means at a walking pace.", insight:"Andante = at a walking pace." },
+  { t:"Articulation & Tempo", q:"What does the tempo marking Allegro mean?", o:["Fast","Slow","At a walking pace","Getting slower"], a:0, h:"A lively, quick speed.", expl:"Allegro means fast.", insight:"Allegro = fast." },
+  { t:"Articulation & Tempo", q:"What does ritardando (rit.) mean?", o:["Getting slower","Getting faster","Getting louder","Getting softer"], a:0, h:"About speed, not volume.", expl:"Ritardando (rit.) means getting slower.", insight:"rit. (ritardando) = getting slower." },
+  { t:"Articulation & Tempo", q:"What do repeat marks tell a performer to do?", o:["Repeat the section or from the beginning again","Play the marked passage noticeably more loudly","Gradually slow the music down towards the end","Play all the marked notes short and detached"], a:0, h:"About playing something again.", expl:"Repeat marks tell the player to repeat the section or from the start.", insight:"Repeat marks = play the section (or piece) again." },
+
+  // ===== INSTRUMENTS =====
+  { t:"Instruments", q:"What are the four families of the orchestra?", o:["Woodwind, brass, percussion, string","Woodwind, brass, keyboard, electronic","String, brass, vocal, percussion","Woodwind, string, choir, brass"], a:0, h:"The deck lists exactly four.", expl:"The four orchestral families are woodwind, brass, percussion and string.", insight:"Four orchestral families = woodwind, brass, percussion, string." },
+  { t:"Instruments", q:"With which family is the piano often grouped, since its sound is made by striking?", o:["Percussion","String","Woodwind","Brass"], a:0, h:"Think about how the sound is started.", expl:"The piano is often grouped with percussion because sound is made by striking (keys move hammers).", insight:"Piano is often grouped with percussion — sound is made by striking." },
+  { t:"Instruments", q:"To which family does the trumpet belong?", o:["Brass","Woodwind","String","Percussion"], a:0, h:"Made of shiny metal, played with the lips.", expl:"The trumpet is a brass instrument.", insight:"Trumpet = brass family." },
+  { t:"Instruments", q:"To which family does the violin belong?", o:["String","Woodwind","Brass","Percussion"], a:0, h:"It has strings and a bow.", expl:"The violin is a string instrument.", insight:"Violin = string family." },
+  { t:"Instruments", q:"To which family does the timpani (kettledrums) belong?", o:["Percussion","Brass","String","Woodwind"], a:0, h:"They are struck to make sound.", expl:"Timpani are percussion instruments.", insight:"Timpani = percussion family." }
+];
+BANK.forEach((q,i)=>q.id=i);
+
+/* ============ TOPIC COLORS ============ */
+const TOPIC_COLORS = {
+  "Note Names":"#5b6ee1",
+  "Note Values & Rests":"#2e9e8f",
+  "Intervals":"#c0529c",
+  "Time Signatures":"#e07b39",
+  "Key Signatures & Triads":"#7a52c0",
+  "Dynamics":"#3a8fd0",
+  "Articulation & Tempo":"#b5892b",
+  "Instruments":"#3f9e54"
+};
+const TOPICS = [...new Set(BANK.map(q=>q.t))];
+
+/* ============ STATE / LEDGER ============ */
+function freshState(){
+  const s={ledger:{}};
+  BANK.forEach(q=>{ s.ledger[q.id]={streak:0,status:"active",lastCorrect:0}; });
+  return s;
+}
+function loadState(){
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(!raw) return freshState();
+    const parsed=JSON.parse(raw);
+    if(!parsed||typeof parsed!=="object"||!parsed.ledger) return freshState();
+    // ensure every current question has a ledger entry (handles bank growth)
+    BANK.forEach(q=>{ if(!parsed.ledger[q.id]) parsed.ledger[q.id]={streak:0,status:"active",lastCorrect:0}; });
+    return parsed;
+  }catch(e){ return freshState(); }
+}
+function saveState(){ try{ localStorage.setItem(LS_KEY,JSON.stringify(STATE)); }catch(e){} }
+let STATE=loadState();
+
+/* ============ HELPERS ============ */
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function eligibleIds(){
+  const now=Date.now();
+  return BANK.filter(q=>{
+    const L=STATE.ledger[q.id];
+    if(L.status!=="active") return false;
+    if(L.streak===STREAK_TO_MASTER-1 && FINAL_PASS_SPACING_MS>0){
+      return (now-L.lastCorrect)>=FINAL_PASS_SPACING_MS;
+    }
+    return true;
+  }).map(q=>q.id);
+}
+function activeCount(){ return BANK.filter(q=>STATE.ledger[q.id].status==="active").length; }
+function masteredCount(){ return BANK.filter(q=>STATE.ledger[q.id].status==="mastered").length; }
+function halfwayCount(topic){
+  return BANK.filter(q=>q.t===topic && STATE.ledger[q.id].status==="active" && STATE.ledger[q.id].streak>0).length;
+}
+function topicMastered(topic){ return BANK.filter(q=>q.t===topic && STATE.ledger[q.id].status==="mastered").length; }
+function topicTotal(topic){ return BANK.filter(q=>q.t===topic).length; }
+
+/* ============ HOME RENDER ============ */
+function renderHome(){
+  // pills
+  const pills=document.getElementById("homePills"); pills.innerHTML="";
+  TOPICS.forEach(t=>{
+    const c=TOPIC_COLORS[t]||"#666";
+    const el=document.createElement("span");
+    el.className="pill"; el.style.borderColor=c; el.style.color=c; el.textContent=t;
+    pills.appendChild(el);
+  });
+  // stats
+  const total=BANK.length, mast=masteredCount();
+  document.getElementById("activeCount").textContent=activeCount();
+  document.getElementById("masteredCount").textContent=mast;
+  const pct= total? Math.round(mast/total*100):0;
+  setTimeout(()=>{ document.getElementById("homeBar").style.width=pct+"%"; },60);
+  document.getElementById("howtoText").innerHTML=
+    "Answer correctly <b>"+STREAK_TO_MASTER+"</b> times in a row to complete a question. "+
+    "A wrong answer resets your progress on that question. Work through all <b>"+total+"</b> questions to finish.";
+  // continue button label
+  const elig=eligibleIds().length;
+  const cbtn=document.getElementById("continueBtn");
+  if(mast>=total){ cbtn.textContent="✓ All Questions Completed"; }
+  else if(elig===0){ cbtn.textContent="▶ Continue Progress (resting — check back soon)"; }
+  else { cbtn.textContent="▶ Continue Progress"; }
+  // topic cards
+  const cont=document.getElementById("topicContainer"); cont.innerHTML="";
+  const grid=document.createElement("div");
+  grid.className = TOPICS.length>=7 ? "topicgrid" : "topicrow";
+  TOPICS.forEach(t=>{
+    const c=TOPIC_COLORS[t]||"#666";
+    const m=topicMastered(t), tot=topicTotal(t), half=halfwayCount(t);
+    const pctT= tot? Math.round(m/tot*100):0;
+    const card=document.createElement("div");
+    card.className="topiccard";
+    card.innerHTML=
+      '<div class="tname" style="color:'+c+'">'+t+
+        (half>0?'<span class="half" title="One more correct answer to complete these">▶'+half+'</span>':'')+
+      '</div>'+
+      '<div class="cnt">'+m+' / '+tot+' completed</div>'+
+      '<div class="bar"><span style="width:'+pctT+'%;background:'+c+'"></span></div>';
+    grid.appendChild(card);
+  });
+  cont.appendChild(grid);
+  show("home");
+}
+
+/* ============ SESSION ============ */
+let session=null;
+function startSession(){
+  const elig=eligibleIds();
+  if(masteredCount()>=BANK.length){ renderHome(); return; }
+  let pool=shuffle(elig);
+  // Relief valve: if not enough eligible to fill a round, top up with active questions
+  if(pool.length<QS_PER_ROUND){
+    const extra=shuffle(BANK.filter(q=>STATE.ledger[q.id].status==="active").map(q=>q.id)
+                    .filter(id=>!pool.includes(id)));
+    pool=pool.concat(extra);
+  }
+  const ids=pool.slice(0,Math.min(QS_PER_ROUND,pool.length));
+  if(ids.length===0){ renderHome(); return; }
+  session={ids:ids,idx:0,correct:0,answered:false,
+    perTopic:{},seen:{},};
+  TOPICS.forEach(t=>{session.perTopic[t]={correct:0,seen:0};});
+  session.completedThisRound=0;
+  renderQuestion();
+}
+function renderQuestion(){
+  show("quiz");
+  session.answered=false;
+  const q=BANK[session.ids[session.idx]];
+  const c=TOPIC_COLORS[q.t]||"#666";
+  const badge=document.getElementById("qBadge");
+  badge.textContent=q.t; badge.style.borderColor=c; badge.style.color=c;
+  document.getElementById("qCount").textContent="Q "+(session.idx+1)+" of "+session.ids.length;
+  document.getElementById("qText").textContent=q.q;
+  // hint reset
+  const hb=document.getElementById("hintBox"); hb.classList.add("hidden"); hb.textContent=q.h;
+  const hbtn=document.getElementById("hintBtn"); hbtn.classList.remove("hidden"); hbtn.textContent="💡 Show hint";
+  // options shuffled at render
+  const wrap=document.getElementById("optsWrap"); wrap.innerHTML="";
+  const order=shuffle(q.o.map((text,i)=>({text,i})));
+  session.currentOrder=order;
+  order.forEach(opt=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.textContent=opt.text;
+    b.onclick=()=>answer(opt.i,b);
+    wrap.appendChild(b);
+  });
+  document.getElementById("feedback").innerHTML="";
+  document.getElementById("nextBtn").classList.add("hidden");
+}
+function answer(chosenIdx,btn){
+  if(session.answered) return;
+  session.answered=true;
+  const q=BANK[session.ids[session.idx]];
+  const L=STATE.ledger[q.id];
+  const correct = chosenIdx===q.a;
+  session.perTopic[q.t].seen++; 
+  if(!session.seen[q.id]) session.seen[q.id]=true;
+  // ledger update
+  if(correct){
+    L.streak++; L.lastCorrect=Date.now();
+    session.correct++; session.perTopic[q.t].correct++;
+    if(L.streak>=STREAK_TO_MASTER){ 
+      if(L.status!=="mastered"){ L.status="mastered"; session.completedThisRound++; }
+    }
+  }else{
+    L.streak=0;
+  }
+  saveState(); // save immediately after every answer
+  // highlight
+  const btns=document.querySelectorAll("#optsWrap .opt");
+  btns.forEach((b,pos)=>{
+    b.disabled=true;
+    const origIdx=session.currentOrder[pos].i;
+    if(origIdx===q.a) b.classList.add("correct");
+    else if(origIdx===chosenIdx) b.classList.add("wrong");
+  });
+  document.getElementById("hintBtn").classList.add("hidden");
+  // feedback boxes
+  const fb=document.getElementById("feedback");
+  fb.innerHTML=
+    '<div class="explbox">'+q.expl+'</div>'+
+    '<div class="insightbox"><b>Examiner key point</b>'+q.insight+'</div>';
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+function nextQuestion(){
+  session.idx++;
+  if(session.idx>=session.ids.length){ renderResults(); }
+  else { renderQuestion(); }
+}
+
+/* ============ RESULTS ============ */
+function renderResults(){
+  show("results");
+  document.getElementById("rScore").textContent=session.correct+" / "+session.ids.length;
+  const badge=document.getElementById("rBadge");
+  if(session.completedThisRound>0){
+    badge.classList.remove("hidden");
+    badge.textContent="+ "+session.completedThisRound+" question"+(session.completedThisRound>1?"s":"")+" completed this round";
+  }else{ badge.classList.add("hidden"); }
+  const tb=document.getElementById("rTable"); tb.innerHTML="";
+  TOPICS.forEach(t=>{
+    const d=session.perTopic[t];
+    if(d.seen===0) return;
+    const c=TOPIC_COLORS[t]||"#666";
+    const tr=document.createElement("tr");
+    tr.innerHTML='<td style="color:'+c+';font-weight:700;">'+t+'</td>'+
+                 '<td class="num">'+d.correct+'</td>'+
+                 '<td class="num">'+d.seen+'</td>';
+    tb.appendChild(tr);
+  });
+}
+
+/* ============ NAV ============ */
+function show(id){
+  ["home","quiz","results"].forEach(s=>{
+    document.getElementById(s).classList.toggle("hidden", s!==id);
+  });
+  window.scrollTo(0,0);
+}
+
+/* ============ EVENTS ============ */
+document.getElementById("continueBtn").onclick=startSession;
+document.getElementById("nextBtn").onclick=nextQuestion;
+document.getElementById("continueStudyBtn").onclick=renderHome;
+document.getElementById("hintBtn").onclick=function(){
+  document.getElementById("hintBox").classList.remove("hidden");
+  this.classList.add("hidden");
+};
+// reset modal
+const overlay=document.getElementById("resetOverlay");
+document.getElementById("resetBtn").onclick=()=>overlay.classList.add("show");
+document.getElementById("cancelReset").onclick=()=>overlay.classList.remove("show");
+document.getElementById("confirmReset").onclick=()=>{
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  STATE=freshState(); saveState();
+  overlay.classList.remove("show");
+  renderHome();
+};
+
+/* ============ BOOT ============ */
+renderHome();
+</script>
+</body>
+</html>
