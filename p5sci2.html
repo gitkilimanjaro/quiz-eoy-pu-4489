@@ -118,6 +118,7 @@
   .opts{display:flex; flex-direction:column; gap:11px;}
   .opt{background:#fff; border:2.5px solid #ece2c8; border-radius:16px; padding:14px 15px; font-size:15px;
     text-align:left; cursor:pointer; font-family:inherit; color:var(--ink); font-weight:700;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
     box-shadow:0 3px 0 #ece2c8; transition:all .12s;}
   .opt:hover:not(:disabled){border-color:var(--sky-dk); box-shadow:0 3px 0 var(--sky);}
   .opt:active:not(:disabled){transform:translateY(2px); box-shadow:0 1px 0 var(--sky);}
@@ -162,7 +163,7 @@
 
   <!-- HOME -->
   <section id="home" class="screen active">
-    <div class="topbar"><span class="ver" id="verTag">ver2.01</span></div>
+    <div class="topbar"><span class="ver" id="verTag">ver2.02</span></div>
     <h1><span class="leaf-emoji">🌱</span> P5 Science Revision</h1>
     <p class="subtitle">Your cozy little study island — answer questions, grow your garden of knowledge! 🐾</p>
     <div class="pills" id="pills"></div>
@@ -347,7 +348,7 @@ var QS_PER_ROUND = 16;
 var STREAK_TO_MASTER = 2;
 var FINAL_PASS_SPACING_MS = 30 * 60 * 1000;
 var LS_KEY = "p5-science-revision_v1";
-var VERSION = "ver2.01";
+var VERSION = "ver2.02";
 
 var TOPIC_ICON = {
   "Reproduction in Plants":"🌸",
@@ -485,8 +486,11 @@ function renderQuestion(){
   var order = shuffle([0,1,2,3]);
   var opts=document.getElementById("opts"); opts.innerHTML="";
   order.forEach(function(oi){
-    var b=document.createElement("button"); b.className="opt"; b.textContent=q.o[oi];
-    b.onclick=function(){ answer(oi, b, opts, q); };
+    var b=document.createElement("button"); b.className="opt"; b.textContent=q.o[oi]; b.type="button";
+    var fired=false;
+    var handle=function(e){ if(fired) return; fired=true; if(e&&e.preventDefault) e.preventDefault(); answer(oi, b, opts, q); };
+    b.addEventListener("click", handle);
+    b.addEventListener("touchend", handle);
     opts.appendChild(b);
   });
 }
