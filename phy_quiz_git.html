@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade 7 Physical Science — Combined Quiz v17</title>
+<title>Grade 7 Physical Science — Combined Quiz v18</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f0f4f8;padding:20px}
@@ -248,7 +248,7 @@ body.answered{padding-bottom:70px}
 <!-- ═══════════════ HOME SCREEN ═══════════════ -->
 <div class="wrap" id="homescreen">
   <h1>&#9883; Grade 7 Physical Science</h1>
-  <p class="sub">257 Questions &middot; 11 Topics &middot; 16 per session &middot; v17</p>
+  <p class="sub">257 Questions &middot; 11 Topics &middot; 16 per session &middot; v18</p>
   <div class="mode-banner" id="mode-banner" style="display:none">&#129504; MEMORIZATION DRILL &mdash; 32 must-know facts (units, names, orders, pH, rock types). Separate progress from the main quiz.</div>
 
   <div class="topic-bar">
@@ -1060,8 +1060,15 @@ function render(){
     html+='<button class="opt" id="opt'+i+'" onclick="answer('+i+','+newAns+')">'+optLabels[i]+'. '+esc(shuffled[i])+'</button>';
   }
   html+='<div class="rlabel" id="rlbl"></div>';
-  html+='<button class="hint-btn" id="hbtn" onclick="toggleHint()">Show hint</button>';
-  html+='<div class="hint-box" id="hbox">'+esc(qobj.h)+'</div>';
+  // Final-pass rule: if a correct answer now would master/retire this question,
+  // hide the hint so the last attempt is unaided.
+  var finalPass = (rec.streak >= STREAK_TO_MASTER - 1);
+  if(finalPass){
+    html+='<div class="hint-box" id="hbox" style="display:block;background:#fff8e1;border:1px solid #ffca28;color:#7a5c00;font-style:italic">&#128274; Final pass \u2014 hint hidden. Answer this correctly to master and retire it.</div>';
+  } else {
+    html+='<button class="hint-btn" id="hbtn" onclick="toggleHint()">Show hint</button>';
+    html+='<div class="hint-box" id="hbox">'+esc(qobj.h)+'</div>';
+  }
   var explText=qobj.expl||qobj.h;
   html+='<div class="expl-section" id="ebox">';
   html+='<div class="expl-box">'+esc(explText)+'</div>';
