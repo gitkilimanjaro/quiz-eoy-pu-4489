@@ -82,7 +82,7 @@
   <!-- ===================== HOME ===================== -->
   <div id="home">
     <div class="card topwrap">
-      <span class="ver" id="verref">ver1.10</span>
+      <span class="ver" id="verref">ver2.00</span>
       <h1>Grade 7 Music</h1>
       <div style="font-weight:600;color:#555;font-size:.95rem;">End of Year Theory Quiz</div>
       <div class="pills" id="homePills"></div>
@@ -521,9 +521,16 @@ function renderQuestion(){
       figWrap.appendChild(card);
     }
   }
-  // hint reset
+  // hint reset — but suppress the hint on a question's FINAL pass before retiring
+  const Lq=STATE.ledger[q.id];
+  const isFinalPass = Lq.streak === (STREAK_TO_MASTER - 1);
   const hb=document.getElementById("hintBox"); hb.classList.add("hidden"); hb.textContent=q.h;
-  const hbtn=document.getElementById("hintBtn"); hbtn.classList.remove("hidden"); hbtn.textContent="💡 Show hint";
+  const hbtn=document.getElementById("hintBtn");
+  if(isFinalPass){
+    hbtn.classList.add("hidden");        // no scaffolding on the last check
+  }else{
+    hbtn.classList.remove("hidden"); hbtn.textContent="💡 Show hint";
+  }
   // options shuffled at render
   const wrap=document.getElementById("optsWrap"); wrap.innerHTML="";
   const order=shuffle(q.o.map((text,i)=>({text,i})));
