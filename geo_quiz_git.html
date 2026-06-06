@@ -90,6 +90,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);min-height:100vh;padding:
 .result-label.ok{color:#15803d;background:var(--accent-lt);border:1px solid #86efac}
 .result-label.ng{color:var(--danger);background:var(--danger-lt);border:1px solid #fca5a5}
 .hbtn{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:6px 14px;font-size:.76rem;color:var(--muted);cursor:pointer;font-family:Arial,sans-serif;margin-bottom:8px}
+.finalpass-note{font-size:.76rem;color:var(--accent);background:var(--accent-lt);border:1px solid #95d5b2;border-radius:9px;padding:8px 13px;margin-bottom:8px;font-weight:600}
 .hbox{font-size:.81rem;line-height:1.6;color:var(--blue);padding:10px 13px;border-left:3px solid #6b9df2;background:var(--blue-lt);border-radius:0 10px 10px 0;margin-bottom:8px}
 .explbox{padding:13px;background:var(--bg);border-radius:12px;border:1px solid var(--border)}
 .explabel{font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
@@ -136,7 +137,7 @@ body.answered{padding-bottom:72px}
 <!-- ═══════════ HOME SCREEN ═══════════ -->
 <div id="home">
   <div class="home-header">
-    <div class="rev-badge">Rev.16</div>
+    <div class="rev-badge">Rev.17</div>
     <h1>&#127758; Geography<br>Revision</h1>
     <p>Grade 7 &middot; End of Year</p>
   </div>
@@ -1027,8 +1028,12 @@ function render() {
     html += '</button>';
   }
   html += '</div>';
-  html += '<button class="hbtn" id="hbtn" onclick="toggleHint()">&#128161; Show hint</button>';
-  html += '<div class="hbox" id="hbox" style="display:none">' + qobj.hint + '</div>';
+  if (entry.streak >= MASTERY_STREAK - 1) {
+    html += '<div class="finalpass-note">&#127919; Final pass &mdash; no hint. Answer from memory to retire this question!</div>';
+  } else {
+    html += '<button class="hbtn" id="hbtn" onclick="toggleHint()">&#128161; Show hint</button>';
+    html += '<div class="hbox" id="hbox" style="display:none">' + qobj.hint + '</div>';
+  }
   html += '<div id="ebox" style="display:none">';
   html += '<div class="result-label" id="rlabel"></div>';
   html += '<div class="explbox"><div class="explabel">Explanation</div>';
@@ -1083,8 +1088,10 @@ function pick(chosen) {
   saveLedger(ledger);
 
   document.getElementById('ebox').style.display = 'block';
-  document.getElementById('hbtn').style.display = 'none';
-  document.getElementById('hbox').style.display = 'none';
+  var hbtnEl = document.getElementById('hbtn');
+  if (hbtnEl) hbtnEl.style.display = 'none';
+  var hboxEl = document.getElementById('hbox');
+  if (hboxEl) hboxEl.style.display = 'none';
   if (justMastered) {
     document.getElementById('mastered-flash').style.display = 'inline-block';
   }
@@ -1096,6 +1103,7 @@ function pick(chosen) {
 function toggleHint() {
   var hbox = document.getElementById('hbox');
   var hbtn = document.getElementById('hbtn');
+  if (!hbox || !hbtn) return;
   if (hbox.style.display === 'none') {
     hbox.style.display = 'block';
     hbtn.textContent = 'Hide hint';
