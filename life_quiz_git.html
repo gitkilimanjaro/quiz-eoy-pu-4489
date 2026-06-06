@@ -55,6 +55,7 @@ body.answered{padding-bottom:70px}
 #hbtn{display:block;background:none;border:1px solid #81c784;color:#2e7d32;padding:7px 14px;
   border-radius:6px;font-size:.83rem;cursor:pointer;margin-bottom:8px;font-family:Arial,sans-serif}
 #hbox{display:none;background:#e8f5e9;border-radius:6px;padding:10px 14px;font-size:.86rem;color:#1b5e20;margin-bottom:8px}
+#nohint{background:#fff8e1;border:1px solid #ffe082;border-radius:6px;padding:9px 14px;font-size:.84rem;color:#8d6e00;margin-bottom:8px;text-align:center}
 #rscreen{display:none}
 .rscore{font-size:2.8rem;font-weight:bold;text-align:center;margin:16px 0 8px;color:#1b5e20}
 .dots{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:10px 0}
@@ -156,7 +157,7 @@ body.answered{padding-bottom:70px}
 <div class="wrap" id="homescreen">
   <div class="home-header">
   <h1>&#127807; Grade 7 Life Science</h1>
-  <span class="ver-badge">Rev.7</span>
+  <span class="ver-badge">Rev.8</span>
 </div>
   <div class="topic-bar">
     <span class="tbadge IntroSci">Introducing Science</span>
@@ -196,7 +197,7 @@ body.answered{padding-bottom:70px}
   </div>
   <div class="srs-info">
     <strong>How it works:</strong> Answer a question correctly twice in a row to master and retire it.
-    One wrong answer resets its streak back to zero. Work through all 214 questions to complete the course.
+    One wrong answer resets its streak back to zero. On the <strong>final attempt</strong> before a question is mastered, the hint is hidden &#8211; you have to get it right on your own. Work through all 214 questions to complete the course.
   </div>
   <div class="card dash-card" style="margin-bottom:14px">
     <div class="dash-title">&#128218; Topic Breakdown</div>
@@ -1930,8 +1931,13 @@ function render(){
     html+='<button class="opt" id="opt'+i+'" onclick="answer('+i+')">'+L[i]+'. '+_sOpts[i]+'</button>';
   }
   html+='<div class="rlabel" id="rlbl"></div>';
-  html+='<button id="hbtn" onclick="toggleHint()">Show hint</button>';
-  html+='<div id="hbox">'+qobj.hint+'</div>';
+  var finalPass=(rec.streak===STREAK_TO_MASTER-1);
+  if(finalPass){
+    html+='<div id="nohint">&#128274; Final check &#8211; no hint this time. Get it right to master this question.</div>';
+  } else {
+    html+='<button id="hbtn" onclick="toggleHint()">Show hint</button>';
+    html+='<div id="hbox">'+qobj.hint+'</div>';
+  }
   html+='<div id="ebox">';
   html+='<div class="expl-box">'+qobj.expl+'</div>';
   html+='<div class="insight-box"><div class="insight-lbl">&#128161; Aha insight</div>'+qobj.insight+'</div>';
@@ -1981,8 +1987,9 @@ function answer(chosen){
   saveLedger(ledger);
 
   document.getElementById('ebox').style.display='block';
-  document.getElementById('hbtn').style.display='none';
-  document.getElementById('hbox').style.display='none';
+  var _hb=document.getElementById('hbtn'); if(_hb) _hb.style.display='none';
+  var _hx=document.getElementById('hbox'); if(_hx) _hx.style.display='none';
+  var _nh=document.getElementById('nohint'); if(_nh) _nh.style.display='none';
   document.getElementById('fixednext').style.display='block';
   document.body.className='answered';
 }
@@ -1991,7 +1998,7 @@ function answer(chosen){
 function toggleHint(){
   var hbox=document.getElementById('hbox');
   var hbtn=document.getElementById('hbtn');
-  if(hbox.style.display==='none'){
+  if(hbox.style.display==='none' || hbox.style.display===''){
     hbox.style.display='block'; hbtn.textContent='Hide hint'; hintCount++;
   } else {
     hbox.style.display='none'; hbtn.textContent='Show hint';
