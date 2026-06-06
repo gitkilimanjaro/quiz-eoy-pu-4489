@@ -67,6 +67,8 @@
     padding:9px;border-radius:9px;width:100%;margin-bottom:14px}
   .hintbox{background:#fff7ec;border:1px solid #ffd9a8;border-radius:9px;padding:11px 13px;
     font-size:13.5px;color:#8a5400;margin-bottom:14px;line-height:1.45}
+  .fpnote{background:#eef0fb;border:1.5px solid var(--navy);border-radius:9px;padding:10px 13px;
+    font-size:13px;color:var(--navy);margin-bottom:14px;line-height:1.45;font-weight:600;text-align:center}
   .opts{display:flex;flex-direction:column;gap:10px}
   .opt{background:#fff;border:1.5px solid #d8dbe8;border-radius:10px;padding:13px 15px;font-size:15px;
     text-align:left;width:100%;transition:background .15s,border-color .15s;color:var(--text);font-weight:600;line-height:1.4}
@@ -110,7 +112,7 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="ver" id="ver">ver1.01</div>
+  <div class="ver" id="ver">ver2.00</div>
 
   <!-- HOME -->
   <div id="home">
@@ -143,6 +145,7 @@
     </div>
     <div class="qtext" id="qtext"></div>
     <button class="hintbtn" id="hintbtn">💡 Show hint</button>
+    <div class="fpnote hide" id="finalPassNote">🎯 Final check — no hint this time. Answer from memory to complete this question.</div>
     <div class="hintbox hide" id="hintbox"></div>
     <div class="opts" id="opts"></div>
     <div id="postAnswer" class="hide">
@@ -822,12 +825,22 @@ function renderQuestion(){
   document.getElementById("qcount").textContent="Q "+(session.idx+1)+" of "+session.ids.length;
   document.getElementById("qtext").textContent=q.q;
 
-  // hint
+  // hint — disabled on the final pass before a question is retired (recall check)
+  var l=state.ledger[q.id];
+  var isFinalPass=(STREAK_TO_MASTER>1 && l.streak===STREAK_TO_MASTER-1);
   var hb=document.getElementById("hintbox");
-  hb.classList.add("hide");hb.textContent=q.h;
   var hbtn=document.getElementById("hintbtn");
-  hbtn.classList.remove("hide");
-  hbtn.textContent="💡 Show hint";
+  var fpNote=document.getElementById("finalPassNote");
+  if(isFinalPass){
+    hb.classList.add("hide");hb.textContent="";
+    hbtn.classList.add("hide");
+    fpNote.classList.remove("hide");
+  }else{
+    hbtn.classList.remove("hide");
+    hbtn.textContent="💡 Show hint";
+    hb.classList.add("hide");hb.textContent=q.h;
+    fpNote.classList.add("hide");
+  }
 
   // options (shuffle at render)
   var opts=document.getElementById("opts");opts.innerHTML="";
@@ -885,6 +898,7 @@ function answer(chosen,btnEl){
 
   document.getElementById("hintbtn").classList.add("hide");
   document.getElementById("hintbox").classList.add("hide");
+  document.getElementById("finalPassNote").classList.add("hide");
   document.getElementById("explain").innerHTML="<b>"+(correct?"ถูกต้อง ✓":"ยังไม่ถูก ✗")+"</b> — "+q.expl;
   document.getElementById("insight").innerHTML="<b>จำให้แม่น:</b> "+q.insight;
   document.getElementById("postAnswer").classList.remove("hide");
