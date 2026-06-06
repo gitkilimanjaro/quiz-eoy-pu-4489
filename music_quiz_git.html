@@ -82,7 +82,7 @@
   <!-- ===================== HOME ===================== -->
   <div id="home">
     <div class="card topwrap">
-      <span class="ver" id="verref">ver1.00</span>
+      <span class="ver" id="verref">ver1.10</span>
       <h1>Grade 7 Music</h1>
       <div style="font-weight:600;color:#555;font-size:.95rem;">End of Year Theory Quiz</div>
       <div class="pills" id="homePills"></div>
@@ -113,6 +113,7 @@
         <span class="qcount" id="qCount"></span>
       </div>
       <div class="qtext" id="qText"></div>
+      <div id="qFig" style="text-align:center;margin:0 0 14px;"></div>
       <button class="hintbtn" id="hintBtn">💡 Show hint</button>
       <div class="hintbox hidden" id="hintBox"></div>
       <div id="optsWrap"></div>
@@ -156,6 +157,148 @@ const QS_PER_ROUND = 16;
 const STREAK_TO_MASTER = 2;
 const FINAL_PASS_SPACING_MS = 10 * 60 * 1000; // 10 minutes
 
+/* ============ SVG NOTATION ENGINE ============ */
+const NS="http://www.w3.org/2000/svg";
+const LETTER={C:0,D:1,E:2,F:3,G:4,A:5,B:6};
+function noteStep(token){
+  const m=token.match(/^([A-G])([#b]?)(\d)$/);
+  if(!m) return {val:0,acc:""};
+  return {val: parseInt(m[3])*7 + LETTER[m[1]], acc:m[2]};
+}
+const CLEF_BOTTOM={treble:"E4",bass:"G2"};
+function mkSVG(W,H){
+  const s=document.createElementNS(NS,"svg");
+  s.setAttribute("viewBox","0 0 "+W+" "+H);
+  s.setAttribute("width",W);s.setAttribute("height",H);
+  s.style.maxWidth="100%";
+  return s;
+}
+function staffBase(svg,W,topY,lineGap){
+  for(let i=0;i<5;i++){
+    const y=topY+i*lineGap;
+    const ln=document.createElementNS(NS,"line");
+    ln.setAttribute("x1",6);ln.setAttribute("x2",W-6);
+    ln.setAttribute("y1",y);ln.setAttribute("y2",y);
+    ln.setAttribute("stroke","#1a1a2e");ln.setAttribute("stroke-width",1.2);
+    svg.appendChild(ln);
+  }
+}
+function addLedger(svg,x,y){
+  const ln=document.createElementNS(NS,"line");
+  ln.setAttribute("x1",x-11);ln.setAttribute("x2",x+11);
+  ln.setAttribute("y1",y);ln.setAttribute("y2",y);
+  ln.setAttribute("stroke","#1a1a2e");ln.setAttribute("stroke-width",1.2);
+  svg.appendChild(ln);
+}
+// Draw a staff with notes. fig fields:
+// {type:"notes", clef, notes:[token | [tokens]], labels?:[..]}
+function drawNotes(fig){
+  const clef=fig.clef||"treble";
+  const groups=fig.notes||[];
+  const lineGap=11, topY=34;
+  const W=Math.max(160, 70+groups.length*42), H=120;
+  const bottomLineY=topY+4*lineGap;
+  const svg=mkSVG(W,H);
+  staffBase(svg,W,topY,lineGap);
+  const clefT=document.createElementNS(NS,"text");
+  clefT.setAttribute("x",10);
+  clefT.setAttribute("font-size",clef==="treble"?48:32);
+  clefT.setAttribute("y",clef==="treble"?bottomLineY+7:topY+2*lineGap+11);
+  clefT.setAttribute("fill","#1a1a2e");
+  clefT.textContent=clef==="treble"?"\uD834\uDD1E":"\uD834\uDD22";
+  svg.appendChild(clefT);
+  const bottomVal=noteStep(CLEF_BOTTOM[clef]).val;
+  const topVal=bottomVal+8;
+  const yFor=v=>bottomLineY-(v-bottomVal)*(lineGap/2);
+  let x=clef==="treble"?56:52;
+  groups.forEach((g,gi)=>{
+    const toks=Array.isArray(g)?g:[g];
+    toks.forEach(tok=>{
+      const ns=noteStep(tok);const y=yFor(ns.val);
+      if(ns.val<bottomVal){for(let v=bottomVal-2;v>=ns.val;v-=2)addLedger(svg,x,yFor(v));}
+      if(ns.val>topVal){for(let v=topVal+2;v<=ns.val;v+=2)addLedger(svg,x,yFor(v));}
+      const e=document.createElementNS(NS,"ellipse");
+      e.setAttribute("cx",x);e.setAttribute("cy",y);
+      e.setAttribute("rx",6.7);e.setAttribute("ry",4.9);
+      e.setAttribute("transform","rotate(-20 "+x+" "+y+")");
+      e.setAttribute("fill","none");e.setAttribute("stroke","#1a1a2e");e.setAttribute("stroke-width",1.7);
+      svg.appendChild(e);
+      if(ns.acc){
+        const a=document.createElementNS(NS,"text");
+        a.setAttribute("x",x-17);a.setAttribute("y",y+5);
+        a.setAttribute("font-size",17);a.setAttribute("fill","#1a1a2e");
+        a.textContent=ns.acc==="#"?"\u266F":"\u266D";
+        svg.appendChild(a);
+      }
+    });
+    if(fig.labels&&fig.labels[gi]){
+      const t=document.createElementNS(NS,"text");
+      t.setAttribute("x",x);t.setAttribute("y",H-6);t.setAttribute("text-anchor","middle");
+      t.setAttribute("font-size",13);t.setAttribute("fill","#666");t.setAttribute("font-weight","700");
+      t.textContent=fig.labels[gi];svg.appendChild(t);
+    }
+    x+=42;
+  });
+  return svg;
+}
+// Key signature: {type:"key", clef, acc:"#"|"b", count:1}
+function drawKey(fig){
+  const clef=fig.clef||"treble";
+  const lineGap=11, topY=34, W=150,H=110;
+  const bottomLineY=topY+4*lineGap;
+  const svg=mkSVG(W,H);
+  staffBase(svg,W,topY,lineGap);
+  const clefT=document.createElementNS(NS,"text");
+  clefT.setAttribute("x",10);clefT.setAttribute("font-size",clef==="treble"?48:32);
+  clefT.setAttribute("y",clef==="treble"?bottomLineY+7:topY+2*lineGap+11);
+  clefT.setAttribute("fill","#1a1a2e");
+  clefT.textContent=clef==="treble"?"\uD834\uDD1E":"\uD834\uDD22";
+  svg.appendChild(clefT);
+  const bottomVal=noteStep(CLEF_BOTTOM[clef]).val;
+  const yFor=v=>bottomLineY-(v-bottomVal)*(lineGap/2);
+  // F# position: treble F5 (top line area) ; Bb position: treble B4 (middle line)
+  let x=clef==="treble"?54:50;
+  if(fig.count>0){
+    for(let i=0;i<fig.count;i++){
+      const a=document.createElementNS(NS,"text");
+      let token = fig.acc==="#" ? (clef==="treble"?"F5":"F3") : (clef==="treble"?"B4":"B2");
+      const y=yFor(noteStep(token).val);
+      a.setAttribute("x",x+i*11);a.setAttribute("y",y+6);
+      a.setAttribute("font-size",22);a.setAttribute("fill","#1a1a2e");
+      a.textContent=fig.acc==="#"?"\u266F":"\u266D";
+      svg.appendChild(a);
+    }
+  }
+  return svg;
+}
+// Time signature beat strip: {type:"ts", glyphs:[...]} simple rhythm of note/rest glyphs
+function drawRhythm(fig){
+  const lineGap=11, topY=44, W=Math.max(180,40+fig.cells.length*38),H=110;
+  const midY=topY+2*lineGap;
+  const svg=mkSVG(W,H);
+  staffBase(svg,W,topY,lineGap);
+  let x=34;
+  fig.cells.forEach(cell=>{
+    const t=document.createElementNS(NS,"text");
+    t.setAttribute("x",x);t.setAttribute("y",midY+8);
+    t.setAttribute("font-size",30);t.setAttribute("fill","#1a1a2e");
+    t.setAttribute("text-anchor","middle");
+    // music symbols: crotchet ♩ U+2669, crotchet rest 𝄽 U+1D13D
+    const map={crotchet:"\u2669",crotchetRest:"\uD834\uDD3D",minim:"\uD834\uDD5E\uD834\uDD65"};
+    t.textContent=map[cell]||cell;
+    svg.appendChild(t);
+    x+=38;
+  });
+  return svg;
+}
+function renderFig(fig){
+  if(!fig) return null;
+  if(fig.type==="notes") return drawNotes(fig);
+  if(fig.type==="key") return drawKey(fig);
+  if(fig.type==="ts") return drawRhythm(fig);
+  return null;
+}
+
 /* ============ QUESTION BANK ============ */
 const BANK = [
   // ===== NOTE NAMES =====
@@ -163,10 +306,12 @@ const BANK = [
   { t:"Note Names", q:"In the treble clef, what are the names of the five lines from bottom to top?", o:["E, G, B, D, F","F, A, C, E, G","G, B, D, F, A","D, F, A, C, E"], a:0, h:"A mnemonic in the deck uses 'Bus' and 'Drives'.", expl:"Treble lines spell E, G, B, D, F — 'Every Green Bus Drives Fast'.", insight:"Treble clef lines (bottom to top) = E, G, B, D, F." },
   { t:"Note Names", q:"In the bass clef, what are the names of the five lines from bottom to top?", o:["G, B, D, F, A","E, G, B, D, F","A, C, E, G, B","F, A, C, E, G"], a:0, h:"Different from the treble lines.", expl:"Bass clef lines from bottom to top are G, B, D, F, A.", insight:"Bass clef lines (bottom to top) = G, B, D, F, A." },
   { t:"Note Names", q:"In the bass clef, what are the names of the four spaces from bottom to top?", o:["A, C, E, G","F, A, C, E","G, B, D, F","E, G, B, D"], a:0, h:"Not the same as the treble spaces.", expl:"Bass clef spaces from bottom to top are A, C, E, G.", insight:"Bass clef spaces (bottom to top) = A, C, E, G." },
-  { t:"Note Names", q:"Which note sits on the very first ledger line below the treble staff?", o:["Middle C","Middle D","Bottom E","Low G"], a:0, h:"It links the treble and bass staves.", expl:"Middle C sits one ledger line below the bottom line of the treble staff.", insight:"Middle C = one ledger line below the treble staff." },
-  { t:"Note Names", q:"Which note sits on the first ledger line above the bass staff?", o:["Middle C","Middle D","Top A","High F"], a:0, h:"It is the same shared note that joins both clefs.", expl:"Middle C sits one ledger line above the top line of the bass staff.", insight:"Middle C = one ledger line above the bass staff." },
-  { t:"Note Names", q:"What does the symbol ♭ (flat) do to a note?", o:["Lowers its pitch by a semitone","Raises its pitch by a semitone","Cancels a previous accidental sign","Doubles the note's overall length"], a:0, h:"Think of the direction 'down'.", expl:"A flat lowers a note's pitch by one semitone.", insight:"Flat (♭) = lower the pitch by a semitone." },
-  { t:"Note Names", q:"What does the symbol ♯ (sharp) do to a note?", o:["Raises its pitch by a semitone","Lowers its pitch by a semitone","Cancels a previous accidental sign","Halves the note's overall length"], a:0, h:"Think of the direction 'up'.", expl:"A sharp raises a note's pitch by one semitone.", insight:"Sharp (♯) = raise the pitch by a semitone." },
+  { t:"Note Names", q:"Name the note shown.", fig:{type:"notes",clef:"treble",notes:["C4"]}, o:["Middle C","Middle D","Bottom E","Low G"], a:0, h:"It sits on a short ledger line below the staff.", expl:"This note is one ledger line below the treble staff — middle C.", insight:"Middle C = one ledger line below the treble staff." },
+  { t:"Note Names", q:"Name the note shown.", fig:{type:"notes",clef:"bass",notes:["C4"]}, o:["Middle C","Middle D","Top A","High F"], a:0, h:"It sits on a short ledger line above the staff.", expl:"This note is one ledger line above the bass staff — middle C.", insight:"Middle C = one ledger line above the bass staff." },
+  { t:"Note Names", q:"Name the note shown.", fig:{type:"notes",clef:"treble",notes:["G4"]}, o:["G","E","B","D"], a:0, h:"It sits on the second line up — the line the treble clef curls around.", expl:"The note on the second line of the treble staff is G.", insight:"Treble 2nd line (clef curl) = G." },
+  { t:"Note Names", q:"Name the note shown.", fig:{type:"notes",clef:"bass",notes:["F3"]}, o:["F","A","D","C"], a:0, h:"It sits on the fourth line up — the line between the two bass-clef dots.", expl:"The note on the fourth line of the bass staff is F.", insight:"Bass 4th line (between the clef dots) = F." },
+  { t:"Note Names", q:"Name the note shown (including its accidental).", fig:{type:"notes",clef:"treble",notes:["Bb4"]}, o:["B flat","G flat","G sharp","B natural"], a:0, h:"The note sits in the middle of the staff; the sign in front lowers it.", expl:"The note sits on the middle line (B) with a flat in front — B flat.", insight:"Read the letter from the staff, then apply the accidental: this is B flat." },
+  { t:"Note Names", q:"To raise the pitch of the note shown by a semitone, which accidental would you place before it?", fig:{type:"notes",clef:"treble",notes:["D5"]}, o:["A sharp (♯)","A flat (♭)","A natural (♮)","A dot"], a:0, h:"Raising pitch goes upward.", expl:"A sharp (♯) raises a note's pitch by one semitone.", insight:"Sharp (♯) = raise the pitch by a semitone." },
   { t:"Note Names", q:"Reading notes that spell C, then A, then F, then E — what hidden word do they make?", o:["CAFE","FACE","FADE","CAGE"], a:0, h:"It is a place you buy coffee.", expl:"The notes C–A–F–E spell the word CAFE.", insight:"Note-spelling: read each note letter in order to find the word." },
 
   // ===== NOTE VALUES & RESTS =====
@@ -185,24 +330,25 @@ const BANK = [
   { t:"Intervals", q:"When counting an interval, which note do you call number 1?", o:["The lower note","The higher note","The middle note","The loudest note"], a:0, h:"Count upward.", expl:"You count up from the lower note, calling it 1.", insight:"To count an interval: call the lower note 1 and count up to the higher note." },
   { t:"Intervals", q:"You count up from one note to the next and reach the number 3. What is the interval called?", o:["A 3rd","A 2nd","A 4th","A 5th"], a:0, h:"The number you reach names it.", expl:"Counting up to the third letter names the interval a 3rd.", insight:"The number you count up to names the interval (e.g. reaching 3 = a 3rd)." },
   { t:"Intervals", q:"What interval is formed between a note and the next note eight letter-names higher?", o:["Octave","5th","4th","Unison"], a:0, h:"'Oct' means eight.", expl:"Eight notes apart (1 to 8) is an octave.", insight:"Eight notes apart = an octave." },
-  { t:"Intervals", q:"From C up to G, what is the interval?", o:["A 5th","A 4th","A 3rd","A 6th"], a:0, h:"C-D-E-F-G.", expl:"C, D, E, F, G = 5 letters, so C to G is a 5th.", insight:"C to G = a 5th (C-D-E-F-G is five letters)." },
-  { t:"Intervals", q:"From C up to F, what is the interval?", o:["A 4th","A 3rd","A 5th","A 2nd"], a:0, h:"C-D-E-F.", expl:"C, D, E, F = 4 letters, so C to F is a 4th.", insight:"C to F = a 4th (four letters)." },
-  { t:"Intervals", q:"Two notes sit on a line and the very next space directly above it. What interval is this?", o:["A 2nd","A 3rd","A unison","A 4th"], a:0, h:"Line to the very next space is one step.", expl:"A line to the adjacent space is one step up — a 2nd.", insight:"Adjacent line-to-space (one step) = a 2nd." },
+  { t:"Intervals", q:"Name the interval shown.", fig:{type:"notes",clef:"treble",notes:[["C4","G4"]]}, o:["A 5th","A 4th","A 3rd","An octave"], a:0, h:"Count up from the lower note: C-D-E-F-G.", expl:"C up to G spans five letters (C-D-E-F-G), so it is a 5th.", insight:"Count letters from the lower note: C to G = a 5th." },
+  { t:"Intervals", q:"Name the interval shown.", fig:{type:"notes",clef:"treble",notes:[["C4","F4"]]}, o:["A 4th","A 3rd","A 5th","A 2nd"], a:0, h:"Count up from the lower note: C-D-E-F.", expl:"C up to F spans four letters (C-D-E-F), so it is a 4th.", insight:"Count letters from the lower note: C to F = a 4th." },
+  { t:"Intervals", q:"Name the interval shown.", fig:{type:"notes",clef:"treble",notes:[["E4","G4"]]}, o:["A 3rd","A 2nd","A 4th","A 5th"], a:0, h:"Count up: E-F-G.", expl:"E up to G spans three letters (E-F-G), so it is a 3rd.", insight:"Count letters from the lower note: E to G = a 3rd." },
+  { t:"Intervals", q:"Name the interval shown.", fig:{type:"notes",clef:"bass",notes:[["C3","C4"]]}, o:["An octave","A 5th","A 6th","A 4th"], a:0, h:"Same letter name, eight notes apart.", expl:"Both notes are C, eight letters apart — an octave.", insight:"Same letter, eight notes apart = an octave." },
 
   // ===== TIME SIGNATURES =====
   { t:"Time Signatures", q:"In a time signature, what does the top number tell you?", o:["The number of beats in each bar","The kind of beat used in each bar","How loudly the music is played","The overall speed of the piece"], a:0, h:"It counts something per bar.", expl:"The top number shows how many beats are in each bar.", insight:"Time signature top number = number of beats per bar." },
   { t:"Time Signatures", q:"In a time signature, what does the bottom number tell you?", o:["The kind of beat used in each bar","The number of beats in each bar","How loudly the music is played","The number of bars in the piece"], a:0, h:"At this level a 4 here means a crotchet.", expl:"The bottom number shows the type of beat; 4 means a crotchet.", insight:"Time signature bottom number = type of beat (4 = crotchet)." },
   { t:"Time Signatures", q:"How many crotchet beats are in each bar of 3/4 time?", o:["3","2","4","6"], a:0, h:"The top number gives it away.", expl:"In 3/4 there are three crotchet beats per bar.", insight:"3/4 = three crotchet beats per bar." },
   { t:"Time Signatures", q:"The symbol 'C' on a staff is sometimes used in place of which time signature?", o:["4/4","3/4","2/4","6/8"], a:0, h:"It is nicknamed 'common time'.", expl:"The 'C' symbol stands for 4/4, called common time.", insight:"'C' = common time = 4/4." },
-  { t:"Time Signatures", q:"A bar contains a crotchet, a crotchet rest, and a crotchet. Which time signature fits it best?", o:["3/4","4/4","2/4","5/4"], a:0, h:"Count the total beats in the bar.", expl:"Crotchet + crotchet rest + crotchet = 3 beats, which fits 3/4.", insight:"Match the time signature to the total beats in the bar (here 3 = 3/4)." },
+  { t:"Time Signatures", q:"The bar shown contains a crotchet, a crotchet rest, and a crotchet. Which time signature fits it?", fig:{type:"ts",cells:["crotchet","crotchetRest","crotchet"]}, o:["3/4","4/4","2/4","5/4"], a:0, h:"Count the total beats in the bar.", expl:"Crotchet (1) + crotchet rest (1) + crotchet (1) = 3 beats, which fits 3/4.", insight:"Match the time signature to the total beats in the bar (here 3 = 3/4)." },
 
   // ===== KEY SIGNATURES & TRIADS =====
   { t:"Key Signatures & Triads", q:"How many sharps or flats are in the key signature of C major?", o:["None","One sharp","One flat","Two sharps"], a:0, h:"It is the plainest key signature.", expl:"C major has no sharps and no flats.", insight:"C major key signature = no sharps or flats." },
-  { t:"Key Signatures & Triads", q:"What is the key signature of G major?", o:["One sharp","One flat","No sharps or flats","Two sharps"], a:0, h:"A single accidental, and it is a sharp.", expl:"G major has one sharp in its key signature.", insight:"G major key signature = one sharp." },
-  { t:"Key Signatures & Triads", q:"What is the key signature of F major?", o:["One flat","One sharp","No sharps or flats","Two flats"], a:0, h:"A single accidental, and it is a flat.", expl:"F major has one flat in its key signature.", insight:"F major key signature = one flat." },
+  { t:"Key Signatures & Triads", q:"Which major key has the key signature shown?", fig:{type:"key",clef:"treble",acc:"#",count:1}, o:["G major","C major","F major","D major"], a:0, h:"One sharp.", expl:"A key signature of one sharp is G major.", insight:"One sharp = G major." },
+  { t:"Key Signatures & Triads", q:"Which major key has the key signature shown?", fig:{type:"key",clef:"bass",acc:"b",count:1}, o:["F major","C major","G major","B flat major"], a:0, h:"One flat.", expl:"A key signature of one flat is F major.", insight:"One flat = F major." },
   { t:"Key Signatures & Triads", q:"A tonic triad is built from which degrees of the scale?", o:["The 1st, 3rd and 5th","The 1st, 2nd and 3rd","The 2nd, 4th and 6th","The 1st, 4th and 8th"], a:0, h:"Skip a degree each time, starting on the tonic.", expl:"A tonic triad uses the 1st, 3rd and 5th degrees of the scale.", insight:"Tonic triad = 1st + 3rd + 5th degrees of the scale." },
-  { t:"Key Signatures & Triads", q:"Which three notes make up the tonic triad in C major?", o:["C, E, G","C, F, A","C, D, E","C, E, A"], a:0, h:"Start on C, then miss a letter each time.", expl:"The C major tonic triad is C, E, G (degrees 1, 3, 5).", insight:"C major tonic triad = C, E, G." },
-  { t:"Key Signatures & Triads", q:"Which three notes make up the tonic triad in F major?", o:["F, A, C","F, G, A","F, A, D","F, C, E"], a:0, h:"Start on F, miss a letter each time.", expl:"The F major tonic triad is F, A, C (degrees 1, 3, 5).", insight:"F major tonic triad = F, A, C." },
+  { t:"Key Signatures & Triads", q:"The tonic triad shown is in C major. Which three notes is it made of?", fig:{type:"notes",clef:"treble",notes:[["C4","E4","G4"]]}, o:["C, E, G","C, F, A","C, D, E","C, E, A"], a:0, h:"Degrees 1, 3 and 5 of C major.", expl:"The C major tonic triad is C, E, G (degrees 1, 3, 5).", insight:"C major tonic triad = C, E, G." },
+  { t:"Key Signatures & Triads", q:"The tonic triad shown is in F major. Which three notes is it made of?", fig:{type:"notes",clef:"treble",notes:[["F4","A4","C5"]]}, o:["F, A, C","F, G, A","F, A, D","F, C, E"], a:0, h:"Degrees 1, 3 and 5 of F major.", expl:"The F major tonic triad is F, A, C (degrees 1, 3, 5).", insight:"F major tonic triad = F, A, C." },
   { t:"Key Signatures & Triads", q:"The Roman numeral written under a tonic triad is which symbol?", o:["I","V","IV","II"], a:0, h:"It is built on the first degree.", expl:"The tonic triad is labelled with the Roman numeral I (the 1st degree).", insight:"Tonic triad = Roman numeral I (built on the 1st degree)." },
   { t:"Key Signatures & Triads", q:"Which note is 'doh' in the key of G major?", o:["G","C","F","D"], a:0, h:"Doh is the home note of the key.", expl:"In G major, the tonic (doh) is G.", insight:"Doh = the tonic = the note the key is named after (G major → G)." },
 
@@ -364,6 +510,17 @@ function renderQuestion(){
   badge.textContent=q.t; badge.style.borderColor=c; badge.style.color=c;
   document.getElementById("qCount").textContent="Q "+(session.idx+1)+" of "+session.ids.length;
   document.getElementById("qText").textContent=q.q;
+  // figure (notation) if present
+  const figWrap=document.getElementById("qFig"); figWrap.innerHTML="";
+  if(q.fig){
+    const svg=renderFig(q.fig);
+    if(svg){
+      const card=document.createElement("div");
+      card.style.cssText="display:inline-block;background:#fff;border:1px solid #e6e7ef;border-radius:10px;padding:6px 10px;";
+      card.appendChild(svg);
+      figWrap.appendChild(card);
+    }
+  }
   // hint reset
   const hb=document.getElementById("hintBox"); hb.classList.add("hidden"); hb.textContent=q.h;
   const hbtn=document.getElementById("hintBtn"); hbtn.classList.remove("hidden"); hbtn.textContent="💡 Show hint";
