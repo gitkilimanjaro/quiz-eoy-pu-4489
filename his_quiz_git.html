@@ -116,15 +116,16 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-
 .modal-actions{display:flex;gap:.6rem}
 .modal-cancel{flex:1;background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:.7rem;font-size:.9rem;cursor:pointer;font-weight:600;color:#333}
 .modal-confirm{flex:1;background:#c62828;color:#fff;border:none;border-radius:8px;padding:.7rem;font-size:.9rem;cursor:pointer;font-weight:600}
+.final-note{display:none;background:#ede7f6;border:1px solid #b39ddb;border-radius:8px;padding:.55rem .85rem;font-size:.82rem;color:#5e35b1;margin-bottom:.8rem;font-weight:500}
 .relief-notice{background:#fff3e0;border:1px solid #ffcc80;border-radius:10px;padding:.7rem 1rem;font-size:.82rem;color:#e65100;margin-bottom:.8rem;display:none}
 </style>
 </head>
 <body>
 <div id="homeScreen" class="screen active">
   <div class="home-header">
-    <span class="version-tag">ver5.00</span>
+    <span class="version-tag">ver6.00</span>
     <h1>History Exam Prep</h1>
-    <div class="home-meta">135 Questions &middot; 6 Topics &middot; 16 per session &middot; v5.00</div>
+    <div class="home-meta">135 Questions &middot; 6 Topics &middot; 16 per session &middot; v6.00</div>
     <div class="topic-pills" id="topicPills"></div>
   </div>
   <div class="progress-card">
@@ -155,6 +156,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-
     <div class="relief-notice" id="reliefNotice">Running low on new questions — mixing in some seen questions to fill the session.</div>
     <div class="quiz-q" id="quizQ"></div>
     <button class="hint-toggle" id="hintToggle" onclick="toggleHint()">💡 Show hint</button>
+    <div class="final-note" id="finalNote">🎯 Final pass — no hint this time. Get it right to complete this question!</div>
     <div class="hint-box" id="hintBox"></div>
     <div class="options" id="optionsWrap"></div>
     <div class="feedback-box" id="feedbackBox"><div class="fb-label" id="fbLabel"></div><div id="fbText"></div></div>
@@ -259,7 +261,17 @@ function renderQuestion(){
   document.getElementById('quizQ').textContent=q.q;
   document.getElementById('hintBox').textContent=q.h;
   document.getElementById('hintBox').classList.remove('open');
-  document.getElementById('hintToggle').textContent='💡 Show hint';
+  document.getElementById('hintToggle').innerHTML='💡 Show hint';
+  // Final-pass: hide hint when this correct answer would retire the question
+  var _l=ledger[q.id];
+  var _finalPass=_l && _l.status==='active' && _l.streak===(STREAK_TO_MASTER-1);
+  if(_finalPass){
+    document.getElementById('hintToggle').style.display='none';
+    document.getElementById('finalNote').style.display='block';
+  }else{
+    document.getElementById('hintToggle').style.display='inline-block';
+    document.getElementById('finalNote').style.display='none';
+  }
   document.getElementById('feedbackBox').style.display='none';
   document.getElementById('insightBox').style.display='none';
   document.getElementById('nextBtn').style.display='none';
