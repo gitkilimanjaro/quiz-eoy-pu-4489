@@ -21,7 +21,13 @@ h1{font-size:1.45rem;margin-bottom:3px;color:#1b5e20}
 #fixednext{position:fixed;bottom:0;left:0;right:0;background:#1b5e20;color:#fff;border:none;
   padding:18px;font-size:1.1rem;font-weight:bold;font-family:Arial,sans-serif;
   cursor:pointer;display:none;z-index:999;text-align:center}
-#fixednext:hover{background:#2e7d32}
+#fixednext,#fixednext-rote{position:fixed;bottom:0;left:0;right:0;background:#1b5e20;color:#fff;border:none;padding:18px;font-size:1.1rem;font-weight:bold;font-family:Arial,sans-serif;cursor:pointer;display:none;z-index:999;text-align:center}
+#fixednext:hover,#fixednext-rote:hover{background:#2e7d32}
+.btn-rote{display:block;width:100%;padding:13px;background:#fff;color:#5b3a8e;border:1.5px solid #7e57c2;border-radius:10px;font-size:.92rem;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;margin-bottom:10px;text-align:center}
+.btn-rote:hover{background:#f3edfb}
+.rote-pill{background:#ede7f6;color:#5b3a8e;border:1px solid #b39ddb}
+#rote-nohint{background:#f3edfb;border:1px solid #d1c4e9;border-radius:6px;padding:9px 14px;font-size:.84rem;color:#5b3a8e;margin-bottom:8px;text-align:center}
+#rote-ebox{display:none}
 body.answered{padding-bottom:70px}
 .card{background:#fff;border-radius:14px;padding:20px;border:1px solid #e0e0e0;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
 .qmeta{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
@@ -157,7 +163,7 @@ body.answered{padding-bottom:70px}
 <div class="wrap" id="homescreen">
   <div class="home-header">
   <h1>&#127807; Grade 7 Life Science</h1>
-  <span class="ver-badge">Rev.8</span>
+  <span class="ver-badge">Rev.9</span>
 </div>
   <div class="topic-bar">
     <span class="tbadge IntroSci">Introducing Science</span>
@@ -210,6 +216,7 @@ body.answered{padding-bottom:70px}
   </div>
   <button class="btn-continue" id="btn-continue" onclick="startRound()">&#9654; Continue Progress</button>
   <button class="btn-sectionb" onclick="startSectionB()">&#9999;&#65039; Section B Practice (written answers)</button>
+  <button class="btn-rote" onclick="startRote()">&#129504; Rote / Recall Mode (hard facts, no hints)</button>
   <button class="btn-reset" onclick="confirmReset()">&#8635; Start All Over</button>
   <div class="all-done" id="all-done" style="display:none">
     &#127881; You have mastered all 214 questions! Tap <em>Start All Over</em> to begin again.
@@ -263,6 +270,35 @@ body.answered{padding-bottom:70px}
 </div>
 
 <button id="fixednext" onclick="nextQ()">Next question &#8594;</button>
+
+<!-- ROTE / RECALL MODE SCREEN -->
+<div class="wrap" id="rotescreen" style="display:none">
+  <div class="topbar">
+    <span id="rote-counter">Recall 1 of 1</span>
+    <div class="scores">
+      <span class="sc ok">&#10003; <span id="rote-scr">0</span></span>
+      <span class="sc ng">&#10007; <span id="rote-scw">0</span></span>
+    </div>
+  </div>
+  <div class="prog-bg"><div class="prog-fill" id="rote-pfill" style="width:0%"></div></div>
+  <div id="rote-maincard"></div>
+  <button class="btn-home" onclick="goHome()" style="margin-top:4px">&#8962; Back to Home</button>
+</div>
+
+<!-- ROTE RESULTS SCREEN -->
+<div class="wrap" id="roteresult" style="display:none">
+  <div class="home-header"><h1>&#129504; Recall Round Complete</h1></div>
+  <div class="result-score" id="rote-rscore">0 / 0</div>
+  <div class="result-dots" id="rote-dots"></div>
+  <div class="mastery-delta" id="rote-delta" style="display:none"></div>
+  <p class="result-msg" id="rote-rmsg"></p>
+  <p class="pool-info" id="rote-pool-info"></p>
+  <button class="btn-continue" onclick="startRote()">&#129504; Drill Again</button>
+  <button class="btn-reset" onclick="confirmRoteReset()">&#8635; Reset Recall Progress</button>
+  <button class="btn-home" onclick="goHome()">&#8962; Back to Home</button>
+</div>
+
+<button id="fixednext-rote" onclick="nextRote()">Next recall &#8594;</button>
 
 <div id="modal-overlay" style="display:none" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
@@ -1811,13 +1847,193 @@ function revealSB(){
 function nextSB(){ if(sbIndex<SECTION_B.length-1){sbIndex++; renderSectionB(); window.scrollTo(0,0);} }
 function prevSB(){ if(sbIndex>0){sbIndex--; renderSectionB(); window.scrollTo(0,0);} }
 
+// ================= ROTE / RECALL MODE (separate key, isolated state) =====================
+// Drills pure-recall "know-it-or-don't" facts. Own streak under ls7_rote_v1.
+// Touches nothing in the main SRS (LS_KEY / ls7_srs_v1).
+var ROTE_KEY = 'ls7_rote_v1';
+var ROTE_STREAK_TO_MASTER = 2;
+
+function isRoteQuestion(text){
+  var t=String(text).toLowerCase().trim();
+  var reason=['best example','most likely','why does','why do','explain','predict',
+    'what happens','what would happen','calculate','how then','difference between','diagram shows',
+    'experiment','student ','investigate','which is the best','positive impact','will have',
+    'most abundant','observation'];
+  for(var i=0;i<reason.length;i++){ if(t.indexOf(reason[i])>-1) return false; }
+  var starts=['what is','what are','what does','which of these','which of the following is',
+    'define','name','how many','which type','which gas','which organ','which row','which option',
+    'which term','what type'];
+  for(var j=0;j<starts.length;j++){ if(t.indexOf(starts[j])===0) return true; }
+  if(t.indexOf('unit of')>-1 || t.indexOf('define')>-1 || t.indexOf('word equation')>-1) return true;
+  return false;
+}
+var ROTE_POOL = POOL.filter(function(q){ return isRoteQuestion(q.text); });
+
+// --- isolated rote state ---
+var rDeck=[], rCur=0, rRights=0, rWrongs=0, rHist=[], rMasteredThisRound=0;
+var r_sOpts=[], r_sAns=0;
+
+function loadRote(){ try{ var raw=localStorage.getItem(ROTE_KEY); return raw?JSON.parse(raw):{}; }catch(e){ return {}; } }
+function saveRote(l){ try{ localStorage.setItem(ROTE_KEY, JSON.stringify(l)); }catch(e){} }
+function getRoteRec(l,id){ if(!l[id]) l[id]={streak:0,status:'active'}; return l[id]; }
+function roteMetrics(){
+  var l=loadRote(), mastered=0, once=0;
+  ROTE_POOL.forEach(function(q){
+    var r=l[q.id];
+    if(r&&r.status==='mastered') mastered++;
+    else if(r&&r.streak===1) once++;
+  });
+  return {mastered:mastered, once:once, total:ROTE_POOL.length, active:ROTE_POOL.length-mastered};
+}
+
+function startRote(){
+  var l=loadRote();
+  rDeck=ROTE_POOL.filter(function(q){ var r=l[q.id]; return !r||r.status!=='mastered'; });
+  // shuffle deck
+  for(var i=rDeck.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=rDeck[i];rDeck[i]=rDeck[j];rDeck[j]=t;}
+  rCur=0; rRights=0; rWrongs=0; rHist=[]; rMasteredThisRound=0;
+
+  document.getElementById('homescreen').style.display='none';
+  document.getElementById('quizscreen').style.display='none';
+  document.getElementById('rscreen').style.display='none';
+  document.getElementById('sbscreen').style.display='none';
+  document.getElementById('roteresult').style.display='none';
+  document.getElementById('fixednext').style.display='none';
+  document.body.className='';
+
+  if(rDeck.length===0){
+    // all recall facts mastered
+    document.getElementById('rotescreen').style.display='none';
+    document.getElementById('roteresult').style.display='block';
+    document.getElementById('rote-rscore').textContent='\uD83C\uDFC6 All done!';
+    document.getElementById('rote-rmsg').textContent='You have mastered every recall fact in this mode. Tap Reset Recall Progress to drill them again.';
+    document.getElementById('rote-delta').style.display='none';
+    document.getElementById('rote-pool-info').textContent=roteMetrics().total+' recall facts \u00b7 all mastered (100%)';
+    document.getElementById('rote-dots').innerHTML='';
+    window.scrollTo(0,0);
+    return;
+  }
+  document.getElementById('rotescreen').style.display='block';
+  renderRote();
+  window.scrollTo(0,0);
+}
+
+function renderRote(){
+  var qobj=rDeck[rCur];
+  var _idx=[0,1,2,3,4];
+  for(var i=_idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=_idx[i];_idx[i]=_idx[j];_idx[j]=t;}
+  r_sOpts=_idx.map(function(k){return qobj.opts[k];});
+  r_sAns=_idx.indexOf(qobj.ans);
+
+  var pct=Math.round((rCur/rDeck.length)*100);
+  document.getElementById('rote-pfill').style.width=pct+'%';
+  document.getElementById('rote-counter').textContent='Recall '+(rCur+1)+' of '+rDeck.length;
+
+  var l=loadRote(); var rec=getRoteRec(l,qobj.id);
+  var streakHtml=rec.streak>0?'<span class="streak-badge">&#9733; streak '+rec.streak+'</span>':'';
+  var typeClass=pillMap[qobj.type]||'IntroSci';
+  var html='<div class="card">';
+  html+='<div class="qmeta">';
+  html+='<span class="qnum">R'+(rCur+1)+'</span>';
+  html+='<span class="qpill '+typeClass+'">'+qobj.type+'</span>';
+  html+='<span class="qpill rote-pill">&#129504; recall</span>';
+  html+=streakHtml;
+  html+='</div>';
+  html+='<div class="qtext">'+qobj.text+'</div>';
+  for(var k=0;k<qobj.opts.length;k++){
+    html+='<button class="opt" id="ropt'+k+'" onclick="answerRote('+k+')">'+L[k]+'. '+r_sOpts[k]+'</button>';
+  }
+  html+='<div class="rlabel" id="rote-rlbl"></div>';
+  html+='<div id="rote-nohint">&#129504; Recall mode &#8211; no hints. Answer from memory.</div>';
+  html+='<div id="rote-ebox">';
+  html+='<div class="expl-box">'+qobj.expl+'</div>';
+  html+='</div></div>';
+  document.getElementById('rote-maincard').innerHTML=html;
+  document.getElementById('fixednext').style.display='none';
+}
+
+function answerRote(chosen){
+  var qobj=rDeck[rCur];
+  var opts=document.querySelectorAll('#rote-maincard .opt');
+  for(var i=0;i<opts.length;i++) opts[i].disabled=true;
+  var l=loadRote(); var rec=getRoteRec(l,qobj.id);
+  var lbl=document.getElementById('rote-rlbl'); lbl.style.display='block';
+
+  if(chosen===r_sAns){
+    document.getElementById('ropt'+chosen).classList.add('correct');
+    rRights++; document.getElementById('rote-scr').textContent=rRights; rHist.push('ok');
+    rec.streak++;
+    if(rec.streak>=ROTE_STREAK_TO_MASTER){
+      rec.status='mastered'; rec.streak=ROTE_STREAK_TO_MASTER; rMasteredThisRound++;
+      lbl.textContent='\uD83C\uDFC6 Correct - this recall fact is mastered!';
+      lbl.className='rlabel ok';
+    } else {
+      lbl.textContent='\u2713 Correct! Recall streak: '+rec.streak+' / '+ROTE_STREAK_TO_MASTER+'.';
+      lbl.className='rlabel ok';
+    }
+  } else {
+    document.getElementById('ropt'+chosen).classList.add('wrong');
+    document.getElementById('ropt'+r_sAns).classList.add('reveal');
+    rWrongs++; document.getElementById('rote-scw').textContent=rWrongs; rHist.push('w');
+    rec.streak=0;
+    lbl.textContent='\u2717 Wrong - the answer was ('+L[r_sAns]+'). Recall streak reset.';
+    lbl.className='rlabel ng';
+  }
+  l[qobj.id]=rec; saveRote(l);
+  document.getElementById('rote-ebox').style.display='block';
+  var nh=document.getElementById('rote-nohint'); if(nh) nh.style.display='none';
+  document.getElementById('fixednext-rote').style.display='block';
+  document.body.className='answered';
+}
+
+function nextRote(){
+  rCur++;
+  document.getElementById('fixednext-rote').style.display='none';
+  document.body.className='';
+  if(rCur>=rDeck.length){ showRoteResult(); return; }
+  renderRote(); window.scrollTo(0,0);
+}
+
+function showRoteResult(){
+  document.getElementById('rotescreen').style.display='none';
+  document.getElementById('roteresult').style.display='block';
+  document.getElementById('fixednext-rote').style.display='none';
+  document.body.className='';
+  var pct=Math.round(rRights/rDeck.length*100);
+  document.getElementById('rote-rscore').textContent=rRights+' / '+rDeck.length;
+  document.getElementById('rote-rmsg').textContent =
+    pct>=90?'Excellent recall! These facts are sticking.':
+    pct>=70?'Good - review the few you missed and run it again.':
+    'Keep drilling - recall facts need repetition. Run it again.';
+  var delta=document.getElementById('rote-delta');
+  if(rMasteredThisRound>0){ delta.style.display='block';
+    delta.textContent='\uD83C\uDFC6 '+rMasteredThisRound+' recall fact'+(rMasteredThisRound>1?'s':'')+' mastered this round!';
+  } else delta.style.display='none';
+  var dd=document.getElementById('rote-dots'); dd.innerHTML='';
+  for(var i=0;i<rHist.length;i++){ var d=document.createElement('div'); d.className='dot '+rHist[i]; dd.appendChild(d); }
+  var m=roteMetrics();
+  document.getElementById('rote-pool-info').textContent =
+    m.active+' recall facts active \u00b7 '+m.mastered+' mastered ('+Math.round(m.mastered/m.total*100)+'% of recall set)';
+  window.scrollTo(0,0);
+}
+
+function confirmRoteReset(){
+  if(confirm('Reset ONLY the Recall-mode progress? Your main quiz progress is not affected.')){
+    try{ localStorage.removeItem(ROTE_KEY); }catch(e){}
+    startRote();
+  }
+}
+
 // ------ HOME ---------------------------------------------------------------------------------------------------
 function showHome(){
   document.getElementById('homescreen').style.display='block';
   document.getElementById('quizscreen').style.display='none';
   document.getElementById('rscreen').style.display='none';
   document.getElementById('sbscreen').style.display='none';
+  document.getElementById('rotescreen').style.display='none';
+  document.getElementById('roteresult').style.display='none';
   document.getElementById('fixednext').style.display='none';
+  document.getElementById('fixednext-rote').style.display='none';
   document.body.className='';
   updateDashboard();
   window.scrollTo(0,0);
