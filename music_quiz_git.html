@@ -82,7 +82,7 @@
   <!-- ===================== HOME ===================== -->
   <div id="home">
     <div class="card topwrap">
-      <span class="ver" id="verref">ver2.00</span>
+      <span class="ver" id="verref">ver2.10</span>
       <h1>Grade 7 Music</h1>
       <div style="font-weight:600;color:#555;font-size:.95rem;">End of Year Theory Quiz</div>
       <div class="pills" id="homePills"></div>
@@ -351,6 +351,8 @@ const BANK = [
   { t:"Key Signatures & Triads", q:"The tonic triad shown is in F major. Which three notes is it made of?", fig:{type:"notes",clef:"treble",notes:[["F4","A4","C5"]]}, o:["F, A, C","F, G, A","F, A, D","F, C, E"], a:0, h:"Degrees 1, 3 and 5 of F major.", expl:"The F major tonic triad is F, A, C (degrees 1, 3, 5).", insight:"F major tonic triad = F, A, C." },
   { t:"Key Signatures & Triads", q:"The Roman numeral written under a tonic triad is which symbol?", o:["I","V","IV","II"], a:0, h:"It is built on the first degree.", expl:"The tonic triad is labelled with the Roman numeral I (the 1st degree).", insight:"Tonic triad = Roman numeral I (built on the 1st degree)." },
   { t:"Key Signatures & Triads", q:"Which note is 'doh' in the key of G major?", o:["G","C","F","D"], a:0, h:"Doh is the home note of the key.", expl:"In G major, the tonic (doh) is G.", insight:"Doh = the tonic = the note the key is named after (G major → G)." },
+  { t:"Key Signatures & Triads", q:"In a major scale, between which scale degrees do the two semitones fall?", o:["Between 3–4 and 7–8","Between 1–2 and 5–6","Between 2–3 and 6–7","Between 4–5 and 7–8"], a:0, h:"Think of the C major scale: where are the white-key half-steps?", expl:"In a major scale the semitones fall between degrees 3–4 and 7–8 (in C major, E–F and B–C).", insight:"Major scale semitones = between degrees 3–4 and 7–8." },
+  { t:"Key Signatures & Triads", q:"Which pair of notes has the distance of a semitone between them?", o:["E and F","C and D","G and A","D and E"], a:0, h:"On a keyboard, which pair has no black key between them?", expl:"E and F are a semitone apart (no note sits between them); the others are each a whole tone apart.", insight:"E–F (and B–C) are natural semitones — no note in between." },
 
   // ===== DYNAMICS =====
   { t:"Dynamics", q:"What does pianissimo (pp) mean?", o:["Very soft","Very loud","Medium soft","Quite fast"], a:0, h:"More extreme than plain piano.", expl:"Pianissimo (pp) means very soft.", insight:"pp (pianissimo) = very soft." },
@@ -362,7 +364,10 @@ const BANK = [
   // ===== ARTICULATION & TEMPO =====
   { t:"Articulation & Tempo", q:"What does legato mean?", o:["Play smoothly","Play detached","Play loudly","Play slower"], a:0, h:"The opposite of detached.", expl:"Legato means to play smoothly.", insight:"Legato = play smoothly." },
   { t:"Articulation & Tempo", q:"What does staccato mean?", o:["Play the notes detached, short and crisp","Play the notes smoothly joined together","Play the passage gradually getting louder","Play the music at a steady walking pace"], a:0, h:"Shown by a dot above or below the note.", expl:"Staccato means to play notes detached, short and crisp.", insight:"Staccato = detached, short and crisp." },
+  { t:"Articulation & Tempo", q:"What does the accent sign (>) above a note tell you to do?", o:["Play that note with extra emphasis","Play that note short and detached","Hold that note slightly longer","Play that note very quietly"], a:0, h:"It makes one note stand out.", expl:"An accent (>) means play the note with an accent — with extra emphasis or stress.", insight:"Accent (>) = play the note with extra emphasis." },
+  { t:"Articulation & Tempo", q:"A curved line joining two or more notes of different pitch (a slur) tells you to do what?", o:["Play those notes smoothly joined","Play those notes short and detached","Play those notes much louder","Repeat those notes again"], a:0, h:"It is about smoothness, like legato.", expl:"A slur means play the marked notes smoothly (joined together).", insight:"Slur (curved line over different pitches) = play smoothly/joined." },
   { t:"Articulation & Tempo", q:"What does the tempo marking Andante mean?", o:["At a walking pace","Fast","At a moderate pace","Getting slower"], a:0, h:"Think of walking.", expl:"Andante means at a walking pace.", insight:"Andante = at a walking pace." },
+  { t:"Articulation & Tempo", q:"What does the tempo marking Moderato mean?", o:["At a moderate pace","Very fast","Getting gradually slower","At a walking pace"], a:0, h:"The word looks like 'moderate'.", expl:"Moderato means at a moderate pace.", insight:"Moderato = at a moderate pace." },
   { t:"Articulation & Tempo", q:"What does the tempo marking Allegro mean?", o:["Fast","Slow","At a walking pace","Getting slower"], a:0, h:"A lively, quick speed.", expl:"Allegro means fast.", insight:"Allegro = fast." },
   { t:"Articulation & Tempo", q:"What does ritardando (rit.) mean?", o:["Getting slower","Getting faster","Getting louder","Getting softer"], a:0, h:"About speed, not volume.", expl:"Ritardando (rit.) means getting slower.", insight:"rit. (ritardando) = getting slower." },
   { t:"Articulation & Tempo", q:"What do repeat marks tell a performer to do?", o:["Repeat the section or from the beginning again","Play the marked passage noticeably more loudly","Gradually slow the music down towards the end","Play all the marked notes short and detached"], a:0, h:"About playing something again.", expl:"Repeat marks tell the player to repeat the section or from the start.", insight:"Repeat marks = play the section (or piece) again." },
